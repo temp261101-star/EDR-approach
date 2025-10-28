@@ -266,7 +266,10 @@ export default function DashboardLayout({ setIsAuthenticated }) {
 
         <div className="p-1.5 border-t border-gray-700">
           <button
-            onClick={() => setIsAuthenticated(false)}
+            onClick={() => {
+    localStorage.removeItem("isAuthenticated");
+    setIsAuthenticated(false);
+  }}
             className="w-full flex items-center gap-1.5 p-1.5 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-md transition-colors duration-200"
             title={collapsed ? "Logout" : ""}
           >

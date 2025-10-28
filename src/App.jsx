@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Login from "./pages/Login.jsx";
 import DashboardLayout from "./pages/DashboardLayout.jsx";
 import Reports from "./pages/Reports.jsx";
@@ -25,7 +25,13 @@ import WhiteListedApplication from "./NewPages/ApplicationControl/WhiteListedApp
 
 function App() {
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+ const [isAuthenticated, setIsAuthenticated] = useState(
+    () => localStorage.getItem("isAuthenticated") === "true"
+  );
+
+  useEffect(() => {
+    localStorage.setItem("isAuthenticated", isAuthenticated);
+  }, [isAuthenticated]);
 
   return (
     <Routes>

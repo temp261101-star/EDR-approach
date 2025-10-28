@@ -136,7 +136,7 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
           <Card title="Test" className="h-[320px]">
             <PieChartComponent
               onClick={() => setOpen(true)}
-             data={data}
+               data={data}
               endpoint="demoChart"
               title="Device Security Status"
               action="somethinfg"
