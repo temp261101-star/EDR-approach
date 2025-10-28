@@ -1,0 +1,122 @@
+[
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": false,
+    "rule": {
+      "type": "custom",
+      "name": "port",
+      "description": "port"
+    },
+    "ip": "192.168.1.12",
+    "device": {
+      "type": "",
+      "mode": ""
+    },
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "usb protection",
+    "modeAccess": "Allow"
+  },
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": false,
+    "rule": {
+      "type": "custom",
+      "name": "usb protection",
+      "description": "usb protection not allowed"
+    },
+    "ip": "192.168.1.42",
+    "device": {
+      "type": "USB Storage",
+      "mode": "Read Only"
+    },
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "",
+    "modeAccess": ""
+  },
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": true,
+    "ip": "192.168.1.55",
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "usb protection",
+    "modeAccess": "Allow",
+    "rule": {
+      "type": "custom",
+      "name": "port",
+      "description": "port"
+    },
+    "device": {
+      "type": "",
+      "mode": ""
+    }
+  },
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": true,
+    "rule": {
+      "type": "custom",
+      "name": "Network Rule",
+      "description": "Network restriction rule"
+    },
+    "ip": "10.0.0.14",
+    "device": {
+      "type": "Ethernet",
+      "mode": "Full Access"
+    },
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "",
+    "modeAccess": ""
+  },
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": false,
+    "rule": {
+      "type": "custom",
+      "name": "Custom 3",
+      "description": "Custom rule together for 3 ips"
+    },
+    "ip": "192.168.2.100",
+    "device": {
+      "type": "USB Storage",
+      "mode": "Read Only"
+    },
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "",
+    "modeAccess": ""
+  },
+  {
+    "policyName": "USB Device Policy",
+    "description": "",
+    "enabled": true,
+    "ip": "192.168.1.88",
+    "ruleNameType": "policy",
+    "customRuleName": "",
+    "customRuleDescription": "",
+    "deviceType": "",
+    "modeAccess": "",
+    "rule": {
+      "type": "custom",
+      "name": "New Device",
+      "description": "adding New Device"
+    },
+    "device": {
+      "type": "USB Storage",
+      "mode": "Read/Write"
+    }
+  }
+]
