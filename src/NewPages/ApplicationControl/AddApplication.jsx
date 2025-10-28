@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import api from '../../../lib/api';
-import FormController from '../../../lib/FormController';
+import api from '../../lib/api';
+import FormController from '../../lib/FormController';
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import TextInput from '../../components/FormComponent/TextInput';

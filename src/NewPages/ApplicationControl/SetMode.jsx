@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import FormController from "../../../lib/FormController";
+import FormController from "../../lib/FormController";
 import Form, { FormActions, FormFields } from "../../components/Form";
 import TextInput from "../../components/TextInput";
 import MultiSelect from "../../components/MultiSelect";
 import RadioGroup from "../../components/RadioGroup";
-import api from "../../../lib/api";
+import api from "../../lib/api";
 
 const SetMode = () => {
   const formRef = useRef();

@@ -493,7 +493,7 @@ import MultiSelect from "../components/MultiSelect";
 import FormController from "../../lib/FormController";
 import Form from "../components/Form";
 import Select from "../components/Select";
-import api from "../../lib/api";
+import api from "../lib/api";
 import TextInput from "../components/TextInput";
 import RadioGroup from "../components/RadioGroup";
 

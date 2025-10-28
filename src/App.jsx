@@ -12,7 +12,7 @@ import AddAntivirus from "./NewPages/AddAntivirus.jsx";
 import VirusListing from "./NewPages/VirusListing.jsx";
 import PolicySetupPage from "./NewPages/PolicySetupPage.jsx";
 import VirusDashboard from "./NewPages/VirusDashboard.jsx";
-import AddExternalUSB from "./NewPages/AddExternalUSB.jsx";
+import AddExternalUSB from "./NewPages/addExternalUSB.jsx";
 import SetMode from "./NewPages/ApplicationControl/SetMode.jsx";
 import ViewMode from "./NewPages/ApplicationControl/ViewMode.jsx";
 import AddApplication from "./NewPages/ApplicationControl/AddApplication.jsx";
@@ -20,7 +20,6 @@ import ViewApplication from "./NewPages/ApplicationControl/ViewApplication.jsx";
 import ManageBlackListed from "./NewPages/ApplicationControl/ManageBlackListed.jsx";
 import PreventedApplicationReport from "./NewPages/ApplicationControl/PreventedApplicationReport.jsx";
 import WhiteListedApplication from "./NewPages/ApplicationControl/WhiteListedApplication.jsx";
-
 
 
 

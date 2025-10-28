@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { getApi } from "../../../lib/api";
+import { getApi } from "../../lib/api";
 import GenericDrawerModal from "../MODAL/GenericDrawerModal";
 
 const PieChartComponent = React.memo(function PieChartComponent({

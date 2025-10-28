@@ -282,7 +282,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Form, { FormFields } from "../Form";
 import Select from "../Select";
-import api from "../../../lib/api";
+import api from "../../lib/api";
 import toast from "react-hot-toast";
 import FormController from "../../../lib/FormController";
 import TextInput from "../TextInput";

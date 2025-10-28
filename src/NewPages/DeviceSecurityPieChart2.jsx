@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Globe, Activity, Clock } from "lucide-react";
 
-import { NewWindowPortal } from "../../lib/useNewWindowPortal.jsx"; // Add this import
+import { NewWindowPortal } from "../lib/useNewWindowPortal.jsx"; // Add this import
 import IPDetailView from "./IPDetailView.jsx"; // Add this import
 
 // Dummy data generator

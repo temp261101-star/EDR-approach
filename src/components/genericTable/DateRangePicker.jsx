@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-import { fetchDataByDateRange } from "../../../lib/api";
+import { fetchDataByDateRange } from "../../lib/api";
 import { useReportData } from "../../context/DataContext";
 
 export default function DateRangePicker() {

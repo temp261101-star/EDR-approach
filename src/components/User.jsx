@@ -3,7 +3,7 @@ import Form, { FormActions, FormFields } from './Form'
 import TextInput from './TextInput'
 import FormController from '../../lib/FormController'
 import toast from 'react-hot-toast'
-import api from '../../lib/api'
+import api from '../lib/api'
 import Swal from 'sweetalert2'
 
 const User = () => {
