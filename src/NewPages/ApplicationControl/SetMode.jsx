@@ -15,8 +15,6 @@ const SetMode = () => {
   const branchRef = useRef();
   const accessRef = useRef();
 
-
-
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -28,18 +26,18 @@ const SetMode = () => {
             parentKey,
             parentValue,
           });
-if (Array.isArray(res)) {
-  return res.map((branch) => ({
-    value: branch,
-    label: branch,
-  }));
-}
-if (res?.branches) {
-  return res.branches.map((b) => ({
-    value: b.id,
-    label: b.name,
-  }));
-}
+          if (Array.isArray(res)) {
+            return res.map((branch) => ({
+              value: branch,
+              label: branch,
+            }));
+          }
+          if (res?.branches) {
+            return res.branches.map((b) => ({
+              value: b.id,
+              label: b.name,
+            }));
+          }
 
           console.log("returned value in addapplication: ", res);
           return res;
@@ -55,14 +53,13 @@ if (res?.branches) {
       hooks: {
         onSuccess: () => {
           toast.success("Set mode successful");
-          
-        //  to do ->   add navigation
+
+          //  to do ->   add navigation
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
             }
             formRef.current.reset();
-          
           }, 100);
         },
         onError: (error) => {
@@ -72,6 +69,10 @@ if (res?.branches) {
 
         onBeforeSubmit: (payload) => {
           console.log("Submitting payload:", payload);
+          // Add new fields
+          payload.requestType = "Set_Mode_Of_Whitelist";
+
+           console.log("Submitting payload:", payload);
         },
       },
     });
@@ -79,23 +80,20 @@ if (res?.branches) {
     return () => controller.destroy();
   }, []);
 
-
   return (
     <div>
       <Form ref={formRef} apiAction="AddSetMode" title="Add External USB">
         <FormFields grid={2}>
-         
-
           <MultiSelect
-            name="branches"           
-             label="Branch"
+            name="branches"
+            label="Branch"
             dataSource="commonMode/getBranchName"
             multiSelect={true}
             sendAsArray={true}
             data-key="branches"
             ref={branchRef}
           />
-           
+
           <MultiSelect
             name="deviceName"
             label="Host name"
@@ -105,18 +103,16 @@ if (res?.branches) {
             multiSelect={true}
             sendAsArray={true}
           />
-          
+
           <MultiSelect
             name="ModeType"
             label="Mode Type"
             options={[
-              { value: "Learning", name: "Learning" },
-              { value: "Protection", name: "Protection" },
+              { value: "1", name: "Learning" },
+              { value: "0", name: "Protection" },
             ]}
             ref={accessRef}
           />
-
-      
         </FormFields>
 
         <FormActions>
