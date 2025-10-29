@@ -35,8 +35,8 @@ const AddExternalUSB = () => {
       },
 
       actions: {
-        addExternalUSB: async (payload) => {
-          return api.createResource("/setexternalUSB/addExternalUSB", payload);
+        AddExternalUSB: async (payload) => {
+          return api.createResource("/setexternalUSB/AddExternalUSB", payload);
         },
       },
 
@@ -85,7 +85,7 @@ const AddExternalUSB = () => {
 
   return (
     <div className="mt-10">
-      <Form ref={formRef} apiAction="addExternalUSB" title="Add External USB">
+      <Form ref={formRef} apiAction="AddExternalUSB" title="Add External USB">
         <FormFields grid={2}>
           <MultiSelect
             name="ipaddress"
