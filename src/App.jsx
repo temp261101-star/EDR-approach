@@ -12,7 +12,7 @@ import AddAntivirus from "./NewPages/AddAntivirus.jsx";
 import VirusListing from "./NewPages/VirusListing.jsx";
 import PolicySetupPage from "./NewPages/PolicySetupPage.jsx";
 import VirusDashboard from "./NewPages/VirusDashboard.jsx";
-// import AddExternalUSB from "./NewPages/AddExternalUSB.jsx";
+
 import SetMode from "./NewPages/ApplicationControl/SetMode.jsx";
 import ViewMode from "./NewPages/ApplicationControl/ViewMode.jsx";
 import AddApplication from "./NewPages/ApplicationControl/AddApplication.jsx";
@@ -65,7 +65,6 @@ function App() {
         <Route path="dynamicGraph" element={<DynamicGraphPage />} />
         <Route path="reports" element={<Reports />} />
         <Route path="/dashboard/policy-setup" element={<PolicySetup />} />
-        {/* <Route path="/dashboard/externalUsb" element={<AddExternalUSB />} /> */}
         <Route path="/dashboard/PolicySetup" element={<PolicySetupPage/> } />
         <Route path="/dashboard/virusListing" element={<VirusListing/> } />
         <Route path="/dashboard/virusDashboard" element={<VirusDashboard/> } />
