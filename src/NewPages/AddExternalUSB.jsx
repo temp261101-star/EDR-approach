@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import FormController from "../../../lib/FormController";
+import FormController from "../lib/FormController";
 import api from "../lib/api";
 import Form, { FormActions, FormFields } from "../components/Form";
 import MultiSelect from "../components/MultiSelect";
