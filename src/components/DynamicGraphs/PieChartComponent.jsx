@@ -26,7 +26,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
       setLoading(true);
       try {
         let res = query ? await getApi(query, endpoint) : data;
-
+ 
         const dynamicPalette = [
           "#22D3EE",
           "#FB923C",

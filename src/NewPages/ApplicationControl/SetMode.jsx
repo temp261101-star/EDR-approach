@@ -46,7 +46,7 @@ const SetMode = () => {
 
       actions: {
         AddSetMode: async (payload) => {
-          return api.createResource("/setexternalUSB/addExternalUSB", payload);
+          return api.createResource("/driveEncryption/AddDriveDetails ", [payload]);
         },
       },
 
@@ -60,6 +60,9 @@ const SetMode = () => {
               formRef.current.reset();
             }
             formRef.current.reset();
+            accessRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
           }, 100);
         },
         onError: (error) => {
@@ -82,7 +85,7 @@ const SetMode = () => {
 
   return (
     <div>
-      <Form ref={formRef} apiAction="AddSetMode" title="Add External USB">
+      <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
         <FormFields grid={2}>
           <MultiSelect
             name="branches"
@@ -95,7 +98,8 @@ const SetMode = () => {
           />
 
           <MultiSelect
-            name="deviceName"
+            name="deviceNames"
+            data-key="deviceNames"
             label="Host name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"
@@ -105,12 +109,14 @@ const SetMode = () => {
           />
 
           <MultiSelect
-            name="ModeType"
+            name="ModeTypes"
             label="Mode Type"
             options={[
               { value: "1", name: "Learning" },
               { value: "0", name: "Protection" },
             ]}
+            multiSelect={false}
+            sendAsArray={true}
             ref={accessRef}
           />
         </FormFields>

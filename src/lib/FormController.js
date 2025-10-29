@@ -206,14 +206,16 @@ export default class FormController {
       const el = this.formEl.querySelector(`[name="${k}"]`);
       const apiKey = el?.getAttribute("data-key") || k;
 
-      if (el?.type === "hidden") {
-        try {
-          const parsed = JSON.parse(v);
-          out[apiKey] = Array.isArray(parsed) ? parsed : [parsed];
-        } catch {
-          out[apiKey] = v ? [v] : [];
-        }
-      }else 
+     if (el?.type === "hidden") {
+  try {
+    const parsed = JSON.parse(v);
+    out[apiKey] = parsed; // Keep as-is (array or string)
+  } catch {
+    // If not JSON, check if it should be an array
+    const sendAsArray = el?.getAttribute('data-send-array') === 'true';
+    out[apiKey] = sendAsArray ? (v ? [v] : []) : v;
+  }
+}else 
       if (el?.type === "file") {
   // Single file
   if (el.files.length === 1) {
