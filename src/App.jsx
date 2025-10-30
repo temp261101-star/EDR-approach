@@ -37,6 +37,7 @@ import ExternalUsbReport from "./NewPages/USB Protection/ExternalUsbReport.jsx";
 import ExternalUsbForm from "./NewPages/USB Protection/ExternalUsbForm.jsx";
 import ExternalUsbList from "./NewPages/USB Protection/ExternalUsbList.jsx";
 import ExternalUsbReportList from "./NewPages/USB Protection/ExternalUsbReportList.jsx";
+import AntiVirusEdr from "./NewPages/AntiVirus/AntiVirusEdr.jsx";
 
 
 
@@ -110,6 +111,7 @@ function App() {
         <Route path="/dashboard/externalusb/externalusbform" element={<ExternalUsbForm />} />
         <Route path="/dashboard/externalUsbReport" element={<ExternalUsbReport />} />
           <Route path="/dashboard/externalUsbReportlist" element={<ExternalUsbReportList />} />
+           <Route path="/dashboard/antivirusEdr" element={<AntiVirusEdr />} />
        
       </Route>
     </Routes>

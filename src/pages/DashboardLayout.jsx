@@ -303,6 +303,17 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             
             
           </AccordionItem>
+          <AccordionItem
+            title="AntiVirus "
+            icon={Banknote}
+            isOpen={openAccordions.antivirus}
+            onToggle={() => toggleAccordion("antivirus")}>
+
+               <NavLink to="/dashboard/antivirusEdr" icon={CircleSmall}>
+            Antivirus EDR
+            </NavLink>
+
+            </AccordionItem>
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">
