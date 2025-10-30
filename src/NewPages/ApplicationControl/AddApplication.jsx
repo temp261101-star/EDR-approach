@@ -7,7 +7,7 @@ import TextInput from '../../components/FormComponent/TextInput';
 
 const AddApplication = () => {
 
-      const formRef = useRef(null);
+  const formRef = useRef(null);
   const branchRef = useRef();
   const deviceRef = useRef();
   const [reloadTable, setReloadTable] = useState(0);
@@ -19,20 +19,20 @@ const AddApplication = () => {
 
     const controller = new FormController(formRef.current, {
 
-sources: {
-  fetchResource: async ({ resource, parentKey, parentValue }) => {
-    const res = await api.fetchResource({
-      resource,
-      parentKey,
-      parentValue,
-    });
+      sources: {
+        fetchResource: async ({ resource, parentKey, parentValue }) => {
+          const res = await api.fetchResource({
+            resource,
+            parentKey,
+            parentValue,
+          });
 
-    console.log("returned value in addapplication: ", res);
-    
-    // Remove all the existing normalization code and just return res
-    return res;
-  },
-},
+          console.log("returned value in addapplication: ", res);
+
+          // Remove all the existing normalization code and just return res
+          return res;
+        },
+      },
       actions: {
         addTrustedApp: async (payload) => {
           return api.createResource("setReactAddApplication", payload);
@@ -69,50 +69,45 @@ sources: {
     setShowApplicationFields(false);
   }
   return (
-    
-       
+    <Form ref={formRef} apiAction="addTrustedApp" title=" Add Trusted Application">
+      {/* Inputs */}
+      <FormFields grid={2}>
+        <MultiSelect
+          name="branches"
+          label="Branch"
+          dataSource="getReactBranchName"
+          multiSelect={true}
+          sendAsArray={true}
+          data-key="branches"
+          ref={branchRef}
+        />
 
-          <Form 
-            ref={formRef}
-            apiAction="addTrustedApp"
-            title=" Add Trusted Application"
-          >
-            {/* Inputs */}
-            <FormFields>
-              <MultiSelect
-                name="branches"
-                label="Branch"
-                dataSource="getReactBranchName"
-                multiSelect={true}
-                sendAsArray={true}
-                data-key="branches"
-                ref={branchRef}
-              />
+        <MultiSelect
+          name="deviceName"
+          label="Device"
+          ref={deviceRef}
+          dataSource="getReactDeviceOnBranch"
+          dataDependsOn="branches"
+          data-param="branches"
+          data-key="devices"
+          multiSelect={true}
+          sendAsArray={true}
+        />
+        <MultiSelect
+          name="type"
+          label="Type"
+          options={[
+            { value: "Application Name", name: "Application Name" },
+            { value: "Hash", name: "Hash" }
+          ]}
+          // multiSelect={false}
+          onChange={handleApplicationTypeChange}
+          required
+        />
 
-              <MultiSelect
-                name="deviceName"
-                label="Device"
-                ref={deviceRef}
-                dataSource="getReactDeviceOnBranch"
-                dataDependsOn="branches"
-                data-param="branches"
-                data-key="devices"
-                multiSelect={true}
-                sendAsArray={true}
-              />
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6">
-                {/* <TextInput
-                  label="Type"
-                  name="type"
-                  onChange={handleApplicationTypeChange}
-                  required
-                /> */}
-            
-              </div>
-
-            {showApplicationFields && (
-  <div className="col-span-full grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
+   
+{showApplicationFields && (
+  <>
     <TextInput
       label="Application Name"
       name="applicationName"
@@ -125,35 +120,36 @@ sources: {
       placeholder="Enter Hash (SHA-256)"
       required
     />
-  </div>
+  </>
 )}
-        
-            </FormFields>
-           
 
-            {/* Buttons */}
-            <FormActions>
-              <button
-                type="reset"
-                className="px-5 py-2.5 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
-                onClick={handleReset}
-              >
-                Reset
-              </button>
-              <button
-                type="submit"
-                className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
-              >
-                Submit
-              </button>
-           
-            </FormActions>
-          </Form>
 
-          
-     
-   
- 
+      </FormFields>
+
+
+      {/* Buttons */}
+      <FormActions>
+        <button
+          type="reset"
+          className="px-5 py-2.5 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
+          onClick={handleReset}
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
+        >
+          Submit
+        </button>
+
+      </FormActions>
+    </Form>
+
+
+
+
+
   )
 }
 

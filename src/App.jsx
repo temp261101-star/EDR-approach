@@ -20,12 +20,18 @@ import ViewApplication from "./NewPages/ApplicationControl/ViewApplication.jsx";
 import ManageBlackListed from "./NewPages/ApplicationControl/ManageBlackListed.jsx";
 import PreventedApplicationReport from "./NewPages/ApplicationControl/PreventedApplicationReport.jsx";
 import WhiteListedApplication from "./NewPages/ApplicationControl/WhiteListedApplication.jsx";
+import ViewApplicationList from "./NewPages/ApplicationControl/ViewApplicationList.jsx";
+import SetModeReport from "./NewPages/ApplicationControl/SetModeReport.jsx";
+import ExternalUsbList from "./NewPages/USBProtection/ExternalUsbList.jsx";
+import ExternalUsbForm from "./NewPages/USBProtection/ExternalUsbForm.jsx";
+import ExternalUsbReport from "./NewPages/USBProtection/ExternalUsbReport.jsx";
+
 
 
 
 function App() {
 
- const [isAuthenticated, setIsAuthenticated] = useState(
+  const [isAuthenticated, setIsAuthenticated] = useState(
     () => localStorage.getItem("isAuthenticated") === "true"
   );
 
@@ -65,17 +71,22 @@ function App() {
         <Route path="dynamicGraph" element={<DynamicGraphPage />} />
         <Route path="reports" element={<Reports />} />
         <Route path="/dashboard/policy-setup" element={<PolicySetup />} />
-        <Route path="/dashboard/externalUsb" element={<AddExternalUSB />} />
-        <Route path="/dashboard/PolicySetup" element={<PolicySetupPage/> } />
-        <Route path="/dashboard/virusListing" element={<VirusListing/> } />
-        <Route path="/dashboard/virusDashboard" element={<VirusDashboard/> } />
-        <Route path="/dashboard/setMode" element={<SetMode /> } />
-        <Route path="/dashboard/viewMode" element={<ViewMode /> } />
-        <Route path="/dashboard/addApplication" element={<AddApplication /> } />
-        <Route path="/dashboard/viewApplication" element={<ViewApplication /> } />
-        <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed /> } />
-        <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport /> } />
-        <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication /> } />
+        {/* <Route path="/dashboard/externalUsb" element={<AddExternalUSB />} /> */}
+        <Route path="/dashboard/PolicySetup" element={<PolicySetupPage />} />
+        <Route path="/dashboard/virusListing" element={<VirusListing />} />
+        <Route path="/dashboard/virusDashboard" element={<VirusDashboard />} />
+        <Route path="/dashboard/setMode" element={<SetMode />} />
+        <Route path="/dashboard/viewMode" element={<ViewMode />} />
+        <Route path="/dashboard/addApplication" element={<AddApplication />} />
+        <Route path="/dashboard/viewApplication" element={<ViewApplication />} />
+        <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed />} />
+        <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport />} />
+        <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication />} />
+        <Route path="/dashboard/viewApplication/viewApplicationListing" element={<ViewApplicationList />} />
+        <Route path="/dashboard/setMode/setModeReport" element={<SetModeReport />} />
+        <Route path="/dashboard/externalusb" element={<ExternalUsbList />} />
+        <Route path="/dashboard/externalusb/externalusbform" element={<ExternalUsbForm />} />
+         <Route path="/dashboard/externalusbreport" element={<ExternalUsbReport />} />
       </Route>
     </Routes>
 

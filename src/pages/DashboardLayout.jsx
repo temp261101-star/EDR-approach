@@ -256,8 +256,9 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/externalUsb" icon={CircleSmall}>
             External USB
             </NavLink>
-         
-  
+              <NavLink to="/dashboard/externalUsbreport" icon={CircleSmall}>
+            External USB Report
+            </NavLink>
            
             
             
