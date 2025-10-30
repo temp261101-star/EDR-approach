@@ -1,25 +1,17 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from 'react'
+import FormController from '../../../lib/FormController';
+import api from '../../../lib/api';
+import Form, { FormActions, FormFields } from '../../components/Form';
+import MultiSelect from '../../components/MultiSelect';
 
-import Swal from "sweetalert2";
-import toast from "react-hot-toast";
-import FormController from "../../../lib/FormController";
-import Form, { FormActions, FormFields } from "../../components/Form";
-import TextInput from "../../components/TextInput";
-import MultiSelect from "../../components/MultiSelect";
-import RadioGroup from "../../components/RadioGroup";
-import api from "../../../lib/api";
-import { useNavigate } from "react-router-dom";
-
-const SetMode = () => {
-  const formRef = useRef();
-  const deviceRef = useRef();
-  const branchRef = useRef();
+function WebsiteBlacklistingForm() {
+  const formRef=useRef();
+  const branchRef=useRef();
+  const deviceRef=useRef();
   const accessRef = useRef();
-  const navigate=useNavigate();
+  const webRef = useRef();
 
-
-
-  useEffect(() => {
+   useEffect(() => {
     if (!formRef.current) return;
 
     const controller = new FormController(formRef.current, {
@@ -49,7 +41,7 @@ if (res?.branches) {
       },
 
       actions: {
-        AddSetMode: async (payload) => {
+        Websiteblacklist: async (payload) => {
           return api.createResource("/setexternalUSB/addExternalUSB", payload);
         },
       },
@@ -81,50 +73,73 @@ if (res?.branches) {
     return () => controller.destroy();
   }, []);
 
-
   return (
     <div>
-      <Form ref={formRef} apiAction="AddSetMode" title="Add External USB">
+
+      <Form ref={formRef} apiAction="Websiteblacklist" title="Website Blacklisting">
+
         <FormFields grid={2}>
-         
-
-          <MultiSelect
-            name="branches"           
-             label="Branch"
-            dataSource="commonMode/getBranchName"
-            multiSelect={true}
-            sendAsArray={true}
-            data-key="branches"
-            ref={branchRef}
-          />
-           
-          <MultiSelect
-            name="deviceName"
-            label="Host name"
-            ref={deviceRef}
-            dataSource="commonMode/getDeviceOnBranchName"
-            dataDependsOn="branches"
-            multiSelect={true}
-            sendAsArray={true}
-          />
+          <MultiSelect 
+          label="Branch Name"
+          name="branches"
+          multiselect={true}
+          sendAsArray={true}
+          data-key="branches"
+          // dataSource="/getBranchName"
+          ref={branchRef}
+          required
           
-          <MultiSelect
-            name="ModeType"
-            label="Mode Type"
-            options={[
-              { value: "Learning", name: "Learning" },
-              { value: "Protection", name: "Protection" },
-            ]}
-            ref={accessRef}
           />
 
-      
+          <MultiSelect
+
+          label="Device Name"
+          name="device"
+          multiselect={true}
+          sendAsArray={true}
+          // dataSource="getDeviceOnBranchName"
+          ref={deviceRef}
+          dataDependsOn="branches"
+          required
+          
+          
+          />
+
+
+           <MultiSelect
+
+          label="Mode Of Access"
+          name="access"
+          ref={accessRef}
+          options={[
+              { value: "Prevent", name: "Prevent" },
+              { value: "Allow", name: "Allow" },
+              {value: "Detect",name:"Detect"}
+            ]}
+            required
+          
+          
+          />
+
+
+
+           <MultiSelect
+
+          label="Website Name"
+          name="websitename"
+          ref={webRef}
+           multiselect={true}
+          sendAsArray={true}
+          // dataSource="getDeviceOnBranchName"
+          required
+/>
+
         </FormFields>
 
         <FormActions>
-          <button
+        <button
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit" onClick={()=>navigate('/dashboard/viewMode')}
+            type="submit" 
           >
             Submit
           </button> 
@@ -133,10 +148,14 @@ if (res?.branches) {
                     >
                         Reset
                     </button>
+        
         </FormActions>
-      </Form>
-    </div>
-  );
-};
 
-export default SetMode;
+
+      </Form>
+      
+    </div>
+  )
+}
+
+export default WebsiteBlacklistingForm

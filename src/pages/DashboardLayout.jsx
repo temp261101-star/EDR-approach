@@ -256,6 +256,47 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/externalUsb" icon={CircleSmall}>
             External USB
             </NavLink>
+
+            <NavLink to="/dashboard/externalUsbReport" icon={CircleSmall}>
+            External USB Report
+            </NavLink>
+
+
+
+             </AccordionItem>
+
+            <AccordionItem
+            title="Website Protection"
+            icon={Banknote}
+            isOpen={openAccordions.website}
+            onToggle={() => toggleAccordion("website")}
+          >
+          
+           
+            <NavLink to="/dashboard/WebsiteDashboard" icon={CircleSmall}>
+            Website Dashboard
+            </NavLink>
+
+            <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
+            Capture Website History
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteBlacklistHistory" icon={CircleSmall}>
+            Website Blacklist History
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteBlacklist" icon={CircleSmall}>
+           Website Blacklist
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteHistoryReport" icon={CircleSmall}>
+            Website History Report
+            </NavLink>
+
+            <NavLink to="/dashboard/DownloadBrowserHistory" icon={CircleSmall}>
+            Download Browser History
+            </NavLink>
+         
          
   
            

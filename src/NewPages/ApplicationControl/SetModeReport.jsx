@@ -2,8 +2,8 @@ import React from 'react'
 import Table from '../../components/Table'
 import { useNavigate } from 'react-router-dom'
 
-const ViewMode = () => {
- 
+function SetModeReport() {
+
     const navigate = useNavigate();
 
     const data = [
@@ -32,4 +32,4 @@ const ViewMode = () => {
   )
 }
 
-export default ViewMode
+export default SetModeReport
