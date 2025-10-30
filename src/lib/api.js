@@ -1,19 +1,10 @@
 import axios from "axios";
-// const api = axios.create({
-// // baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
-
-// // local url from pranay
-// // baseURL:"http://192.168.0.156:9191/api/v1",
-
-// // hosted IP from Pranay
-// baseURL:"http://182.48.194.218:9191/api/v1",
-// // 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
-// });
-
 const api = axios.create({
-  baseURL: "/api/proxy",   // <-- ALWAYS call this
-  // timeout: 30000, // optional
+// baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
+baseURL:"http://182.48.194.218:9191/api/v1",
+// 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
 });
+
 async function fetchResource({ resource, parentValue }) {
   console.log("check api endpoint ", resource);
   // console.log("parent key : ", parentValue);
