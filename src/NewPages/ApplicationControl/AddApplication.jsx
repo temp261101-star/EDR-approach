@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
-import api from '../../../lib/api';
-import FormController from '../../../lib/FormController';
+import api from '../../lib/api';
+import FormController from '../../lib/FormController';
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import TextInput from '../../components/FormComponent/TextInput';
@@ -20,19 +20,29 @@ const AddApplication = () => {
     const controller = new FormController(formRef.current, {
 
 sources: {
-  fetchResource: async ({ resource, parentKey, parentValue }) => {
-    const res = await api.fetchResource({
-      resource,
-      parentKey,
-      parentValue,
-    });
+        fetchResource: async ({ resource, parentKey, parentValue }) => {
+          const res = await api.fetchResource({
+            resource,
+            parentKey,
+            parentValue,
+          });
+          if (Array.isArray(res)) {
+            return res.map((branch) => ({
+              value: branch,
+              label: branch,
+            }));
+          }
+          if (res?.branches) {
+            return res.branches.map((b) => ({
+              value: b.id,
+              label: b.name,
+            }));
+          }
 
-    console.log("returned value in addapplication: ", res);
-    
-    // Remove all the existing normalization code and just return res
-    return res;
-  },
-},
+          console.log("returned value in addapplication: ", res);
+          return res;
+        },
+      },
       actions: {
         addTrustedApp: async (payload) => {
           return api.createResource("setReactAddApplication", payload);
@@ -82,11 +92,8 @@ sources: {
               <MultiSelect
                 name="branches"
                 label="Branch"
-                // dataSource="getReactBranchName"
-                options={[
-              { value: "Learning", name: "Learning" },
-              { value: "Protection", name: "Protection" },
-            ]}
+                 dataSource="commonMode/getBranchName"
+                
                 multiSelect={true}
                 sendAsArray={true}
                 data-key="branches"
@@ -97,13 +104,8 @@ sources: {
                 name="deviceName"
                 label="Device"
                 ref={deviceRef}
-                // dataSource="getReactDeviceOnBranch"
-
-                options={[
-              { value: "Learning", name: "Learning" },
-              { value: "Protection", name: "Protection" },
-            ]}
-                // dataDependsOn="branches"
+                 dataSource="commonMode/getDeviceOnBranchName"
+               dataDependsOn="branches"
                 data-param="branches"
                 data-key="devices"
                 multiSelect={true}

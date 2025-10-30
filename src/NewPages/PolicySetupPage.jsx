@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Form, { FormActions, FormFields } from '../components/Form'
 import TextInput from '../components/FormComponent/TextInput';
-import FormController from '../../lib/FormController';
+import FormController from '../lib/FormController';
 import Swal from 'sweetalert2';
-import api from '../../lib/api';
+import api from '../lib/api';
 import MultiSelect from '../components/MultiSelect';
 import toast from 'react-hot-toast';
 import { useNavigate } from "react-router-dom";

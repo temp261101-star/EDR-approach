@@ -1,10 +1,12 @@
 import React, { useEffect,useRef } from 'react'
-import FormController from '../../../lib/FormController';
+
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import toast from "react-hot-toast";
-import api from '../../../lib/api';
+
 import { useNavigate } from 'react-router-dom';
+import FormController from '../../lib/FormController';
+import api from '../../lib/api';
 
 const ManageBlackListed = () => {
 
@@ -82,26 +84,22 @@ if (res?.branches) {
         <MultiSelect
           name="branches"
           label="Branch Name"
-          options={[
-                {value:"branch1",name:"Branch1"},
-                {value:"branch2",name:"Branch2"}
-                ]}
-          //multiselect={true}
+         dataSource="commonMode/getBranchName"
+          multiSelect={true}
           sendAsArray={true}
           ref={branchRef}
+          required
         />
 
         <MultiSelect
           name="deviceName"
           label="Device Name"
-          options={[
-            {value:"device1",name:"Device1"},
-             {value:"device",name:"Device2"}
-          ]}
+          dataSource="commonMode/getDeviceOnBranchName"
           ref={deviceRef}
           dataDependsOn="branches"
-          //multiselect={true}
+        multiSelect={true}
           sendAsArray={true}
+          required
         />
 
       </FormFields>

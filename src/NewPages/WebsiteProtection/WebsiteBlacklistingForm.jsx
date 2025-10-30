@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react'
-import FormController from '../../../lib/FormController';
-import api from '../../../lib/api';
+
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
+import FormController from '../../lib/FormController';
+import api from '../../lib/api';
 
 function WebsiteBlacklistingForm() {
   const formRef=useRef();
@@ -79,31 +80,30 @@ if (res?.branches) {
       <Form ref={formRef} apiAction="Websiteblacklist" title="Website Blacklisting">
 
         <FormFields grid={2}>
-          <MultiSelect 
-          label="Branch Name"
+          <MultiSelect
           name="branches"
-          multiselect={true}
+          label="Branch Name"
+         dataSource="commonMode/getBranchName"
+          multiSelect={true}
           sendAsArray={true}
-          data-key="branches"
-          // dataSource="/getBranchName"
           ref={branchRef}
           required
-          
-          />
+        />
 
-          <MultiSelect
-
+        <MultiSelect
+          name="deviceName"
           label="Device Name"
-          name="device"
-          multiselect={true}
-          sendAsArray={true}
-          // dataSource="getDeviceOnBranchName"
+          dataSource="commonMode/getDeviceOnBranchName"
           ref={deviceRef}
           dataDependsOn="branches"
+        multiSelect={true}
+          sendAsArray={true}
           required
+        />
+
           
           
-          />
+          
 
 
            <MultiSelect

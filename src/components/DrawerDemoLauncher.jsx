@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import DrawerModal from "../components/DrawerModal";
 import DemoDrawerContent from "./DemoDrawerContent.jsx";
 import Table from "./Table.jsx";
-import { dummyData } from "../../lib/DummyData.js";
+import { dummyData } from "../lib/DummyData.js";
 
 export default function DrawerDemoLauncher() {
   const [open, setOpen] = useState(false);

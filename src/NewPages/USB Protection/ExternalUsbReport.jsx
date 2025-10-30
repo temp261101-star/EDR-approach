@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
-import FormController from '../../../lib/FormController';
-import api from '../../../lib/api';
+
+
 import Form, { FormActions, FormFields } from '../../components/Form'
 
 import MultiSelect from '../../components/MultiSelect';
@@ -9,6 +9,8 @@ import DateRangePicker from '../../components/genericTable/DateRangePicker';
 import Table from '../../components/Table';
 import DateTimeInput from '../../components/FormComponent/DateTimeInput';
 import { useNavigate } from 'react-router-dom';
+import FormController from '../../lib/FormController';
+import api from '../../lib/api';
 
 
 
@@ -110,6 +112,7 @@ function ExternalUsbReport() {
                         sendAsArray={true}
                         data-key="branches"
                         ref={branchRef}
+                        required
                     />
 
                     <MultiSelect
@@ -120,6 +123,7 @@ function ExternalUsbReport() {
                         dataDependsOn="branches"
                         multiSelect={true}
                         sendAsArray={true}
+                        required
                     />
 
 

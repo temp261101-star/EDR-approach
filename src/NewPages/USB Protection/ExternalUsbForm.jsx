@@ -6,20 +6,25 @@ import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
 
 import MultiSelect from '../../components/MultiSelect'
-import FormController from '../../../lib/FormController'
-import api from '../../../lib/api'
+
+
 import Form, { FormActions, FormFields } from '../../components/Form'
 import { Check } from 'lucide-react'
 import TextInput from '../../components/TextInput'
 import CheckBoxGroup from '../../components/FormComponent/CheckBoxGroup'
+import FormController from '../../lib/FormController'
+import api from '../../lib/api'
 
 
 
 function ExternalUsbForm() {
-    const branchref = useRef()
+    const branchRef = useRef()
     const formRef = useRef()
+    const deviceRef=useRef();
+    const accessRef=useRef();
+    const typeRef=useRef();
     // const [showAccessOptions, setShowAccessOptions] = useState(false);
-    const [showApplicationFields, setShowApplicationFields] = useState(false);
+    const [showApplicationFields, setShowApplicationFields] = useState("");
     const writeOptions = [
         { value: "WriteModeDeny", label: "Write Mode Deny" },
     ];
@@ -31,6 +36,30 @@ function ExternalUsbForm() {
         if (!formRef.current) return;
 
         const controller = new FormController(formRef.current, {
+              sources: {
+        fetchResource: async ({ resource, parentKey, parentValue }) => {
+          const res = await api.fetchResource({
+            resource,
+            parentKey,
+            parentValue,
+          });
+          if (Array.isArray(res)) {
+            return res.map((branch) => ({
+              value: branch,
+              label: branch,
+            }));
+          }
+          if (res?.branches) {
+            return res.branches.map((b) => ({
+              value: b.id,
+              label: b.name,
+            }));
+          }
+
+          console.log("returned value in addapplication: ", res);
+          return res;
+        },
+      },
             actions: {
                 externalUsb: async (payload) => {
                     return api.createResource("saveAntivirusData", payload);
@@ -82,36 +111,33 @@ function ExternalUsbForm() {
     const handleApplicationTypeChange = (event) => {
         const value = event.target.value;
 
-        setShowApplicationFields(!!value);
+        setShowApplicationFields(event.target.value);
     };
+                    
+    console.log("showApplicationFields",showApplicationFields)
     return (
         <div>
             <Form ref={formRef} apiAction="externalUsb" title="Branch Wise">
                 <FormFields grid={2}>
 
                     <MultiSelect
+                        name="branches"
                         label="Branch Name"
-                        name="branch"
-                        options={[
-                            { value: "vashi", name: "Vashi" },
-                            { value: "Mysore", name: "Mysore" }
-                        ]}
+                        dataSource="commonMode/getBranchName"
                         multiSelect={true}
                         sendAsArray={true}
-                        ref={branchref}
+                        ref={branchRef}
                         required
                     />
 
                     <MultiSelect
+                        name="deviceName"
                         label="Device Name"
-                        name="devicename"
-                        options={[
-                            { value: "gayathri", name: "Gayathri" },
-                            { value: "jyothi", name: "Jyothi" }
-                        ]}
+                        dataSource="commonMode/getDeviceOnBranchName"
+                        ref={deviceRef}
+                        dataDependsOn="branches"
                         multiSelect={true}
                         sendAsArray={true}
-                        ref={branchref}
                         required
                     />
 
@@ -120,11 +146,11 @@ function ExternalUsbForm() {
                         label="Device Type"
                         name="deviceType"
                         options={[
-                            { value: "Up", name: "Up" },
+                            { value: "MTP", name: "MTP" },
                             { value: "Down", name: "Down" }
                         ]}
+                        ref={typeRef}
                         sendAsArray={true}
-                        ref={branchref}
                         required
                     />
 
@@ -132,24 +158,26 @@ function ExternalUsbForm() {
                         label="Mode of Access"
                         name="modeofaccess"
                         options={[
-                            { value: "Detect", name: "Detect" },
+                            { value: "Allow", name: "Allow" },
                             { value: "Prevent", name: "Prevent" }
                         ]}
-                        sendAsArray={true}
-                        ref={branchref}
+                        sendAsArray={false}
+                       ref={accessRef}
                         required
                         onChange={handleApplicationTypeChange}
                     />
 
-                    {showApplicationFields && (
+                    {showApplicationFields =="Allow" && (
                         <>
                             <CheckBoxGroup
+                            name="ExecuteOptions"
+
                                 options={executeOptions}
 
 
                             />
                             <CheckBoxGroup
-
+                            name="writeOptions"
                                 options={writeOptions}
 
                             />

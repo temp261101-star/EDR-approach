@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react'
-import FormController from '../../../lib/FormController';
+
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import api from '../../../lib/api';
+import FormController from '../../lib/FormController';
+import api from '../../lib/api';
+
 
 const ViewApplication = () => {
   const formRef = useRef();
@@ -93,31 +95,21 @@ const ViewApplication = () => {
           <MultiSelect
             name="branches"
             label="Branch"
-            // dataSource="getBranchName"
-            // multiSelect={true}
-            // sendAsArray={true}
-            // ref={branchRef}
-            options={[
-              { value: "Up", name: "Up" },
-              { value: "Down", name: "Down" }
-            ]}
-            // sendAsArray={true}
+            dataSource="commonMode/getBranchName"
+            multiSelect={true}
+            sendAsArray={true}
+            ref={branchRef}
             required
           />
 
           <MultiSelect
             name="deviceName"
             label="Device Name"
-            // ref={deviceRef}
-            // dataSource="getDevice"
-            // dataDependsOn="branches"
+            ref={deviceRef}
+            dataSource="commonMode/getDeviceOnBranchName"
+            dataDependsOn="branches"
             multiSelect={true}
-            // sendAsArray={true}
-            options={[
-              { value: "Up", name: "Up" },
-              { value: "Down", name: "Down" }
-            ]}
-            // sendAsArray={true}
+            sendAsArray={true}
             required
           />
 

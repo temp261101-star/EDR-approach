@@ -1,13 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import Swal from "sweetalert2";
 import MultiSelect from "../components/MultiSelect";
-import FormController from "../../lib/FormController";
+import FormController from "../lib/FormController";
 import Form, { FormActions, FormFields } from "../components/Form";
-import api from "../../lib/api";
+import api from "../lib/api";
 import TextInput from "../components/TextInput";
-import ModuleDrawerModal from "./MODAL/ModuleDrawerModal.JSX";
+// import ModuleDrawerModal from "./MODAL/ModuleDrawerModal.JSX";
 import toast from "react-hot-toast";
-// import { Form, FormFields, FormActions } from "../components/Form";
 
 export default function ApplicationUser() {
   const formRef = useRef(null);
@@ -210,12 +209,12 @@ export default function ApplicationUser() {
               />
             </div>
 
-            <ModuleDrawerModal
+            {/* <ModuleDrawerModal
               reset={resetCheck}
               isOpen={showModuleModal}
               onClose={() => setShowModuleModal(false)}
               onSave={setSelectedModules}
-            />
+            /> */}
           </div>
         </FormFields>
 

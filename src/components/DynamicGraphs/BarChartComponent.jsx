@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { getApi } from "../../../lib/api";
+import { getApi } from "../../lib/api";
 
 const BarChartComponent = ({query,endpoint,title}) => {
   const [anomalyOverview, setAnomalyOverview] = useState([]);

@@ -1,10 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FormController from '../../../lib/FormController';
+
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
-import api from '../../../lib/api';
+
 import toast from 'react-hot-toast';
+import FormController from '../../lib/FormController';
+import api from '../../lib/api';
 
 const PreventedApplicationReport = () => {
   const formRef = useRef();
@@ -74,28 +76,26 @@ const PreventedApplicationReport = () => {
       <Form ref={formRef} apiAction="PreventedApplication" title="Prevented Application">
         <FormFields grid={2}>
           <MultiSelect
-            label="Branch Name"
-            name="branches"
-            multiSelect={true}
-            sendAsArray={true}
-            ref={branchRef}
-            options={[
-              { value: 'Learning', name: 'Learning' },
-              { value: 'Protection', name: 'Protection' },
-            ]}
-          />
+          name="branches"
+          label="Branch Name"
+         dataSource="commonMode/getBranchName"
+          multiSelect={true}
+          sendAsArray={true}
+          ref={branchRef}
+          required
+        />
 
-          <MultiSelect
-            label="Device Name"
-            name="Device"
-            ref={deviceRef}
-            multiSelect={true}
-            sendAsArray={true}
-            options={[
-              { value: 'Learning', name: 'Learning' },
-              { value: 'Protection', name: 'Protection' },
-            ]}
-          />
+        <MultiSelect
+          name="deviceName"
+          label="Device Name"
+          dataSource="commonMode/getDeviceOnBranchName"
+          ref={deviceRef}
+          dataDependsOn="branches"
+        multiSelect={true}
+          sendAsArray={true}
+          required
+        />
+
 
           <FormActions>
             <button

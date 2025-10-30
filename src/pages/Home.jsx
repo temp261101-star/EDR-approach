@@ -1,6 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
-import { getApi } from "../../lib/api";
+import { getApi } from "../lib/api";
 import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
 import BarChartComponent from "../components/DynamicGraphs/BarChartComponent";
 import DeviceSecurityPieChart2 from "../NewPages/DeviceSecurityPieChart2";
@@ -48,7 +48,7 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
  useEffect(() => {
     const fetchData = async () => {
       
-      const res = await axios.get("http://192.168.0.156:9191/api/v1/dashboard/getHostStatus");
+      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getHostStatus");
       console.log("log api response in app", res);
 
       setData(res.data);
@@ -60,7 +60,7 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
  useEffect(() => {
     const fetchData = async () => {
       
-      const res = await axios.get("http://192.168.0.156:9191/api/v1/dashboard/getDeviceStatus");
+      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getDeviceStatus");
       console.log("log api response in app", res);
 
       setGetDeviceStatus(res.data);
@@ -71,7 +71,7 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
  useEffect(() => {
     const fetchData = async () => {
       
-      const res = await axios.get("http://192.168.0.156:9191/api/v1/dashboard/getUSBStatus");
+      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus");
       console.log("log api response in app", res);
 
       setGetUSBStatus(res.data);
@@ -136,7 +136,7 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
           <Card title="Test" className="h-[320px]">
             <PieChartComponent
               onClick={() => setOpen(true)}
-               data={data}
+              data={data}
               endpoint="demoChart"
               title="Device Security Status"
               action="somethinfg"
