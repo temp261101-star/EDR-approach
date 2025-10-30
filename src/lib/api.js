@@ -13,6 +13,8 @@ const api = axios.create({
   },
 });
 
+// test
+
 async function fetchResource({ resource, parentValue }) {
   console.log("check api endpoint ", resource);
   // console.log("parent key : ", parentValue);
