@@ -1,7 +1,12 @@
 import axios from "axios";
 const api = axios.create({
 // baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
-baseURL:"http://192.168.0.156:9191/api/v1",
+
+// local url from pranay
+// baseURL:"http://192.168.0.156:9191/api/v1",
+
+// hosted IP from Pranay
+baseURL:"http://182.48.194.218:9191/api/v1",
 // 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
 });
 
