@@ -76,6 +76,7 @@ function App() {
         <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed /> } />
         <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport /> } />
         <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication /> } />
+        <Route path="/dashboard/externalUsb" element={<AddExternalUSB /> } />
       </Route>
     </Routes>
 
