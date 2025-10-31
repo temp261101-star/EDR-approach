@@ -1,5 +1,3 @@
-
-
 import React, {
   useState,
   useRef,
@@ -228,10 +226,9 @@ const MultiSelect = forwardRef(function MultiSelect(
       onChange?.({ target: { name, value: option.value } });
 
       if (hiddenInputRef.current) {
-        hiddenInputRef.current.value =
-          multiSelect && sendAsArray
-            ? JSON.stringify([option.value])
-            : option.value;
+        hiddenInputRef.current.value = sendAsArray
+          ? JSON.stringify([option.value])
+          : option.value;
 
         hiddenInputRef.current.dispatchEvent(
           new Event("change", { bubbles: true })
@@ -300,7 +297,8 @@ const MultiSelect = forwardRef(function MultiSelect(
     onChange?.({ target: { name, value: multiSelect ? [] : "" } });
 
     if (hiddenInputRef.current) {
-      hiddenInputRef.current.value = multiSelect && sendAsArray ? "[]" : "";
+      // hiddenInputRef.current.value = multiSelect && sendAsArray ? "[]" : "";
+      hiddenInputRef.current.value = sendAsArray ? "[]" : "";
       const changeEvent = new Event("change", { bubbles: true });
       hiddenInputRef.current.dispatchEvent(changeEvent);
     }
@@ -330,9 +328,9 @@ const MultiSelect = forwardRef(function MultiSelect(
     if (dataAuto) result["data-auto"] = dataAuto;
     if (dataSource) result["data-source"] = dataSource;
     if (dataDependsOn) result["data-depends-on"] = dataDependsOn;
+    if (sendAsArray) result["data-send-array"] = "true";
     return result;
-  }, [dataAuto, dataSource, dataDependsOn]);
-
+  }, [dataAuto, dataSource, dataDependsOn, sendAsArray]);
   return (
     <div
       className={`relative ${disabled ? "opacity-60" : ""}`}
@@ -511,11 +509,18 @@ const MultiSelect = forwardRef(function MultiSelect(
         ref={hiddenInputRef}
         type="hidden"
         name={name}
-        value={
-          multiSelect && sendAsArray
-            ? JSON.stringify(selectedValues)
-            : selectedValues[0] || ""
-        }
+        // value={
+        //   multiSelect && sendAsArray
+        //     ? JSON.stringify(selectedValues)
+        //     : selectedValues[0] || ""
+        // }
+      value={
+  sendAsArray
+    ? JSON.stringify(selectedValues)
+    : multiSelect
+    ? selectedValues.join(",")
+    : selectedValues[0] || ""
+}
         {...attrs}
         {...rest}
       />

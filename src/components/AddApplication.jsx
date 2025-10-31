@@ -2,11 +2,11 @@ import React, { useRef, useEffect, useState } from "react";
 import Form from "../components/Form";
 import Select from "../components/Select";
 import FormController from "../../lib/FormController";
-import api from "../../lib/api";
 import TextInput from "./TextInput";
 import MultiSelect from "./MultiSelect";
 import Table from "./Table";
 import toast from "react-hot-toast";
+import api from '../lib/api'
 
 export default function AddApplication() {
   const formRef = useRef(null);

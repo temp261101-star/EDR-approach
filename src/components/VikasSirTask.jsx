@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 // import Form, { FormActions, FormFields } from "./Form";
 import TextInput from "./TextInput";
 import FormController from "../../lib/FormController";
-import api from "../../lib/api";
+import api from "../lib/api";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import Form, { FormActions, FormFields } from "./Form";

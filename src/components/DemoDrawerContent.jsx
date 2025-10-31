@@ -1,6 +1,6 @@
 import React from 'react'
 import Table from './Table'
-import { dummyData } from '../../lib/DummyData'
+import { dummyData } from '../lib/DummyData'
 
 const DemoDrawerContent = () => {
   return (

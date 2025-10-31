@@ -4,7 +4,7 @@ import React from "react";
 import Table from "./Table";
 import DateRangePicker from "./genericTable/DateRangePicker";
 import { DataProvider, useReportData } from "../context/DataContext";
-import { dummyData } from "../../lib/DummyData";
+import { dummyData } from "../lib/DummyData";
 
 const ReportContent = () => {
   const { reportData } = useReportData(); 

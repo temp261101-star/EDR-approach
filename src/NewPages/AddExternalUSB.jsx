@@ -2,12 +2,10 @@ import React, { useEffect, useRef, useState } from "react";
 
 import Swal from "sweetalert2";
 import toast from "react-hot-toast";
-import FormController from "../../lib/FormController";
+import FormController from "../lib/FormController";
+import api from "../lib/api";
 import Form, { FormActions, FormFields } from "../components/Form";
-import TextInput from "../components/TextInput";
 import MultiSelect from "../components/MultiSelect";
-import RadioGroup from "../components/RadioGroup";
-import api from "../../lib/api";
 
 const AddExternalUSB = () => {
   const formRef = useRef();
@@ -37,8 +35,8 @@ const AddExternalUSB = () => {
       },
 
       actions: {
-        addExternalUSB: async (payload) => {
-          return api.createResource("/setexternalUSB/addExternalUSB", payload);
+        AddExternalUSB: async (payload) => {
+          return api.createResource("/setexternalUSB/AddExternalUSB", payload);
         },
       },
 
@@ -87,7 +85,7 @@ const AddExternalUSB = () => {
 
   return (
     <div className="mt-10">
-      <Form ref={formRef} apiAction="addExternalUSB" title="Add External USB">
+      <Form ref={formRef} apiAction="AddExternalUSB" title="Add External USB">
         <FormFields grid={2}>
           <MultiSelect
             name="ipaddress"

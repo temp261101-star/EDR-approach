@@ -3,7 +3,7 @@ import Form, { FormActions, FormFields } from "./Form";
 import TextInput from "./TextInput";
 import FormController from "../../lib/FormController";
 import Swal from "sweetalert2";
-import api from "../../lib/api";
+import api from "../lib/api";
 import RadioGroup from "./RadioGroup";
 import axios from "axios";
 import toast from "react-hot-toast";

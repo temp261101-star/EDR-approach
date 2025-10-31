@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 import Form, { FormFields } from "../components/Form";
 import Select from "../components/Select";
 import FormController from "../../lib/FormController";
-import api from "../../lib/api";
+import api from "../lib/api";
 import toast from "react-hot-toast";
 
 export default function AddATM() {
