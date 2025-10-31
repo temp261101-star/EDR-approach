@@ -89,7 +89,7 @@ const ViewApplication = () => {
     return () => controller.destroy();
   }, []);
   return (
-    <div>
+    <div className="mt-10">
       <Form ref={formRef} apiAction="viewApplication" title="View Application">
         <FormFields grid={2}>
 

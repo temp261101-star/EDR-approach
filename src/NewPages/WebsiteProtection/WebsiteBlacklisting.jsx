@@ -34,7 +34,7 @@ return (
       </div>
 
       {/* Table Section */}
-      <Table data={data} />
+      <Table data={data}  showCheckboxes={false} />
     </div>
   </div>
 );

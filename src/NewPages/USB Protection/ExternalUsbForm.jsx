@@ -16,7 +16,6 @@ import FormController from '../../lib/FormController'
 import api from '../../lib/api'
 
 
-
 function ExternalUsbForm() {
     const branchRef = useRef()
     const formRef = useRef()
@@ -116,7 +115,7 @@ function ExternalUsbForm() {
                     
     console.log("showApplicationFields",showApplicationFields)
     return (
-        <div>
+       <div className="mt-10">
             <Form ref={formRef} apiAction="externalUsb" title="Branch Wise">
                 <FormFields grid={2}>
 
@@ -146,8 +145,10 @@ function ExternalUsbForm() {
                         label="Device Type"
                         name="deviceType"
                         options={[
+                            { value: "All", name: "All" },
                             { value: "MTP", name: "MTP" },
-                            { value: "Down", name: "Down" }
+                             { value: "USB", name: "USB" }
+                             
                         ]}
                         ref={typeRef}
                         sendAsArray={true}

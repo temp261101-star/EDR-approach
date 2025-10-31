@@ -15,6 +15,7 @@ import api from '../../lib/api';
 
 
 
+
 function ExternalUsbReport() {
 
     const formRef = useRef();
@@ -84,7 +85,7 @@ function ExternalUsbReport() {
         return () => controller.destroy();
     }, []);
     return (
-        <div>
+         <div className="mt-10">
             <Form ref={formRef} apiAction="ExternalUsbReport" title="External USB Report">
 
 

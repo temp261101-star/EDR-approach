@@ -12,14 +12,14 @@ const AddApplication = () => {
   const deviceRef = useRef();
   const [reloadTable, setReloadTable] = useState(0);
 
-  const [showApplicationFields, setShowApplicationFields] = useState(false);
+  const [showApplicationFields, setShowApplicationFields] = useState("");
 
   useEffect(() => {
     if (!formRef.current) return;
 
     const controller = new FormController(formRef.current, {
 
-sources: {
+      sources: {
         fetchResource: async ({ resource, parentKey, parentValue }) => {
           const res = await api.fetchResource({
             resource,
@@ -65,10 +65,11 @@ sources: {
     return () => controller.destroy();
   }, []);
 
-  const handleApplicationTypeChange = (event) => {
-    const value = event.target.value;
-    setShowApplicationFields(!!value);
-  };
+    const handleApplicationTypeChange = (event) => {
+        const value = event.target.value;
+
+        setShowApplicationFields(event.target.value);
+    };
 
   function handleReset() {
     if (formRef.current) {
@@ -79,127 +80,99 @@ sources: {
     setShowApplicationFields(false);
   }
   return (
-    <Form ref={formRef} apiAction="addTrustedApp" title=" Add Trusted Application">
-      {/* Inputs */}
-      <FormFields grid={2}>
-        <MultiSelect
-          name="branches"
-          label="Branch"
-          dataSource="getReactBranchName"
-          multiSelect={true}
-          sendAsArray={true}
-          data-key="branches"
-          ref={branchRef}
-        />
 
-          <Form 
-            ref={formRef}
-            apiAction="addTrustedApp"
-            title=" Add Trusted Application"
-          >
-            {/* Inputs */}
-            <FormFields grid={2}>
-              <MultiSelect
-                name="branches"
-                label="Branch"
-                 dataSource="commonMode/getBranchName"
-                
-                multiSelect={true}
-                sendAsArray={true}
-                data-key="branches"
-                ref={branchRef}
-              />
+    <div className="mt-10">
 
-              <MultiSelect
-                name="deviceName"
-                label="Device"
-                ref={deviceRef}
-                 dataSource="commonMode/getDeviceOnBranchName"
-               dataDependsOn="branches"
-                data-param="branches"
-                data-key="devices"
-                multiSelect={true}
-                sendAsArray={true}
-              />
+      <Form
+        ref={formRef}
+        apiAction="addTrustedApp"
+        title=" Add Trusted Application"
+      >
+        {/* Inputs */}
+        <FormFields grid={2}>
+          <MultiSelect
+            name="branches"
+            label="Branch"
+            dataSource="commonMode/getBranchName"
 
-              {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6"> */}
-                 <MultiSelect
-                  label="Type"
-                  name="type"
-                  onChange={handleApplicationTypeChange}
-                   options={[
-              { value: "Learning", name: "Learning" },
-              { value: "Protection", name: "Protection" },
+            multiSelect={true}
+            sendAsArray={true}
+            data-key="branches"
+            ref={branchRef}
+            required
+          />
+
+          <MultiSelect
+            name="deviceName"
+            label="Device"
+            ref={deviceRef}
+            dataSource="commonMode/getDeviceOnBranchName"
+            dataDependsOn="branches"
+            data-param="branches"
+            data-key="devices"
+            multiSelect={true}
+            sendAsArray={true}
+            required
+          />
+
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-6"> */}
+          <MultiSelect
+            label="Type"
+            name="type"
+            onChange={handleApplicationTypeChange}
+            options={[
+              { value: "SelectType", name: "Select type" },
+              { value: "ApplicationName", name: "Application Name" },
+
+
             ]}
-                  required
-                /> 
-            
-              {/* </div> */}
+            required
+          />
 
-      {showApplicationFields && (
-  <>
-    <TextInput
-      label="Application Name"
-      name="applicationName"
-      placeholder="Enter Application Name"
-      required
-    />
-    <TextInput
-      label="Hash (SHA-256)"
-      name="hash"
-      placeholder="Enter Hash (SHA-256)"
-      required
-    />
-  </>
-)}
+          {/* </div> */}
 
-        
-            </FormFields>
-           
-
-            {/* Buttons */}
-            <FormActions>
-              
-              <button
-                type="submit"
-                className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
-              >
-                Submit
-              </button>
-
-              <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                    
-                onClick={handleReset}
-              >
-                Reset
-              </button>
-           
-            </FormActions>
-          </Form>
-
-      </FormFields>
+          {showApplicationFields == "ApplicationName" && (
+            <>
+              <TextInput
+                label="Application Name"
+                name="applicationName"
+                placeholder="Enter Application Name"
+                required
+              />
+              <TextInput
+                label="Hash (SHA-256)"
+                name="hash"
+                placeholder="Enter Hash (SHA-256)"
+                required
+              />
+            </>
+          )}
 
 
-      {/* Buttons */}
-      <FormActions>
-        <button
-          type="reset"
-          className="px-5 py-2.5 bg-gray-700 text-gray-200 rounded-lg hover:bg-gray-600 transition-colors"
-          onClick={handleReset}
-        >
-          Reset
-        </button>
-        <button
-          type="submit"
-          className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
-        >
-          Submit
-        </button>
-
-      </FormActions>
-    </Form>
+        </FormFields>
 
 
+        {/* Buttons */}
+        <FormActions>
+
+          <button
+            type="submit"
+            className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
+          >
+            Submit
+          </button>
+
+          <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+
+            onClick={handleReset}
+          >
+            Reset
+          </button>
+
+        </FormActions>
+      </Form>
+
+    </div>
 
 
 
