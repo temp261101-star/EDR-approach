@@ -21,7 +21,7 @@ import {
   YAxis,
 } from "recharts";
 import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
-import BarChartComponent from "../components/DynamicGraphs/BarChartComponent";
+import BarChartComponent from "../components/DynamicGraphs/BarChartComponentOld";
 import Table from "../components/Table";
 
 // const VirusDashboard = () => {

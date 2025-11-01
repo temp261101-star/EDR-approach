@@ -1,20 +1,25 @@
-
 // import React, { useState, useMemo } from "react";
+// import { Search } from "lucide-react";
 // import jsPDF from "jspdf";
 // import autoTable from "jspdf-autotable";
 // import * as XLSX from "xlsx";
 // import { saveAs } from "file-saver";
-// import { Search } from "lucide-react";
-// import { useNavigate } from "react-router-dom";
 
-// export default function Table({ data = [], onBulkAction }) {
+
+// export default function Table({ 
+//   data , 
+
+//   onBulkAction,
+//   showCheckboxes = true,
+//   bulkActionLabel = "Bulk Action",
+//   tableTitle
+// }) {
 //   const [searchTerm, setSearchTerm] = useState("");
 //   const [selectedRows, setSelectedRows] = useState([]);
 //   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 //   const [currentPage, setCurrentPage] = useState(1);
 //   const [itemsPerPage, setItemsPerPage] = useState(5);
 
-//   const navigate = useNavigate();
 
 //   // Memoized columns
 //   const columns = useMemo(() => {
@@ -71,6 +76,51 @@
 //           : "asc",
 //     }));
 //   };
+// const handleDownloadPDF = () => {
+//   const doc = new jsPDF();
+//   const tableColumn = actualColumns.map((col) =>
+//     col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
+//   );
+  
+//   // Use all data if no rows selected, otherwise use selected rows
+//   const dataToExport = selectedRows.length > 0 
+//     ? selectedRows.map((i) => data[i])
+//     : filteredData;
+  
+//   const tableRows = dataToExport.map((row) =>
+//     actualColumns.map((col) =>
+//       col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col]
+//     )
+//   );
+
+//   autoTable(doc, {
+//     head: [tableColumn],
+//     body: tableRows,
+//     startY: 20,
+//     styles: { fontSize: 8 },
+//     headStyles: { fillColor: [0, 128, 128] },
+//   });
+
+//   doc.save("table-data.pdf");
+// };
+
+//   const handleDownloadExcel = () => {
+//     const exportData = paginatedData.map((row) => {
+//       const obj = {};
+//       actualColumns.forEach((col) => {
+//         obj[col] =
+//           col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col];
+//       });
+//       return obj;
+//     });
+
+//     const worksheet = XLSX.utils.json_to_sheet(exportData);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "TableData");
+//     const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+//     const blob = new Blob([wbout], { type: "application/octet-stream" });
+//     saveAs(blob, "table-data.xlsx");
+//   };
 
 //   const toggleRow = (index) => {
 //     const globalIndex = (currentPage - 1) * itemsPerPage + index;
@@ -98,29 +148,48 @@
 //     }
 //   };
 
-//   const handleDownloadPDF = () => {
-//     const doc = new jsPDF();
-//     const tableColumn = actualColumns.map((col) =>
-//       col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
-//     );
-//     const tableRows = paginatedData.map((row) =>
-//       actualColumns.map((col) =>
-//         col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col]
-//       )
-//     );
-
-//     autoTable(doc, {
-//       head: [tableColumn],
-//       body: tableRows,
-//       startY: 20,
-//       styles: { fontSize: 8 },
-//       headStyles: { fillColor: [0, 128, 128] },
-//     });
-
-//     doc.save("table-data.pdf");
+//   const handleBulkActionClick = () => {
+//     const selectedData = selectedRows.map((i) => data[i]);
+//     if (onBulkAction) {
+//       onBulkAction(selectedData);
+//     }
 //   };
 
-//   const handleDownloadExcel = () => {
+//   const handleDownloadCSV = () => {
+//     // Create CSV header
+//     const headers = actualColumns.map((col) =>
+//       col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
+//     );
+    
+//     // Create CSV rows
+//     const rows = paginatedData.map((row) =>
+//       actualColumns.map((col) => {
+//         const value = col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col];
+//         // Escape quotes and wrap in quotes if contains comma
+//         return typeof value === 'string' && (value.includes(',') || value.includes('"'))
+//           ? `"${value.replace(/"/g, '""')}"`
+//           : value;
+//       })
+//     );
+    
+//     // Combine header and rows
+//     const csvContent = [headers, ...rows]
+//       .map(row => row.join(','))
+//       .join('\n');
+    
+//     // Download
+//     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+//     const link = document.createElement('a');
+//     const url = URL.createObjectURL(blob);
+//     link.setAttribute('href', url);
+//     link.setAttribute('download', 'table-data.csv');
+//     link.style.visibility = 'hidden';
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+//   };
+
+//   const handleDownloadJSON = () => {
 //     const exportData = paginatedData.map((row) => {
 //       const obj = {};
 //       actualColumns.forEach((col) => {
@@ -130,23 +199,27 @@
 //       return obj;
 //     });
 
-//     const worksheet = XLSX.utils.json_to_sheet(exportData);
-//     const workbook = XLSX.utils.book_new();
-//     XLSX.utils.book_append_sheet(workbook, worksheet, "TableData");
-//     const wbout = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
-//     const blob = new Blob([wbout], { type: "application/octet-stream" });
-//     saveAs(blob, "table-data.xlsx");
+//     const jsonContent = JSON.stringify(exportData, null, 2);
+//     const blob = new Blob([jsonContent], { type: 'application/json' });
+//     const link = document.createElement('a');
+//     const url = URL.createObjectURL(blob);
+//     link.setAttribute('href', url);
+//     link.setAttribute('download', 'table-data.json');
+//     link.style.visibility = 'hidden';
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
 //   };
 
 //   return (
-//     <div className="w-full max-w-6xl mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
+//     <div className="w-full max-w-7xl mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
 //       {/* Header */}
 //       <div className="relative bg-gradient-to-r from-gray-800 via-gray-900 to-black px-6 py-4 border-b border-gray-600">
 //         <div className="absolute inset-0 bg-gray-800/20 backdrop-blur-sm"></div>
 //         <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
 //           <div className="flex items-center gap-3">
 //             <h2 className="text-xl font-bold text-white tracking-wide">
-//               Dynamic Table
+//               {tableTitle || "Dynamic Table"}
 //             </h2>
 //             <span className="px-2 py-1 bg-gray-700/60 rounded-full text-xs text-gray-300 font-medium">
 //               {totalItems} records
@@ -171,15 +244,15 @@
 
 //             <button
 //               className="cursor-pointer px-2 py-0.5 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2"
-//               onClick={handleDownloadPDF}
+//               onClick={handleDownloadCSV}
 //             >
-//               PDF
+//               CSV
 //             </button>
 //             <button
 //               className="cursor-pointer px-2 py-0.5 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2"
-//               onClick={handleDownloadExcel}
+//               onClick={handleDownloadPDF}
 //             >
-//               CSV
+//               PDF
 //             </button>
 //           </div>
 //         </div>
@@ -190,43 +263,45 @@
 //         <table className="w-full border-collapse table-auto">
 //           <thead>
 //             <tr className="bg-gradient-to-r from-gray-800 to-gray-700 border-b border-gray-600">
-//               <th className="py-2 px-4 text-center w-12">
-//                 <label className="relative inline-block">
-//                   <input
-//                     type="checkbox"
-//                     onChange={toggleAll}
-//                     checked={
-//                       paginatedData.length > 0 &&
-//                       paginatedData.every((_, i) =>
-//                         selectedRows.includes(
-//                           (currentPage - 1) * itemsPerPage + i
+//               {showCheckboxes && (
+//                 <th className="py-2 px-4 text-center w-12">
+//                   <label className="relative inline-block">
+//                     <input
+//                       type="checkbox"
+//                       onChange={toggleAll}
+//                       checked={
+//                         paginatedData.length > 0 &&
+//                         paginatedData.every((_, i) =>
+//                           selectedRows.includes(
+//                             (currentPage - 1) * itemsPerPage + i
+//                           )
 //                         )
-//                       )
-//                     }
-//                     className="sr-only"
-//                   />
-//                   <div className="w-4 h-4 bg-gray-700 border border-gray-500 rounded flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-colors">
-//                     {paginatedData.length > 0 &&
-//                       paginatedData.every((_, i) =>
-//                         selectedRows.includes(
-//                           (currentPage - 1) * itemsPerPage + i
-//                         )
-//                       ) && (
-//                         <svg
-//                           className="w-3 h-3 text-cyan-400"
-//                           fill="currentColor"
-//                           viewBox="0 0 20 20"
-//                         >
-//                           <path
-//                             fillRule="evenodd"
-//                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-//                             clipRule="evenodd"
-//                           />
-//                         </svg>
-//                       )}
-//                   </div>
-//                 </label>
-//               </th>
+//                       }
+//                       className="sr-only"
+//                     />
+//                     <div className="w-4 h-4 bg-gray-700 border border-gray-500 rounded flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-colors">
+//                       {paginatedData.length > 0 &&
+//                         paginatedData.every((_, i) =>
+//                           selectedRows.includes(
+//                             (currentPage - 1) * itemsPerPage + i
+//                           )
+//                         ) && (
+//                           <svg
+//                             className="w-3 h-3 text-cyan-400"
+//                             fill="currentColor"
+//                             viewBox="0 0 20 20"
+//                           >
+//                             <path
+//                               fillRule="evenodd"
+//                               d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+//                               clipRule="evenodd"
+//                             />
+//                           </svg>
+//                         )}
+//                     </div>
+//                   </label>
+//                 </th>
+//               )}
 //               <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
 //                 Id
 //               </th>
@@ -250,42 +325,44 @@
 //               <tr
 //                 key={i}
 //                 className={`group transition-all duration-200 hover:bg-gray-800 ${
-//                   selectedRows.includes((currentPage - 1) * itemsPerPage + i)
+//                   showCheckboxes && selectedRows.includes((currentPage - 1) * itemsPerPage + i)
 //                     ? "bg-gray-800 shadow-sm border-l-2 border-cyan-400"
 //                     : i % 2 === 0
 //                     ? "bg-gray-900"
 //                     : "bg-gray-850"
 //                 }`}
 //               >
-//                 <td className="py-2 px-4 text-center">
-//                   <label className="relative inline-block">
-//                     <input
-//                       type="checkbox"
-//                       checked={selectedRows.includes(
-//                         (currentPage - 1) * itemsPerPage + i
-//                       )}
-//                       onChange={() => toggleRow(i)}
-//                       className="sr-only"
-//                     />
-//                     <div className="w-4 h-4 bg-gray-700 border border-gray-500 rounded flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-colors">
-//                       {selectedRows.includes(
-//                         (currentPage - 1) * itemsPerPage + i
-//                       ) && (
-//                         <svg
-//                           className="w-3 h-3 text-cyan-400"
-//                           fill="currentColor"
-//                           viewBox="0 0 20 20"
-//                         >
-//                           <path
-//                             fillRule="evenodd"
-//                             d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-//                             clipRule="evenodd"
-//                           />
-//                         </svg>
-//                       )}
-//                     </div>
-//                   </label>
-//                 </td>
+//                 {showCheckboxes && (
+//                   <td className="py-2 px-4 text-center">
+//                     <label className="relative inline-block">
+//                       <input
+//                         type="checkbox"
+//                         checked={selectedRows.includes(
+//                           (currentPage - 1) * itemsPerPage + i
+//                         )}
+//                         onChange={() => toggleRow(i)}
+//                         className="sr-only"
+//                       />
+//                       <div className="w-4 h-4 bg-gray-700 border border-gray-500 rounded flex items-center justify-center cursor-pointer hover:border-cyan-400 transition-colors">
+//                         {selectedRows.includes(
+//                           (currentPage - 1) * itemsPerPage + i
+//                         ) && (
+//                           <svg
+//                             className="w-3 h-3 text-cyan-400"
+//                             fill="currentColor"
+//                             viewBox="0 0 20 20"
+//                           >
+//                             <path
+//                               fillRule="evenodd"
+//                               d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+//                               clipRule="evenodd"
+//                             />
+//                           </svg>
+//                         )}
+//                       </div>
+//                     </label>
+//                   </td>
+//                 )}
 //                 <td className="py-2 px-4 text-center">
 //                   <span className="inline-flex items-center justify-center w-6 h-6 bg-gray-700 text-gray-300 rounded-full text-xs font-medium">
 //                     {(currentPage - 1) * itemsPerPage + i + 1}
@@ -316,7 +393,7 @@
 //             {paginatedData.length === 0 && (
 //               <tr>
 //                 <td
-//                   colSpan={actualColumns.length + 2}
+//                   colSpan={actualColumns.length + (showCheckboxes ? 2 : 1)}
 //                   className="py-8 text-center"
 //                 >
 //                   <div className="flex flex-col items-center gap-3">
@@ -436,7 +513,7 @@
 //       )}
 
 //       {/* Footer selection info */}
-//       {selectedRows.length > 0 && (
+//       {showCheckboxes && selectedRows.length > 0 && (
 //         <div className="px-6 py-2 bg-gray-800 border-t border-gray-700">
 //           <div className="flex items-center justify-between">
 //             <span className="text-sm text-gray-300">
@@ -445,18 +522,10 @@
 //             </span>
 //             <div className="flex gap-2">
 //               <button
-//                 // onClick={() => {
-//                 //   const selectedData = selectedRows.map((i) => data[i]);
-//                 //   if (onBulkAction) onBulkAction(selectedData);
-//                 // }}
-//                 onClick={() => {
-//                   const selectedData = selectedRows.map((i) => data[i]);
-//                    localStorage.setItem("selectedIPs", JSON.stringify(selectedData));
-//                   navigate("/dashboard/PolicySetup");
-//                 }}
+//                 onClick={handleBulkActionClick}
 //                 className="px-3 py-1 text-xs bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 rounded-lg transition-colors"
 //               >
-//                 Bulk Action
+//                 {bulkActionLabel}
 //               </button>
 //               <button
 //                 className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
@@ -476,46 +545,117 @@
 
 
 
-import React, { useState, useMemo } from "react";
+
+
+
+
+
+
+
+
+
+import React, { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import api from "../lib/api.js";
 
-
-export default function Table({ 
-  data = [], 
+export default function Table({
+  data = [],
+  endpoint, // NEW: API endpoint
+  dataPath, // NEW: path to extract data from response (e.g., "data.recentFileData")
   onBulkAction,
   showCheckboxes = true,
   bulkActionLabel = "Bulk Action",
-  tableTitle
+  tableTitle,
 }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apiData, setApiData] = useState([]);
+  const [error, setError] = useState(null);
+
+  // Fetch data from API if endpoint is provided
+  // Fetch data from API only if data prop is empty and endpoint is provided
+  useEffect(() => {
+    if (data.length === 0 && endpoint) {
+      const fetchData = async () => {
+        setIsLoading(true);
+        setError(null);
+        try {
+          const response = await api.fetchResource({ resource: endpoint });
+          console.log("API Response:", response);
+
+          // Extract data using dataPath if provided
+          let extractedData = response;
+          if (dataPath) {
+            const paths = dataPath.split(".");
+            for (const path of paths) {
+              extractedData = extractedData?.[path];
+            }
+          }
+
+          console.log("Extracted Data:", extractedData);
+          setApiData(Array.isArray(extractedData) ? extractedData : []);
+        } catch (err) {
+          console.error("Failed to fetch table data:", err);
+          setError(err.message || "Failed to load data");
+          setApiData([]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }
+  }, [data.length, endpoint, dataPath]);
+
+  console.log("apiData", apiData);
+
+  // Memoized columns
+  // Determine which data source to use
+  // Use data prop if not empty, otherwise use apiData
+  const tableData = useMemo(() => {
+    const result = data.length > 0 ? data : apiData;
+    console.log("tableData result:", result);
+    console.log("data.length:", data.length);
+    console.log("apiData.length:", apiData.length);
+    return result;
+  }, [data, apiData]);
 
   // Memoized columns
   const columns = useMemo(() => {
-    if (!data || data.length === 0) return [];
-    return Object.keys(data[0]);
-  }, [data]);
+    console.log("tableData in columns:", tableData);
+    console.log("tableData.length:", tableData.length);
+    if (!tableData || tableData.length === 0) return [];
+    const cols = Object.keys(tableData[0]);
+    console.log("Generated columns:", cols);
+    return cols;
+  }, [tableData]);
 
   // Safe actualColumns
   const actualColumns = useMemo(() => {
-    if (data.length > 0) return columns;
+    if (tableData.length > 0) return columns;
     return [];
-  }, [data, columns]);
+  }, [tableData, columns]);
 
   const filteredData = useMemo(() => {
-    if (!searchTerm) return data;
+    if (!searchTerm) {
+      console.log("filteredData (no search):", tableData);
+      return tableData;
+    }
     const lower = searchTerm.toLowerCase();
-    return data.filter((row) =>
+    const filtered = tableData.filter((row) =>
       columns.some((col) => String(row[col]).toLowerCase().includes(lower))
     );
-  }, [data, searchTerm, columns]);
+    console.log("filteredData (with search):", filtered);
+    return filtered;
+  }, [tableData, searchTerm, columns]);
 
   const { paginatedData, totalPages, totalItems } = useMemo(() => {
     let dataToFilter = filteredData;
@@ -552,33 +692,34 @@ export default function Table({
           : "asc",
     }));
   };
-const handleDownloadPDF = () => {
-  const doc = new jsPDF();
-  const tableColumn = actualColumns.map((col) =>
-    col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
-  );
-  
-  // Use all data if no rows selected, otherwise use selected rows
-  const dataToExport = selectedRows.length > 0 
-    ? selectedRows.map((i) => data[i])
-    : filteredData;
-  
-  const tableRows = dataToExport.map((row) =>
-    actualColumns.map((col) =>
-      col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col]
-    )
-  );
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    const tableColumn = actualColumns.map((col) =>
+      col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
+    );
 
-  autoTable(doc, {
-    head: [tableColumn],
-    body: tableRows,
-    startY: 20,
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [0, 128, 128] },
-  });
+    // Use all data if no rows selected, otherwise use selected rows
+    const dataToExport =
+      selectedRows.length > 0
+        ? selectedRows.map((i) => tableData[i])
+        : filteredData;
 
-  doc.save("table-data.pdf");
-};
+    const tableRows = dataToExport.map((row) =>
+      actualColumns.map((col) =>
+        col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col]
+      )
+    );
+
+    autoTable(doc, {
+      head: [tableColumn],
+      body: tableRows,
+      startY: 20,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [0, 128, 128] },
+    });
+
+    doc.save("table-data.pdf");
+  };
 
   const handleDownloadExcel = () => {
     const exportData = paginatedData.map((row) => {
@@ -625,7 +766,7 @@ const handleDownloadPDF = () => {
   };
 
   const handleBulkActionClick = () => {
-    const selectedData = selectedRows.map((i) => data[i]);
+    const selectedData = selectedRows.map((i) => tableData[i]);
     if (onBulkAction) {
       onBulkAction(selectedData);
     }
@@ -636,30 +777,32 @@ const handleDownloadPDF = () => {
     const headers = actualColumns.map((col) =>
       col.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())
     );
-    
+
     // Create CSV rows
     const rows = paginatedData.map((row) =>
       actualColumns.map((col) => {
-        const value = col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col];
+        const value =
+          col === "enabled" ? (row[col] ? "Enabled" : "Disabled") : row[col];
         // Escape quotes and wrap in quotes if contains comma
-        return typeof value === 'string' && (value.includes(',') || value.includes('"'))
+        return typeof value === "string" &&
+          (value.includes(",") || value.includes('"'))
           ? `"${value.replace(/"/g, '""')}"`
           : value;
       })
     );
-    
+
     // Combine header and rows
     const csvContent = [headers, ...rows]
-      .map(row => row.join(','))
-      .join('\n');
-    
+      .map((row) => row.join(","))
+      .join("\n");
+
     // Download
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'table-data.csv');
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", "table-data.csv");
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -676,12 +819,12 @@ const handleDownloadPDF = () => {
     });
 
     const jsonContent = JSON.stringify(exportData, null, 2);
-    const blob = new Blob([jsonContent], { type: 'application/json' });
-    const link = document.createElement('a');
+    const blob = new Blob([jsonContent], { type: "application/json" });
+    const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'table-data.json');
-    link.style.visibility = 'hidden';
+    link.setAttribute("href", url);
+    link.setAttribute("download", "table-data.json");
+    link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -778,8 +921,11 @@ const handleDownloadPDF = () => {
                   </label>
                 </th>
               )}
-              <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
+              {/* <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
                 Id
+              </th> */}
+              <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
+                SR NO
               </th>
               {actualColumns.map((col) => (
                 <th
@@ -801,7 +947,8 @@ const handleDownloadPDF = () => {
               <tr
                 key={i}
                 className={`group transition-all duration-200 hover:bg-gray-800 ${
-                  showCheckboxes && selectedRows.includes((currentPage - 1) * itemsPerPage + i)
+                  showCheckboxes &&
+                  selectedRows.includes((currentPage - 1) * itemsPerPage + i)
                     ? "bg-gray-800 shadow-sm border-l-2 border-cyan-400"
                     : i % 2 === 0
                     ? "bg-gray-900"
@@ -866,7 +1013,54 @@ const handleDownloadPDF = () => {
               </tr>
             ))}
 
-            {paginatedData.length === 0 && (
+            {isLoading && (
+              <tr>
+                <td
+                  colSpan={actualColumns.length + (showCheckboxes ? 2 : 1)}
+                  className="py-8 text-center"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 border-4 border-gray-700 border-t-cyan-500 rounded-full animate-spin"></div>
+                    <p className="text-gray-400 font-medium">Loading data...</p>
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && error && (
+              <tr>
+                <td
+                  colSpan={actualColumns.length + (showCheckboxes ? 2 : 1)}
+                  className="py-8 text-center"
+                >
+                  <div className="flex flex-col items-center gap-3">
+                    <div className="w-12 h-12 bg-red-900/30 rounded-full flex items-center justify-center">
+                      <svg
+                        className="w-6 h-6 text-red-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-red-400 font-medium">
+                        Error loading data
+                      </p>
+                      <p className="text-gray-500 text-sm">{error}</p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && !error && paginatedData.length === 0 && (
               <tr>
                 <td
                   colSpan={actualColumns.length + (showCheckboxes ? 2 : 1)}

@@ -21,6 +21,7 @@ import ViewApplication from "./NewPages/ApplicationControl/ViewApplication.jsx";
 import ManageBlackListed from "./NewPages/ApplicationControl/ManageBlackListed.jsx";
 import PreventedApplicationReport from "./NewPages/ApplicationControl/PreventedApplicationReport.jsx";
 import WhiteListedApplication from "./NewPages/ApplicationControl/WhiteListedApplication.jsx";
+import SummaryDashboard from "./NewPages/Dashboards/SummaryDashboard.jsx";
 
 
 
@@ -57,6 +58,7 @@ function App() {
         }
       >
         <Route index element={<Home />} />
+        <Route path="/dashboard/summaryDashboard" element={<SummaryDashboard />} />
         <Route path="/dashboard/reportPanel" element={<ReportPanel />} />
         <Route
           path="/dashboard/add-application-user"

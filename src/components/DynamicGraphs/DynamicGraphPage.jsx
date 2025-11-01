@@ -1,5 +1,5 @@
 import PieChartComponent from "./PieChartComponent";
-import BarChartComponent from "./BarChartComponent";
+import BarChartComponent from "./BarChartComponentOld";
 import { useState } from "react";
 
 const DynamicGraphPage = () => {
