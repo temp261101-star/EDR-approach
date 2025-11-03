@@ -195,6 +195,7 @@ const SetModeForm = ({ onSuccess }) => {
 //  TABLE COMPONENT
 
 const ModeTable = ({ tableData, loading, onBack }) => {
+  alert(tableData)
   return (
     <>
       <button
