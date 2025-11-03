@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef } from 'react'
 
 import Form, { FormActions, FormFields } from '../../components/Form';
@@ -10,7 +12,7 @@ import { useDispatch } from "react-redux";
 
 import { setViewApplicationResultData } from "../../store/appSlice";
 
-const ViewApplication = () => {
+const ViewBlacklistedapplication = () => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
@@ -47,7 +49,7 @@ const ViewApplication = () => {
       },
 
       actions: {
-        viewApplication: async (payload) => {
+        viewBlacklistedapplication: async (payload) => {
           return api.createResource("/dashboard/viewApplicationListing", payload);
         },
       },
@@ -82,13 +84,13 @@ const ViewApplication = () => {
   }, []);
   return (
     <div className="mt-10">
-      <Form ref={formRef} apiAction="viewApplication" title="View Application">
+      <Form ref={formRef} apiAction="viewBlacklistedapplication" title="View Application">
         <FormFields grid={2}>
 
 
           <MultiSelect
             name="branches"
-            label="Branch"
+            label="Branch Name"
             dataSource="commonMode/getBranchName"
             multiSelect={true}
             sendAsArray={true}
@@ -112,11 +114,11 @@ const ViewApplication = () => {
         <FormActions>
           <button
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit"
+            type="submit" 
           >
             Submit
           </button> 
-       
+        
           <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             Reset
@@ -127,4 +129,4 @@ const ViewApplication = () => {
   )
 }
 
-export default ViewApplication;
+export default ViewBlacklistedapplication;

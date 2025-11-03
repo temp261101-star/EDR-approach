@@ -321,6 +321,8 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             
             
           </AccordionItem>
+
+
           <AccordionItem
             title="AntiVirus "
             icon={Banknote}
@@ -332,6 +334,31 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink>
 
             </AccordionItem>
+            
+          <AccordionItem
+            title="Application Blacklisting "
+            icon={Banknote}
+            isOpen={openAccordions.blacklisting}
+            onToggle={() => toggleAccordion("blacklisting")}>
+
+               <NavLink to="/dashboard/addBlacklistedapplication" icon={CircleSmall}>
+             Add Application
+            </NavLink>
+
+             <NavLink to="/dashboard/ViewBlacklistedapplication" icon={CircleSmall}>
+             View Application
+            </NavLink>
+
+             <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
+             Manage Whitelisted
+            </NavLink>
+
+               <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
+            View Report
+            </NavLink>
+            </AccordionItem>
+
+            
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">

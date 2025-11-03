@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import FormController from "../../lib/FormController";

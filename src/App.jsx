@@ -42,6 +42,11 @@ import ExternalUsbReportList from "./NewPages/USB Protection/ExternalUsbReportLi
 import AntiVirusEdr from "./NewPages/AntiVirus/AntiVirusEdr.jsx";
 import ExternalUsbReport from "./NewPages/USB Protection/ExternalUsbReport.jsx";
 import ExternalUsbList from "./NewPages/USB Protection/ExternalUsbList.jsx";
+import ViewReport from "./NewPages/ApplicationBlacklisting/ViewReport.jsx";
+import ViewBlacklistedapplication from "./NewPages/ApplicationBlacklisting/ViewBlacklistedapplication.jsx";
+import AddBlacklistedapplication from "./NewPages/ApplicationBlacklisting/AddBlacklistedapplication.jsx";
+import ManageWhitelisted from "./NewPages/ApplicationBlacklisting/ManageWhitelisted.jsx";
+import ManageWhitelistedApplicationReport from "./NewPages/ApplicationBlacklisting/ManageWhitelistedApplicationReport.jsx";
 
 
 
@@ -117,6 +122,14 @@ function App() {
         <Route path="/dashboard/externalUsbReport" element={<ExternalUsbReport />} />
         <Route path="/dashboard/externalUsbReportlist" element={<ExternalUsbReportList />} />
         <Route path="/dashboard/antivirusEdr" element={<AntiVirusEdr />} />
+
+        <Route path="/dashboard/addBlacklistedapplication" element={<AddBlacklistedapplication />} />
+        <Route path="/dashboard/ViewBlacklistedapplication" element={<ViewBlacklistedapplication />} />
+        <Route path="/dashboard/managewhitelisted" element={<ManageWhitelisted />} />
+        <Route path="/dashboard/viewreport" element={<ViewReport />} />
+         <Route path="/dashboard/managewhitelisted/manageWhitelistedApplicationReport" element={<ManageWhitelistedApplicationReport />} />
+
+
 
       </Route>
     </Routes>
