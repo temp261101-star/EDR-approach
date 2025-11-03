@@ -1,9 +1,23 @@
 import axios from "axios";
+// const api = axios.create({
+// // baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
+// baseURL:"http://182.48.194.218:9191/api/v1",
+// // 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
+// });
+
+
+// vercel CONFIGURATION 
+
+
 const api = axios.create({
-// baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
-baseURL:"http://182.48.194.218:9191/api/v1",
-// 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
+  baseURL: "/api", // will be rewritten by Vercel
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
+
+// test test
 
 async function fetchResource({ resource, parentValue }) {
   console.log("check api endpoint ", resource);
@@ -18,11 +32,17 @@ async function fetchResource({ resource, parentValue }) {
     r = await api.get(`/${resource}`);
     console.log(r.data);
   }
-
-
-  
-
   return r.data;
+}
+async function getData(resource) {
+  console.log("check api endpoint ", resource);
+  // console.log("parent key : ", parentValue);
+
+  const response = await api.get(`${resource}`)
+ 
+
+ 
+  return response.data;
 }
 
 async function createResource(resource, payload) {
@@ -39,6 +59,8 @@ async function createResource(resource, payload) {
 
 
 
+// get for normal get call with endpoint 
+
 
 
 
@@ -49,7 +71,7 @@ async function createResource(resource, payload) {
   return `${day}-${month}-${year}`;
 };
 
-export const getApi = async (query, endpoint ) => {
+export const getApi = async (query, endpoint) => {
   console.log("api call after app render in api ");
 
   try {
@@ -85,4 +107,5 @@ export const fetchDataByDateRange = async (endpoint, fromDate, toDate) => {
 export default {
   fetchResource,
   createResource,
+  getData
 };

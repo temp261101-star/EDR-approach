@@ -1,20 +1,23 @@
-import React, { useEffect,useRef } from 'react'
+import React, { useEffect, useRef } from "react";
 
-import Form, { FormActions, FormFields } from '../../components/Form';
-import MultiSelect from '../../components/MultiSelect';
+import Form, { FormActions, FormFields } from "../../components/Form";
+import MultiSelect from "../../components/MultiSelect";
 import toast from "react-hot-toast";
 
-import { useNavigate } from 'react-router-dom';
-import FormController from '../../lib/FormController';
-import api from '../../lib/api';
+import { useNavigate } from "react-router-dom";
+import FormController from "../../lib/FormController";
+import api from "../../lib/api";
+import { useDispatch } from "react-redux";
+
+import { setBlacklistResultData } from "../../store/appSlice";
 
 const ManageBlackListed = () => {
+  const formRef = useRef();
+  const deviceRef = useRef();
+  const branchRef = useRef();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-   const formRef = useRef();
-    const deviceRef = useRef();
-    const branchRef = useRef();
-    const navigate =useNavigate();
-  
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -26,18 +29,18 @@ const ManageBlackListed = () => {
             parentKey,
             parentValue,
           });
-if (Array.isArray(res)) {
-  return res.map((branch) => ({
-    value: branch,
-    label: branch,
-  }));
-}
-if (res?.branches) {
-  return res.branches.map((b) => ({
-    value: b.id,
-    label: b.name,
-  }));
-}
+          if (Array.isArray(res)) {
+            return res.map((branch) => ({
+              value: branch,
+              label: branch,
+            }));
+          }
+          if (res?.branches) {
+            return res.branches.map((b) => ({
+              value: b.id,
+              label: b.name,
+            }));
+          }
 
           console.log("returned value in addapplication: ", res);
           return res;
@@ -46,21 +49,26 @@ if (res?.branches) {
 
       actions: {
         AddManagedBlacklisted: async (payload) => {
-          return api.createResource("/setexternalUSB/addExternalUSB", payload);
+          return api.createResource(
+            "/commonMode/ManageBlacklistedApplicationListing",
+            payload
+          );
         },
       },
 
       hooks: {
         onSuccess: () => {
           toast.success("Set mode successful");
-          
-        //  to do ->   add navigation
+          console.log("API response", response);
+          dispatch(setBlacklistResultData(response.data.recentFileData));
+
+          //  to do ->   add navigation
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
             }
             formRef.current.reset();
-          
+            navigate("/dashboard/manageBlacklisted/manageBlacklistedResult");
           }, 100);
         },
         onError: (error) => {
@@ -79,44 +87,51 @@ if (res?.branches) {
 
   return (
     <div className="mt-10">
-    <Form ref={formRef} apiAction="AddManagedBlacklisted" title="Manage Blacklisting Application">
-      <FormFields grid={2}>
-        <MultiSelect
-          name="branches"
-          label="Branch Name"
-         dataSource="commonMode/getBranchName"
-          multiSelect={true}
-          sendAsArray={true}
-          ref={branchRef}
-          required
-        />
+      <Form
+        ref={formRef}
+        apiAction="AddManagedBlacklisted"
+        title="Manage Blacklisting Application"
+      >
+        <FormFields grid={2}>
+          <MultiSelect
+            name="branches"
+            label="Branch Name"
+            dataSource="commonMode/getBranchName"
+            multiSelect={true}
+            sendAsArray={true}
+            ref={branchRef}
+            required
+          />
 
-        <MultiSelect
-          name="deviceName"
-          label="Device Name"
-          dataSource="commonMode/getDeviceOnBranchName"
-          ref={deviceRef}
-          dataDependsOn="branches"
-        multiSelect={true}
-          sendAsArray={true}
-          required
-        />
+          <MultiSelect
+            name="deviceNames"
+            label="Device Name"
+            dataSource="commonMode/getDeviceOnBranchName"
+            ref={deviceRef}
+            dataDependsOn="branches"
+            multiSelect={true}
+            sendAsArray={true}
+            required
+          />
+        </FormFields>
 
-      </FormFields>
-
-      <FormActions>
-         <button  className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit"  onClick={()=>navigate('/dashboard/manageBlacklisted/manageBlacklistedResult')}>
-              Submit
-        </button>
-         <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                    >
-                        Reset
-                    </button>
-      </FormActions>
-    </Form>
-   </div>
+        <FormActions>
+          <button
+            className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
+            type="submit"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+          >
+            Reset
+          </button>
+        </FormActions>
+      </Form>
+    </div>
   );
 };
 
-export default ManageBlackListed
+export default ManageBlackListed;

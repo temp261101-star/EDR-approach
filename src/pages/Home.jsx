@@ -2,7 +2,7 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { useEffect, useState } from "react";
 import { getApi } from "../lib/api";
 import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
-import BarChartComponent from "../components/DynamicGraphs/BarChartComponent";
+import BarChartComponent from "../components/DynamicGraphs/BarChartComponentOld";
 import DeviceSecurityPieChart2 from "../NewPages/DeviceSecurityPieChart2";
 import { data } from "jquery";
 import axios from "axios";

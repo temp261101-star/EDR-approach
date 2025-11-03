@@ -72,7 +72,7 @@ const PreventedApplicationReport = () => {
   }, []);
 
   return (
- <div className="mt-10">
+    <div className="mt-10">
       <Form ref={formRef} apiAction="PreventedApplication" title="Prevented Application">
         <FormFields grid={2}>
           <MultiSelect

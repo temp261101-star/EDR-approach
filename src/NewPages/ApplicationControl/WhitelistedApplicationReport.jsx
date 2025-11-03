@@ -26,7 +26,7 @@ function WhitelistedApplicationReport() {
           ← Back
         </button>
 
-      <Table data={data} showCheckboxes={false} />
+      <Table data={data} showCheckboxes={false}/>
     </div> 
   )
 }

@@ -1,21 +1,23 @@
 import React from 'react'
 import Table from '../../components/Table'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from "react-redux";
+
 
 function ManageBlackListedResult() {
 
     const navigate = useNavigate();
-
-    const data = [
-        {
-        srNo : 1,
-        pcName:"Desktop1",
-        aliasName:"desktop",
-        branchName:"Branch1",
-        deviceName:"Device1"
-        }
-    ]
-
+    const resultData = useSelector((state) => state.app.blacklist.resultData);
+    // const data = [
+    //     {
+    //     srNo : 1,
+    //     pcName:"Desktop1",
+    //     aliasName:"desktop",
+    //     branchName:"Branch1",
+    //     deviceName:"Device1"
+    //     }
+    // ]
+    
   return (
    <div className="p-4">
 
@@ -27,7 +29,7 @@ function ManageBlackListedResult() {
         </button>
 
       {/* Table Section */}
-      <Table data={data} />
+      <Table data={resultData} />
     </div> 
   )
 }

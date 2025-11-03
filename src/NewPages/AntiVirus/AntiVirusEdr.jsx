@@ -115,30 +115,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Zap, ShieldCheck, HardDrive, CalendarDays } from "lucide-react";

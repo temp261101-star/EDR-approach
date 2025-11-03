@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useRef } from 'react'
 
 import Form, { FormActions, FormFields } from '../../components/Form';
@@ -6,13 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import FormController from '../../lib/FormController';
 import api from '../../lib/api';
+import { useDispatch } from "react-redux";
 
+import { setViewApplicationResultData } from "../../store/appSlice";
 
 const ViewApplication = () => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -44,15 +50,16 @@ const ViewApplication = () => {
 
       actions: {
         viewApplication: async (payload) => {
-          return api.createResource("/setexternalUSB/addExternalUSB", payload);
+          return api.createResource("/dashboard/viewApplicationListing", payload);
         },
       },
 
       hooks: {
-        onSuccess: () => {
+        onSuccess: (response) => {
           toast.success("View Application successful");
-
-
+          dispatch(setViewApplicationResultData(response));
+          console.log("check res : ",response);
+   
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
@@ -61,17 +68,6 @@ const ViewApplication = () => {
 
           }, 100);
         },
-//         onSuccess: () => {
-//   toast.success("View Application successful");
-
-//   setTimeout(() => {
-//     if (formRef.current) {
-//       formRef.current.reset();
-//     }
-
-//     navigate('/dashboard/viewApplication/viewApplicationListing'); 
-//   }, 100);
-// },
 
         onError: (error) => {
           console.error("Submission error:", error);
@@ -87,7 +83,7 @@ const ViewApplication = () => {
     return () => controller.destroy();
   }, []);
   return (
- <div className="mt-10">
+    <div className="mt-10">
       <Form ref={formRef} apiAction="viewApplication" title="View Application">
         <FormFields grid={2}>
 
@@ -103,7 +99,7 @@ const ViewApplication = () => {
           />
 
           <MultiSelect
-            name="deviceName"
+            name="deviceNames"
             label="Device Name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"

@@ -21,17 +21,32 @@ import React, { forwardRef } from "react";
 
 const FormFields = ({ children, grid = 4 }) => {
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${grid}, minmax(0, 1fr))`,
-        gap: "1rem",
-      }}
+    <div     
+className={`
+        grid gap-4
+        grid-cols-1
+        sm:grid-cols-2
+        md:grid-cols-3
+        lg:grid-cols-${grid}
+      `}
     >
       {children}
     </div>
   );
 };
+// const FormFields = ({ children, grid = 4 }) => {
+//   return (
+//     <div
+//       style={{
+//         display: "grid",
+//         gridTemplateColumns: `repeat(${grid}, minmax(0, 1fr))`,
+//         gap: "1rem",
+//       }}
+//     >
+//       {children}
+//     </div>
+//   );
+// };
 
 const FormActions = ({ children }) => {
   return (
@@ -48,7 +63,7 @@ const Form = forwardRef(function Form(
   return (
 
     <div className={`max-w-5xl mx-auto `}  >
-      <div className="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 overflow-hidden">
+      <div className="bg-gray-800 rounded-xl shadow-2xl border border-gray-700 mx-5 overflow-hidden">
         <div className="bg-gray-800 border-b border-gray-700 px-6 py-3">
           <div className="flex items-center space-x-3">
             <div className="w-2 h-8 bg-cyan-500 rounded-full"></div>
