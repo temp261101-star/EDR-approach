@@ -99,7 +99,7 @@ const WhiteListedApplication = () => {
 
 
   return (
-    <div>
+    <div className="mt-10">
       <Form ref={formRef} apiAction="view1" title="View Whitelisting Report">
         <FormFields grid={2}>
 

@@ -78,7 +78,7 @@ if (res?.branches) {
   }, []);
 
   return (
-   <div>
+    <div className="mt-10">
     <Form ref={formRef} apiAction="AddManagedBlacklisted" title="Manage Blacklisting Application">
       <FormFields grid={2}>
         <MultiSelect

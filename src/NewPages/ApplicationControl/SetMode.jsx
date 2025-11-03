@@ -86,7 +86,7 @@ const SetMode = () => {
   }, []);
 
   return (
-    <div>
+    <div className="mt-10">
       <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
         <FormFields grid={2}>
           <MultiSelect
@@ -97,6 +97,7 @@ const SetMode = () => {
             sendAsArray={true}
             data-key="branches"
             ref={branchRef}
+            required
           />
 
           <MultiSelect
@@ -108,6 +109,7 @@ const SetMode = () => {
             dataDependsOn="branches"
             multiSelect={true}
             sendAsArray={true}
+            required
           />
 
           <MultiSelect
@@ -120,6 +122,7 @@ const SetMode = () => {
             multiSelect={false}
             sendAsArray={true}
             ref={accessRef}
+            required
           />
         </FormFields>
 

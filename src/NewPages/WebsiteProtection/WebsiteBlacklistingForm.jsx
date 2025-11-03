@@ -75,7 +75,7 @@ if (res?.branches) {
   }, []);
 
   return (
-    <div>
+   <div className="mt-10">
 
       <Form ref={formRef} apiAction="Websiteblacklist" title="Website Blacklisting">
 
@@ -113,8 +113,7 @@ if (res?.branches) {
           ref={accessRef}
           options={[
               { value: "Prevent", name: "Prevent" },
-              { value: "Allow", name: "Allow" },
-              {value: "Detect",name:"Detect"}
+              { value: "Allow", name: "Allow" }
             ]}
             required
           

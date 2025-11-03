@@ -19,22 +19,19 @@ const ViewPreventedApplication = () => {
   ];
 
   return (
-    <div className="p-4">
-      <div className="mb-4">
-        <div className="flex justify-end mb-2">
-          <button
-            className="cursor-pointer px-2 py-1 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2 mr-25 translate-y-2"
-            onClick={() => navigate('/dashboard/preventedApplicationReport')}
-          >
-            Back
-          </button>
-        </div>
-
-        {/* Table Section */}
-        <Table data={data} />
-      </div>
-    </div>
-  );
+       <div className="p-4">
+    
+         <button
+              onClick={() => navigate(-1)} 
+              className="ml-9 px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
+            >
+              ← Back
+            </button>
+    
+          {/* Table Section */}
+          <Table data={data} showCheckboxes={false}  />
+        </div> 
+  )
 };
 
 export default ViewPreventedApplication;
