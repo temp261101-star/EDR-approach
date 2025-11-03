@@ -26,7 +26,7 @@ function ExternalUsbReportList() {
         >
           ← Back
         </button>
-
+      
       {/* Table Section */}
       <Table data={data} showCheckboxes={false} />
     </div> 
