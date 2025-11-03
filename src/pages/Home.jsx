@@ -25,11 +25,11 @@ const darkPalette = {
 
 export default function Home() {
   const [deviceBreakdown, setDeviceBreakdown] = useState([]);
-const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
-const [data,setData]=useState([]);
-const [getDeviceStatus,setGetDeviceStatus]=useState([]);
-const [getUSBStatus,setGetUSBStatus]=useState([]);
+  const [data, setData] = useState([]);
+  const [getDeviceStatus, setGetDeviceStatus] = useState([]);
+  const [getUSBStatus, setGetUSBStatus] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +45,9 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
   }, []);
 
   console.log("deviceBreakdown : ", deviceBreakdown);
- useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-      
+
       const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getHostStatus");
       console.log("log api response in app", res);
 
@@ -57,9 +57,9 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
   }, []);
 
 
- useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-      
+
       const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getDeviceStatus");
       console.log("log api response in app", res);
 
@@ -68,9 +68,9 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
     fetchData();
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
-      
+
       const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus");
       console.log("log api response in app", res);
 
@@ -80,25 +80,25 @@ const [getUSBStatus,setGetUSBStatus]=useState([]);
   }, []);
 
 
-  console.log("data check for pie",data);
-  
+  console.log("data check for pie", data);
+
 
   const Card = ({ title, action, children, className = "", noPadding = false }) => (
-  <div
-    className={`rounded-lg border bg-gray-800 shadow-sm transition-shadow flex flex-col border-gray-700 ${className}`}
-  >
-    <div className="px-3 py-2 border-b bg-gray-800/50 flex-shrink-0 border-gray-700">
-      <div className="flex items-center justify-between">
-        <h3 className="text-sm font-bold text-gray-100">{title}</h3>
-        {action}
+    <div
+      className={`rounded-lg border bg-gray-800 shadow-sm transition-shadow flex flex-col border-gray-700 ${className}`}
+    >
+      <div className="px-3 py-2 border-b bg-gray-800/50 flex-shrink-0 border-gray-700">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-bold text-gray-100">{title}</h3>
+          {action}
+        </div>
+      </div>
+      {/* If noPadding=true, skip padding */}
+      <div className={`flex-1 overflow-hidden ${noPadding ? "" : "p-3"}`}>
+        {children}
       </div>
     </div>
-    {/* If noPadding=true, skip padding */}
-    <div className={`flex-1 overflow-hidden ${noPadding ? "" : "p-3"}`}>
-      {children}
-    </div>
-  </div>
-);
+  );
 
   const tooltipStyle = {
     background: darkPalette.cardBackground,
@@ -225,11 +225,11 @@ FROM
         <div className="lg:col-span-4 space-y-3">
           <Card title="Security Anomaly Trends" className="h-[320px]">
             <BarChartComponent
-             data={getUSBStatus}
+              data={getUSBStatus}
             />
           </Card>
         </div>
-       
+
         <div className="lg:col-span-4 space-y-3">
           <DeviceSecurityPieChart2 />
         </div>

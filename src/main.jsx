@@ -5,14 +5,17 @@ import App from "./App.jsx";
 import "./index.css";
 import { Toaster } from 'react-hot-toast';
 import { DataProvider } from "./context/DataContext.jsx";
+import { Provider } from "react-redux";
+import store from "./store/store.js";
 
 createRoot(document.getElementById("root")).render(
 
     <BrowserRouter>
     <DataProvider>
-      <App />
-    </DataProvider>
-      
+  <Provider store={store }>
+    <App />
+  </Provider>
+    </DataProvider>      
        <Toaster />
     </BrowserRouter>
 

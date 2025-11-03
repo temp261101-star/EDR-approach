@@ -831,7 +831,7 @@ export default function Table({
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
+    <div className=" max-w-7xl mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
       {/* Header */}
       <div className="relative bg-gradient-to-r from-gray-800 via-gray-900 to-black px-6 py-4 border-b border-gray-600">
         <div className="absolute inset-0 bg-gray-800/20 backdrop-blur-sm"></div>
@@ -924,9 +924,9 @@ export default function Table({
               {/* <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
                 Id
               </th> */}
-              <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
+              {/* <th className="py-2 px-4 text-center w-16 text-xs font-semibold text-gray-300 uppercase tracking-wider">
                 SR NO
-              </th>
+              </th> */}
               {actualColumns.map((col) => (
                 <th
                   key={col}
@@ -986,11 +986,11 @@ export default function Table({
                     </label>
                   </td>
                 )}
-                <td className="py-2 px-4 text-center">
-                  <span className="inline-flex items-center justify-center w-6 h-6 bg-gray-700 text-gray-300 rounded-full text-xs font-medium">
+                {/* <td className="py-2 px-4 text-center">
+                  <span className="inline-flex items-center justify-center w-6 h-6 bg-red-700 text-gray-300 rounded-full text-xs font-medium">
                     {(currentPage - 1) * itemsPerPage + i + 1}
                   </span>
-                </td>
+                </td> */}
                 {actualColumns.map((col) => (
                   <td key={col} className="py-2 px-4 text-gray-200 text-sm">
                     <div className="flex items-center">

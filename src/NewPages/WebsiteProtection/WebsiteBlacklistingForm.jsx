@@ -1,24 +1,17 @@
-
-
 import React, { useEffect, useRef } from 'react'
 
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 import FormController from '../../lib/FormController';
 import api from '../../lib/api';
-import { useDispatch } from "react-redux";
 
-import { setViewApplicationResultData } from "../../store/appSlice";
-
-const ViewApplication = () => {
+function WebsiteBlacklistingForm() {
   const formRef = useRef();
-  const deviceRef = useRef();
   const branchRef = useRef();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  
+  const deviceRef = useRef();
+  const accessRef = useRef();
+  const webRef = useRef();
+
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -43,23 +36,22 @@ const ViewApplication = () => {
             }));
           }
 
-          console.log("returned value in view Application: ", res);
+          console.log("returned value in addapplication: ", res);
           return res;
         },
       },
 
       actions: {
-        viewApplication: async (payload) => {
-          return api.createResource("/dashboard/viewApplicationListing", payload);
+        Websiteblacklist: async (payload) => {
+          return api.createResource("/setexternalUSB/addExternalUSB", payload);
         },
       },
 
       hooks: {
-        onSuccess: (response) => {
-          toast.success("View Application successful");
-          dispatch(setViewApplicationResultData(response));
-          console.log("check res : ",response);
-   
+        onSuccess: () => {
+          toast.success("Set mode successful");
+
+          //  to do ->   add navigation
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
@@ -68,7 +60,6 @@ const ViewApplication = () => {
 
           }, 100);
         },
-
         onError: (error) => {
           console.error("Submission error:", error);
           toast.error(error.message);
@@ -82,15 +73,16 @@ const ViewApplication = () => {
 
     return () => controller.destroy();
   }, []);
+
   return (
     <div className="mt-10">
-      <Form ref={formRef} apiAction="viewApplication" title="View Application">
+
+      <Form ref={formRef} apiAction="Websiteblacklist" title="Website Blacklisting">
+
         <FormFields grid={2}>
-
-
           <MultiSelect
             name="branches"
-            label="Branch"
+            label="Branch Name"
             dataSource="commonMode/getBranchName"
             multiSelect={true}
             sendAsArray={true}
@@ -99,13 +91,40 @@ const ViewApplication = () => {
           />
 
           <MultiSelect
-            name="deviceNames"
+            name="deviceName"
             label="Device Name"
-            ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"
+            ref={deviceRef}
             dataDependsOn="branches"
             multiSelect={true}
             sendAsArray={true}
+            required
+          />
+
+          <MultiSelect
+
+            label="Mode Of Access"
+            name="access"
+            ref={accessRef}
+            options={[
+              { value: "Allow", name: "Allow" },
+              { value: "Prevent", name: "Prevent" },
+
+
+            ]}
+            required
+
+
+          />
+
+          <MultiSelect
+
+            label="Website Name"
+            name="websitename"
+            ref={webRef}
+            multiselect={true}
+            sendAsArray={true}
+            // dataSource="getDeviceOnBranchName"
             required
           />
 
@@ -114,24 +133,23 @@ const ViewApplication = () => {
         <FormActions>
           <button
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit" onClick={()=>navigate('/dashboard/viewApplication/viewApplicationListing')}
-          >
-            Submit
-          </button> 
-                   {/* <button
-            className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
             type="submit"
           >
             Submit
-          </button> */}
+          </button>
+
           <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             Reset
           </button>
+
         </FormActions>
+
+
       </Form>
+
     </div>
   )
 }
 
-export default ViewApplication;
+export default WebsiteBlacklistingForm

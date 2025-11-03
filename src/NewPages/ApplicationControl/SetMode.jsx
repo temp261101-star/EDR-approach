@@ -1,15 +1,68 @@
-import React, { useEffect, useRef, useState } from "react";
 
-import Swal from "sweetalert2";
+
+import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import FormController from "../../lib/FormController";
 import Form, { FormActions, FormFields } from "../../components/Form";
-import TextInput from "../../components/TextInput";
 import MultiSelect from "../../components/MultiSelect";
-import RadioGroup from "../../components/RadioGroup";
 import api from "../../lib/api";
+import Table from "../../components/Table";
 
 const SetMode = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch table data API
+  const getDriveDetails = async () => {
+    setLoading(true);
+    try {
+      const res = await api.fetchResource({
+        resource: "dashboard/ViewModeListing",
+      });
+      setTableData(res || []);
+    } catch (err) {
+      toast.error("Failed to load mode data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <SetModeForm
+          onSuccess={() => {
+            setShowTable(true);
+
+            // Load table after submit
+            getDriveDetails();
+          }}
+        />
+      ) : (
+        <ModeTable
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        />
+      )}
+
+    
+    </div>
+  );
+};
+
+export default SetMode;
+
+//  FORM COMPONENT
+
+const SetModeForm = ({ onSuccess }) => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
@@ -26,57 +79,38 @@ const SetMode = () => {
             parentKey,
             parentValue,
           });
-          if (Array.isArray(res)) {
-            return res.map((branch) => ({
-              value: branch,
-              label: branch,
-            }));
-          }
-          if (res?.branches) {
-            return res.branches.map((b) => ({
-              value: b.id,
-              label: b.name,
-            }));
-          }
-
-          console.log("returned value in addapplication: ", res);
+          if (Array.isArray(res))
+            return res.map((b) => ({ value: b, label: b }));
+          if (res?.branches)
+            return res.branches.map((b) => ({ value: b.id, label: b.name }));
           return res;
         },
       },
 
       actions: {
-        AddSetMode: async (payload) => {
-          return api.createResource("/driveEncryption/AddDriveDetails ", [payload]);
-        },
+        AddSetMode: async (payload) =>
+          api.createResource("/driveEncryption/AddDriveDetails", [payload]),
       },
 
       hooks: {
-        onSuccess: () => {
-          toast.success("Set mode successful");
-
-          //  to do ->   add navigation
-          setTimeout(() => {
-            if (formRef.current) {
-              formRef.current.reset();
-            }
-            formRef.current.reset();
-            accessRef.current.reset();
-            deviceRef.current.reset();
-            branchRef.current.reset();
-          }, 100);
-        },
-        onError: (error) => {
-          console.error("Submission error:", error);
-          toast.error(error.message);
-        },
-
         onBeforeSubmit: (payload) => {
-          console.log("Submitting payload:", payload);
-          // Add new fields
           payload.requestType = "Set_Mode_Of_Whitelist";
-
-           console.log("Submitting payload:", payload);
         },
+
+        onSuccess: () => {
+          toast.success("Mode set successfully!");
+
+          setTimeout(() => {
+            formRef.current.reset();
+            deviceRef.current?.reset();
+            branchRef.current?.reset();
+            accessRef.current?.reset();
+          }, 100);
+
+          onSuccess();
+        },
+
+        onError: (err) => toast.error(err.message),
       },
     });
 
@@ -84,54 +118,96 @@ const SetMode = () => {
   }, []);
 
   return (
-    <div>
-      <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
-        <FormFields grid={2}>
-          <MultiSelect
-            name="branches"
-            label="Branch"
-            dataSource="commonMode/getBranchName"
-            multiSelect={true}
-            sendAsArray={true}
-            data-key="branches"
-            ref={branchRef}
-          />
+    <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
+      <FormFields grid={2}>
+        <MultiSelect
+          name="branches"
+          label="Branch"
+          dataSource="commonMode/getBranchName"
+          multiSelect
+          sendAsArray
+          data-key="branches"
+          ref={branchRef}
+          required
+        />
 
-          <MultiSelect
-            name="deviceNames"
-            data-key="deviceNames"
-            label="Host name"
-            ref={deviceRef}
-            dataSource="commonMode/getDeviceOnBranchName"
-            dataDependsOn="branches"
-            multiSelect={true}
-            sendAsArray={true}
-          />
+        <MultiSelect
+          name="deviceNames"
+          data-key="deviceNames"
+          label="Host Name"
+          ref={deviceRef}
+          dataSource="commonMode/getDeviceOnBranchName"
+          dataDependsOn="branches"
+          multiSelect
+          sendAsArray
+          required
+        />
 
-          <MultiSelect
-            name="ModeTypes"
-            label="Mode Type"
-            options={[
-              { value: "1", name: "Learning" },
-              { value: "0", name: "Protection" },
-            ]}
-            multiSelect={false}
-            sendAsArray={true}
-            ref={accessRef}
-          />
-        </FormFields>
+        <MultiSelect
+          name="ModeTypes"
+          label="Mode Type"
+          options={[
+            { value: "Learning", name: "Learning" },
+            { value: "Protection", name: "Protection" },
+          ]}
+          multiSelect={false}
+          sendAsArray
+          ref={accessRef}
+          required
+        />
+      </FormFields>
 
-        <FormActions>
-          <button
-            className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit"
-          >
-            Submit
-          </button>
-        </FormActions>
-      </Form>
-    </div>
+      <FormActions>
+        <button
+          className="px-6 py-2 bg-cyan-600 text-white rounded-lg cursor-pointer"
+          type="submit"
+        >
+          Submit
+        </button>
+
+        <button
+          type="button"
+          className="px-6 py-2 border rounded-lg ml-2"
+          onClick={() => {
+            formRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
+            accessRef.current.reset();
+          }}
+        >
+          Reset
+        </button>
+      </FormActions>
+    </Form>
   );
 };
 
-export default SetMode;
+//  TABLE COMPONENT
+
+const ModeTable = ({ tableData, loading, onBack }) => {
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+  <Table tableTitle="Set Mode Table" />
+        </div>
+      
+      ) : (
+        <div>
+          <Table tableTitle="Set Mode Table" data={tableData} />
+        </div>
+        
+      )}
+    </>
+  );
+};

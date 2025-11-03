@@ -106,9 +106,9 @@ export default function DashboardLayout({ setIsAuthenticated }) {
   return (
     <div className="flex h-screen bg-gray-900">
       <aside
-        className={`fixed md:static z-20 top-0 left-0 h-full bg-gray-800 shadow-2xl flex flex-col transform transition-all duration-300 border-r border-gray-700
+        className={`fixed md:static z-20 top-0 left-0 h-full bg-gray-800 shadow-2xl flex flex-col transform transition-all duration-300 border-r border-gray-700 items-center
        ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 
-       ${collapsed ? "w-16" : "w-52"}`}
+       ${collapsed ? "w-15" : "w-60"}`}
       >
         <div className="flex items-center justify-between p-1.5 border-b border-gray-700">
           {!collapsed && (
@@ -129,7 +129,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             onClick={() => setCollapsed(!collapsed)}
             className="hidden md:flex p-0.5 rounded-md hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-200"
           >
-            {collapsed ? <ChevronRight size={25} /> : <ChevronLeft size={25} />}
+            {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           </button>
 
           <button
@@ -275,7 +275,63 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/externalUsb" icon={CircleSmall}>
               External USB
             </NavLink>
+            <NavLink to="/dashboard/externalUsbReport" icon={CircleSmall}>
+            External USB Report
+            </NavLink>
+
+
+
+             </AccordionItem>
+
+            <AccordionItem
+            title="Website Protection"
+            icon={Banknote}
+            isOpen={openAccordions.website}
+            onToggle={() => toggleAccordion("website")}
+          >
+          
+           
+            <NavLink to="/dashboard/WebsiteDashboard" icon={CircleSmall}>
+            Website Dashboard
+            </NavLink>
+
+            <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
+            Capture Website History
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteBlacklistHistory" icon={CircleSmall}>
+            Website Blacklist History
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteBlacklist" icon={CircleSmall}>
+           Website Blacklist
+            </NavLink>
+
+            <NavLink to="/dashboard/WebsiteHistoryReport" icon={CircleSmall}>
+            Website History Report
+            </NavLink>
+
+            <NavLink to="/dashboard/DownloadBrowserHistory" icon={CircleSmall}>
+            Download Browser History
+            </NavLink>
+         
+         
+  
+           
+            
+            
           </AccordionItem>
+          <AccordionItem
+            title="AntiVirus "
+            icon={Banknote}
+            isOpen={openAccordions.antivirus}
+            onToggle={() => toggleAccordion("antivirus")}>
+
+               <NavLink to="/dashboard/antivirusEdr" icon={CircleSmall}>
+            Antivirus EDR
+            </NavLink>
+
+            </AccordionItem>
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">
@@ -294,7 +350,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 ">
-        <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-3 py-1.5 flex items-center justify-between border-b border-gray-700">
+        <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-3 py-1 flex items-center justify-between border-b border-gray-700">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
