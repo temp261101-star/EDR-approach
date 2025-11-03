@@ -17,7 +17,6 @@ const api = axios.create({
   },
 });
 
-test test
 
 async function fetchResource({ resource, parentValue }) {
   console.log("check api endpoint ", resource);
