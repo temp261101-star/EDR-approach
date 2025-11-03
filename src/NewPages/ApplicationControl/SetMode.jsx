@@ -45,12 +45,17 @@ const SetMode = () => {
           }}
         />
       ) : (
-        <ModeTable
+
+        <div className="mx-5">
+
+          <ModeTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
-        />
+        /> 
+        </div>
+       
       )}
 
     
@@ -67,6 +72,8 @@ const SetModeForm = ({ onSuccess }) => {
   const deviceRef = useRef();
   const branchRef = useRef();
   const accessRef = useRef();
+
+    const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -95,11 +102,12 @@ const SetModeForm = ({ onSuccess }) => {
       hooks: {
         onBeforeSubmit: (payload) => {
           payload.requestType = "Set_Mode_Of_Whitelist";
+          setLoading(true);
         },
 
         onSuccess: () => {
           toast.success("Mode set successfully!");
-
+          setLoading(false);
           setTimeout(() => {
             formRef.current.reset();
             deviceRef.current?.reset();
@@ -118,7 +126,9 @@ const SetModeForm = ({ onSuccess }) => {
   }, []);
 
   return (
-    <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
+
+    <div className="p-4">
+       <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
       <FormFields grid={2}>
         <MultiSelect
           name="branches"
@@ -162,7 +172,7 @@ const SetModeForm = ({ onSuccess }) => {
           className="px-6 py-2 bg-cyan-600 text-white rounded-lg cursor-pointer"
           type="submit"
         >
-          Submit
+        {loading?(<p> loading..</p>):(<p>Submit</p>)}  
         </button>
 
         <button
@@ -179,6 +189,8 @@ const SetModeForm = ({ onSuccess }) => {
         </button>
       </FormActions>
     </Form>
+    </div>
+   
   );
 };
 
