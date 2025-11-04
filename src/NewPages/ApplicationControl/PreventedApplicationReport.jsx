@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
 import Form, { FormActions, FormFields } from '../../components/Form';
@@ -9,6 +9,65 @@ import FormController from '../../lib/FormController';
 import api from '../../lib/api';
 
 const PreventedApplicationReport = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch table data API
+  // const getDriveDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "dashboard/viewApplicationListing",
+  //     });
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        // <ViewApplicationForm
+        //   onSuccess={() => {
+        //     setShowTable(true);
+
+        //     // Load table after submit
+        //     getDriveDetails();
+        //   }}
+        // />
+        <PreventedApplicationReportForm
+          onSuccesswhitelist={(response) => {
+            setShowTable(true);
+            setTableData(response || []); // use API response directly
+          }}
+        />
+
+      ) : (
+        <PreventedApplicationTable
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        />
+      )}
+
+
+    </div>
+  );
+};
+export default PreventedApplicationReport;
+
+
+const PreventedApplicationReportForm = () => {
   const formRef = useRef();
   const branchRef = useRef();
   const deviceRef = useRef();
@@ -70,6 +129,13 @@ const PreventedApplicationReport = () => {
 
     return () => controller.destroy();
   }, []);
+  const reset = () => {
+  
+            formRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
+           
+  };
 
   return (
     <div className="mt-10">
@@ -101,9 +167,7 @@ const PreventedApplicationReport = () => {
             <button
               className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
               type="submit"
-              onClick={() =>
-                navigate('/dashboard/preventedApplicationReport/viewpreventedApplication')
-              }
+            
             >
               Submit
             </button>
@@ -111,6 +175,7 @@ const PreventedApplicationReport = () => {
             <button
               type="button"
               className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+             onClick={reset}
             >
               Reset
             </button>
@@ -121,4 +186,35 @@ const PreventedApplicationReport = () => {
   );
 };
 
-export default PreventedApplicationReport;
+
+//  TABLE COMPONENT
+
+const PreventedApplicationTable = ({ tableData, loading, onBack }) => {
+  // alert(tableData)
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+  <Table tableTitle="Set Mode Table" />
+        </div>
+      
+      ) : (
+        <div>
+          <Table tableTitle="Set Mode Table" data={tableData} />
+        </div>
+        
+      )}
+    </>
+  );
+};
+

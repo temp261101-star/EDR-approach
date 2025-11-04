@@ -18,7 +18,7 @@ const SetMode = () => {
       const res = await api.fetchResource({
         resource: "dashboard/ViewModeListing",
       });
-      setTableData(res || []);
+      setTableData(res.data || []);
     } catch (err) {
       toast.error("Failed to load mode data");
     } finally {
@@ -122,7 +122,14 @@ const SetModeForm = ({ onSuccess }) => {
 
     return () => controller.destroy();
   }, []);
-
+ const reset = () => {
+  
+            formRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
+            accessRef.current.reset();
+      
+  };
   return (
 
     <div className="p-4">
@@ -176,12 +183,8 @@ const SetModeForm = ({ onSuccess }) => {
         <button
           type="button"
           className="px-6 py-2 border rounded-lg ml-2"
-          onClick={() => {
-            formRef.current.reset();
-            deviceRef.current.reset();
-            branchRef.current.reset();
-            accessRef.current.reset();
-          }}
+           onClick={reset}
+         
         >
           Reset
         </button>
@@ -195,7 +198,7 @@ const SetModeForm = ({ onSuccess }) => {
 //  TABLE COMPONENT
 
 const ModeTable = ({ tableData, loading, onBack }) => {
-  alert(tableData)
+  // alert(tableData)
   return (
     <>
       <button
