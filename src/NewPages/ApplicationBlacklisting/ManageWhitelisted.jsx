@@ -1,21 +1,87 @@
-
 import React, { useEffect, useRef, useState } from 'react';
 import api from '../../lib/api';
 import FormController from '../../lib/FormController';
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
-import TextInput from '../../components/FormComponent/TextInput';
+
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Table from '../../components/Table';
 // import { toast } from 'react-toastify';
 
 const ManageWhitelisted = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  console.log("showTable : ",showTable);
+  
+
+  // // Fetch table data API
+  // const getBlacklistedDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "commonMode/ManageBlacklistedApplicationListing",
+  //     });
+
+  //     console.log("response in getBlacklistedDetails : ",res);
+      
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <ManageWhitelistedForm
+          onSuccessManageWhitelist={(response) => {
+            setShowTable(true);
+            // Load table after submit
+            // getBlacklistedDetails();
+            setTableData(response|| []);
+            console.log("table dataaa response:"+response)
+          }}
+        />
+      ) : (
+
+        <div className="mx-5">
+
+          <ManageWhitelistedTable
+          
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        /> 
+        </div>
+       
+      )}
+
+    
+    </div>
+  );
+};
+
+export default ManageWhitelisted;
+
+const ManageWhitelistedForm = ({onSuccessManageWhitelist}) => {
   const formRef = useRef(null);
   const branchRef = useRef();
   const deviceRef = useRef();
   const typeRef = useRef();
-const navigate=useNavigate();
-  const [reloadTable, setReloadTable] = useState(0);
+  const [loading, setLoading] = useState(false);
+ const [reloadTable, setReloadTable] = useState(0);
   const [showApplicationFields, setShowApplicationFields] = useState("");
 
   useEffect(() => {
@@ -50,13 +116,14 @@ const navigate=useNavigate();
 
       actions: {
         manageWhitelistedApplication: async (payload) => {
-          return api.createResource("commonMode/add-application-set", [payload]);
+          return api.createResource("commonMode/manageWhitelisting", payload);
         },
       },
 
       hooks: {
-        onSuccess: () => {
-          toast.success("Trusted Application Added!");
+        onSuccess: (response) => {
+          toast.success("Data Added Successfully");
+            setLoading(false); 
 
           // Hide conditional fields first
           setShowApplicationFields("");
@@ -71,18 +138,23 @@ const navigate=useNavigate();
             deviceRef.current?.reset();
             typeRef.current?.reset();
           }, 0);
+           onSuccessManageWhitelist(response)
 
           setReloadTable(prev => prev + 1);
         },
+        onBeforeSubmit: () => {
+    setLoading(true); 
+  },
+   onError: (err) => {
+    toast.error(err.message || "Submission failed!");
+    setLoading(false); 
+  },
       },
     });
 
     return () => controller.destroy();
   }, []);
 
-  const handleApplicationTypeChange = (event) => {
-    setShowApplicationFields(event.target.value);
-  };
 
   function handleReset() {
     setShowApplicationFields("");
@@ -114,25 +186,30 @@ const navigate=useNavigate();
           />
 
           <MultiSelect
-            name="deviceName"
+            name="ip_address"
             label="Device Name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"
             dataDependsOn="branches"
             data-param="branches"
-            data-key="devices"
+            data-key="ip_address"
             multiSelect={true}
             sendAsArray={true}
             required
           />
         <MultiSelect
-            name="type"
+            name="appname"
             label="Application Name"
             ref={typeRef}
-            dataSource="commonMode/getDeviceOnBranchName"
-            dataDependsOn="branches"
-            data-param="branches"
-            data-key="devices"
+            // dataSource="commonMode/getDeviceOnBranchName"
+         options={[
+  { value: "userinit.exe", name: "userinit.exe" }
+]}
+
+
+            // dataDependsOn="branches"
+            // data-param="branches"
+            data-key="appname"
             multiSelect={true}
             sendAsArray={true}
             required
@@ -144,10 +221,10 @@ const navigate=useNavigate();
 
         <FormActions>
           <button
-            type="submit" onClick={()=>navigate('/dashboard/managewhitelisted/manageWhitelistedApplicationReport')}
+            type="submit"
             className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
           >
-            Submit 
+             {loading?(<p> loading..</p>):(<p>Submit</p>)}   
           </button>
 
           <button
@@ -163,4 +240,37 @@ const navigate=useNavigate();
   );
 };
 
-export default ManageWhitelisted;
+
+
+
+
+
+//  TABLE COMPONENT
+const ManageWhitelistedTable = ({ tableData, loading, onBack }) => {
+ console.log(tableData+"tabledata")
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+  <Table tableTitle="Manage Whitelisted Table" />
+        </div>
+      
+      ) : (
+        <div>
+          <Table tableTitle="Manage Whitelisted Table" data={tableData} />
+        </div>
+        
+      )}
+    </>
+  );
+};

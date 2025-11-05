@@ -74,6 +74,7 @@ const WhiteListedApplicationForm = ({onSuccesswhitelist}) => {
   const formRef = useRef()
   const branchRef = useRef()
   const deviceRef = useRef()
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -116,6 +117,7 @@ const WhiteListedApplicationForm = ({onSuccesswhitelist}) => {
       hooks: {
         onSuccess: (response) => {
            toast.success("Data fetched successfully!");
+             setLoading(false); 
           // Swal.fire({
           //   title: "Added AntiVirus Successfully!",
           //   icon: "success",
@@ -147,10 +149,12 @@ const WhiteListedApplicationForm = ({onSuccesswhitelist}) => {
         onError: (error) => {
           console.error("Submission error:", error);
           toast.error(error.message);
+           setLoading(false);
         },
 
         onBeforeSubmit: (payload) => {
           console.log("Submitting payload:", payload);
+           setLoading(true); 
         },
       },
     });
@@ -200,7 +204,7 @@ const reset = () => {
            
             
           >
-            Submit
+             {loading?(<p> loading..</p>):(<p>Submit</p>)}  
           </button>
 
           <button

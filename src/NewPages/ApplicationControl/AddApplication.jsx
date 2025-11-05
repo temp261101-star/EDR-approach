@@ -215,6 +215,7 @@ const AddApplication = () => {
   const [showTable, setShowTable] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [loading, setLoading] = useState(false);
+    
   
 
   //  Back Button Handler
@@ -246,6 +247,7 @@ return (
           //  Pass back function
           onBack={handleBack}
         />
+
       )}
 
 
@@ -262,6 +264,7 @@ const AddApplicationForm = ({ onSuccess }) => {
 
   const [reloadTable, setReloadTable] = useState(0);
   const [showApplicationFields, setShowApplicationFields] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -300,26 +303,34 @@ const AddApplicationForm = ({ onSuccess }) => {
       },
 
       hooks: {
-        onSuccess: () => {
-          toast.success("Trusted Application Added!");
+  onBeforeSubmit: () => {
+    setLoading(true); 
+  },
+  onSuccess: () => {
+    toast.success("Trusted Application Added!");
+    setLoading(false);
 
-          // Hide conditional fields first
-          setShowApplicationFields("");
+    setShowApplicationFields("");
 
-          // Clear input values manually so hidden inputs don't retain data
-          formRef.current.querySelectorAll("input").forEach(i => (i.value = ""));
+    
+    formRef.current.querySelectorAll("input").forEach(i => (i.value = ""));
 
-          // Reset dropdown values
-          setTimeout(() => {
-            formRef.current?.reset();
-            branchRef.current?.reset();
-            deviceRef.current?.reset();
-            typeRef.current?.reset();
-          }, 0);
-          onSuccess();
-          setReloadTable(prev => prev + 1);
-        },
-      },
+    setTimeout(() => {
+      formRef.current?.reset();
+      branchRef.current?.reset();
+      deviceRef.current?.reset();
+      typeRef.current?.reset();
+    }, 0);
+
+    onSuccess();
+    setReloadTable(prev => prev + 1);
+  },
+  onError: (err) => {
+    toast.error(err.message || "Submission failed!");
+    setLoading(false); 
+  },
+},
+
     });
 
     return () => controller.destroy();
@@ -406,7 +417,8 @@ const AddApplicationForm = ({ onSuccess }) => {
             type="submit"
             className="px-5 py-2.5 bg-cyan-600 text-white rounded-lg hover:bg-cyan-500 transition-colors shadow-sm"
           >
-            Submit
+             {loading?(<p> loading..</p>):(<p>Submit</p>)}  
+         
           </button>
 
           <button

@@ -69,11 +69,14 @@ const ViewApplication = () => {
 
 
 export default ViewApplication;
+
+
 const ViewApplicationForm = ({ onSuccess }) => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -111,10 +114,12 @@ const ViewApplicationForm = ({ onSuccess }) => {
       },
 
       hooks: {
+ 
         onSuccess: (response) => {
           toast.success("View Application successful");
           dispatch(setViewApplicationResultData(response));
           console.log("check res : ", response);
+           setLoading(false); 
 
           setTimeout(() => {
             if (formRef.current) {
@@ -130,10 +135,12 @@ const ViewApplicationForm = ({ onSuccess }) => {
         onError: (error) => {
           console.error("Submission error:", error);
           toast.error(error.message);
+           setLoading(false); 
         },
 
         onBeforeSubmit: (payload) => {
           console.log("Submitting payload:", payload);
+            setLoading(true); 
         },
       },
     });
@@ -184,7 +191,7 @@ const ViewApplicationForm = ({ onSuccess }) => {
             type="submit"
           
           >
-            Submit
+           {loading?(<p> loading..</p>):(<p>Submit</p>)}  
           </button>
 
           <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"

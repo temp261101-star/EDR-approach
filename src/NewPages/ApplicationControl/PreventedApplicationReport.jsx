@@ -7,6 +7,7 @@ import MultiSelect from '../../components/MultiSelect';
 import toast from 'react-hot-toast';
 import FormController from '../../lib/FormController';
 import api from '../../lib/api';
+import Table from "../../components/Table";
 
 const PreventedApplicationReport = () => {
   const [showTable, setShowTable] = useState(false);
@@ -45,7 +46,7 @@ const PreventedApplicationReport = () => {
         //   }}
         // />
         <PreventedApplicationReportForm
-          onSuccesswhitelist={(response) => {
+          onSuccessPreventApplication={(response) => {
             setShowTable(true);
             setTableData(response || []); // use API response directly
           }}
@@ -67,11 +68,12 @@ const PreventedApplicationReport = () => {
 export default PreventedApplicationReport;
 
 
-const PreventedApplicationReportForm = () => {
+const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
   const formRef = useRef();
   const branchRef = useRef();
   const deviceRef = useRef();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -119,18 +121,22 @@ const PreventedApplicationReportForm = () => {
       hooks: {
         onSuccess: () => {
           toast.success('PreventedApplicationReport successful');
+            setLoading(false); 
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
             }
           }, 100);
+           onSuccessPreventApplication()
         },
         onError: (error) => {
           console.error('Submission error:', error);
           toast.error(error.message);
+            setLoading(false); 
         },
         onBeforeSubmit: (payload) => {
           console.log('Submitting payload:', payload);
+           setLoading(true); 
         },
       },
     });
@@ -177,7 +183,7 @@ const PreventedApplicationReportForm = () => {
               type="submit"
             
             >
-              Submit
+              {loading?(<p> loading..</p>):(<p>Submit</p>)}  
             </button>
 
             <button
@@ -213,12 +219,12 @@ const PreventedApplicationTable = ({ tableData, loading, onBack }) => {
       ) : tableData.length === 0 ? (
 
         <div>
-  <Table tableTitle="Set Mode Table" />
+  <Table tableTitle="Prevent Application Report Table" />
         </div>
       
       ) : (
         <div>
-          <Table tableTitle="Set Mode Table" data={tableData} />
+          <Table tableTitle="Prevent Application Report Table" data={tableData} />
         </div>
         
       )}

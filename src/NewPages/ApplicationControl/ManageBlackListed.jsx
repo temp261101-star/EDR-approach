@@ -86,6 +86,8 @@ const ManageBlackListedForm = ({onSuccessHandle}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -137,6 +139,7 @@ const ManageBlackListedForm = ({onSuccessHandle}) => {
           toast.success("Data Submitted Successfully");
           console.log("API response", response);
           dispatch(setBlacklistResultData(response.recentFileData));
+            setLoading(false); 
 
           //  to do ->   add navigation
           setTimeout(() => {
@@ -152,10 +155,12 @@ const ManageBlackListedForm = ({onSuccessHandle}) => {
         onError: (error) => {
           console.error("Submission error:", error);
           toast.error(error.message+"hyy");
+            setLoading(false); 
         },
 
         onBeforeSubmit: (payload) => {
           console.log("Submitting payload:", payload);
+           setLoading(true); 
         },
       },
     });
@@ -206,7 +211,7 @@ const ManageBlackListedForm = ({onSuccessHandle}) => {
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
             type="submit"
           >
-            Submit
+             {loading?(<p> loading..</p>):(<p>Submit</p>)}  
           </button>
           <button
             type="button"

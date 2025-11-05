@@ -184,7 +184,7 @@ function ExternalUsbFormData() {
     console.log("showApplicationFields",showApplicationFields)
     return (
        <div className="mt-10">
-            <Form ref={formRef} apiAction="externalUsb" title="Branch Wise">
+            <Form ref={formRef} apiAction="externalUsb" title="External USB">
                 <FormFields grid={2}>
 
                     <MultiSelect
