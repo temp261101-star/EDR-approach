@@ -104,7 +104,15 @@ const PreventedApplicationReportForm = () => {
 
       actions: {
         PreventedApplication: async (payload) => {
-          return api.createResource('/setexternalUSB/addExternalUSB', payload);
+           if (Array.isArray(payload.branches)) {
+            payload.branches = payload.branches.join(',');
+          }
+          if (Array.isArray(payload.ip_address)) {
+            payload.ip_address = payload.ip_address.join(',');
+          }
+           payload.branch_name = payload.branches; 
+           delete payload.branches; 
+          return api.createResource('/EndPointSecurity/ApplicationWhitelisting/ManageBlacklistedprotectionApplicationListing', payload);
         },
       },
 
@@ -152,7 +160,7 @@ const PreventedApplicationReportForm = () => {
         />
 
         <MultiSelect
-          name="deviceName"
+          name="ip_address"
           label="Device Name"
           dataSource="commonMode/getDeviceOnBranchName"
           ref={deviceRef}

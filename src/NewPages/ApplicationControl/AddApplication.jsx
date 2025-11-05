@@ -451,3 +451,5 @@ const AddApplicationTable = ({ tableData, loading, onBack }) => {
     </>
   );
 };
+
+

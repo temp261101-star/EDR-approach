@@ -6,9 +6,73 @@ import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import TextInput from '../../components/FormComponent/TextInput';
 import toast from 'react-hot-toast';
+import Table from '../../components/Table';
 // import { toast } from 'react-toastify';
-
 const AddBlacklistedapplication = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  console.log("showTable : ",showTable);
+  
+
+  // // Fetch table data API
+  // const getBlacklistedDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "commonMode/ManageBlacklistedApplicationListing",
+  //     });
+
+  //     console.log("response in getBlacklistedDetails : ",res);
+      
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <AddBlacklistedapplicationForm
+          onSuccessAddBlacklist={(response) => {
+            setShowTable(true);
+            // Load table after submit
+            // getBlacklistedDetails();
+            setTableData(response || []);
+            console.log("table dataaa response:"+response)
+          }}
+        />
+      ) : (
+
+        <div className="mx-5">
+
+          <AddBlacklistedapplicationTable
+          
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        /> 
+        </div>
+       
+      )}
+
+    
+    </div>
+  );
+};
+export default AddBlacklistedapplication;
+const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
   const formRef = useRef(null);
   const branchRef = useRef();
   const deviceRef = useRef();
@@ -48,8 +112,16 @@ const AddBlacklistedapplication = () => {
       },
 
       actions: {
+
         addblacklistedapplication: async (payload) => {
-          return api.createResource("commonMode/add-application-set", [payload]);
+
+          //  if (Array.isArray(payload.branches)) {
+          //   payload.branches = payload.branches.join(',');
+          // }
+          // if (Array.isArray(payload.devices)) {
+          //   payload.devices = payload.devices.join(',');
+          // }
+          return api.createResource("/EndPointSecurity/ApplicationWhitelisting/ManageBlacklistedprotectionApplicationListing", payload);
         },
       },
 
@@ -70,6 +142,7 @@ const AddBlacklistedapplication = () => {
             deviceRef.current?.reset();
             typeRef.current?.reset();
           }, 0);
+          onSuccessAddBlacklist();
 
           setReloadTable(prev => prev + 1);
         },
@@ -113,7 +186,7 @@ const AddBlacklistedapplication = () => {
           />
 
           <MultiSelect
-            name="deviceName"
+            name="devices"
             label="Device Name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"
@@ -176,4 +249,35 @@ const AddBlacklistedapplication = () => {
   );
 };
 
-export default AddBlacklistedapplication;
+
+
+
+//  TABLE COMPONENT
+const AddBlacklistedapplicationTable = ({ tableData, loading, onBack }) => {
+  console.log(tableData + "tabledata")
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+          <Table tableTitle="Add Blacklist Application Table" />
+        </div>
+
+      ) : (
+        <div>
+          <Table tableTitle="Add Blacklist Application Table" data={tableData} />
+        </div>
+
+      )}
+    </>
+  );
+};

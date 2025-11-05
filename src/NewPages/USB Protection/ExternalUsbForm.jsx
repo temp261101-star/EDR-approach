@@ -16,7 +16,75 @@ import FormController from '../../lib/FormController'
 import api from '../../lib/api'
 
 
-function ExternalUsbForm() {
+const ExternalUsbForm = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  console.log("showTable : ",showTable);
+  
+
+  // // Fetch table data API
+  // const getBlacklistedDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "commonMode/ManageBlacklistedApplicationListing",
+  //     });
+
+  //     console.log("response in getBlacklistedDetails : ",res);
+      
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <ExternalUsbFormData
+          onSuccessHandle={(response) => {
+            setShowTable(true);
+            // Load table after submit
+            // getBlacklistedDetails();
+            setTableData(response || []);
+            console.log("table dataaa response:"+response)
+          }}
+        />
+      ) : (
+
+        <div className="mx-5">
+
+          <ExternalUsbFormTable
+          
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        /> 
+        </div>
+       
+      )}
+
+    
+    </div>
+  );
+};
+
+export default ExternalUsbForm;
+
+
+
+function ExternalUsbFormData() {
     const branchRef = useRef()
     const formRef = useRef()
     const deviceRef=useRef();
@@ -202,4 +270,33 @@ function ExternalUsbForm() {
     )
 }
 
-export default ExternalUsbForm;
+
+//  TABLE COMPONENT
+const ExternalUsbFormTable = ({ tableData, loading, onBack }) => {
+ console.log(tableData+"tabledata")
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+  <Table tableTitle="Manage Blacklisted Table" />
+        </div>
+      
+      ) : (
+        <div>
+          <Table tableTitle="Manage Blacklisted Table" data={tableData} />
+        </div>
+        
+      )}
+    </>
+  );
+};
