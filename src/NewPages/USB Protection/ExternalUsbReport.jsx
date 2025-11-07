@@ -75,6 +75,7 @@ const ExternalUsbReport = () => {
 
     
     </div>
+    
   );
 };
 
@@ -87,7 +88,7 @@ function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
     const formRef = useRef();
     const branchRef = useRef();
     const deviceRef = useRef();
-    const navigate=useNavigate();
+
 
     useEffect(() => {
         if (!formRef.current) return;
