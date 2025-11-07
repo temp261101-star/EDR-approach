@@ -116,7 +116,7 @@ const WhiteListedApplicationForm = ({onSuccesswhitelist}) => {
 
       hooks: {
         onSuccess: (response) => {
-           toast.success("Data fetched successfully!");
+           toast.success("Whitelisted Applications Fetched successfully!");
              setLoading(false); 
           // Swal.fire({
           //   title: "Added AntiVirus Successfully!",
@@ -244,12 +244,12 @@ const WhiteListedApplicationTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
+        <div className='mx-4'>
           <Table tableTitle="View Application" />
         </div>
 
       ) : (
-        <div>
+        <div className='mx-4'>
           <Table tableTitle="View Application" data={tableData} />
         </div>
 

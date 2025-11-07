@@ -79,9 +79,9 @@ function App() {
         }
       />
      
-        <Route path="/test" element={<PolicyCreatorPage />} />
+        {/* <Route path="/test" element={<PolicyCreatorPage />} />
      <Route path="/policy1" element={<JsonToUi />} />
-     <Route path="/policy2" element={<DynamicFormBuilder />} />
+     <Route path="/policy2" element={<DynamicFormBuilder />} /> */}
      <Route path="/policy3" element={<GenericFormBuilder  />} />
       <Route
         path="/dashboard"

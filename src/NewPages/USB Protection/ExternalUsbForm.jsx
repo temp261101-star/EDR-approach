@@ -93,10 +93,10 @@ function ExternalUsbFormData() {
     // const [showAccessOptions, setShowAccessOptions] = useState(false);
     const [showApplicationFields, setShowApplicationFields] = useState("");
     const writeOptions = [
-        { value: "WriteModeDeny", label: "Write Mode Deny" },
+        { value: "True", label: "Write Mode Deny" },
     ];
     const executeOptions = [
-        { value: "executeOptions ", label: "Execute Mode Deny" },
+        { value: "True ", label: "Execute Mode Deny" },
     ];
 
     useEffect(() => {
@@ -129,7 +129,7 @@ function ExternalUsbFormData() {
       },
             actions: {
                 externalUsb: async (payload) => {
-                    return api.createResource("saveAntivirusData", payload);
+                    return api.createResource("restrict-usb", payload);
                 },
             },
 

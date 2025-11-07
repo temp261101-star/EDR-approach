@@ -222,7 +222,7 @@ const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
           {showApplicationFields === "ApplicationName" && (
             <>
               <TextInput
-                label="Application Name"
+                label="Application Path"
                 name="applicationName"
                 placeholder="Enter Application Name"
                 required

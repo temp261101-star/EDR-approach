@@ -1,11 +1,34 @@
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Bar,
+} from "recharts";
 import { useEffect, useState } from "react";
 import { getApi } from "../lib/api";
 import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
-import BarChartComponent from "../components/DynamicGraphs/BarChartComponentOld";
+import BarChartComponent from "../components/DynamicGraphs/BarChartComponent.jsx";
 import DeviceSecurityPieChart2 from "../NewPages/DeviceSecurityPieChart2";
 import { data } from "jquery";
 import axios from "axios";
+import {
+  Activity,
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle,
+  Eye,
+  Shield,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
+import Card from "../components/Cards/Card.jsx";
+// import BarChartComponent from "../components/DynamicGraphs/BarChartComponentold";
 
 const darkPalette = {
   primary: "#3B82F6",
@@ -22,7 +45,58 @@ const darkPalette = {
   textMuted: "#9CA3AF",
   hover: "#374151",
 };
-
+const kpis = [
+  {
+    label: "Latest Signature",
+    value: "27772",
+    change: "+1.2M",
+    up: true,
+    icon: Activity,
+  },
+  {
+    label: "Detected Malware",
+    value: "45",
+    change: "+68K",
+    up: true,
+    icon: Eye,
+  },
+  {
+    label: "Remediation Count",
+    value: "2",
+    change: "-3%",
+    up: false,
+    icon: Shield,
+  },
+  {
+    label: "Total EndPoint: 5",
+    value: "516",
+    change: "-4%",
+    up: false,
+    icon: AlertTriangle,
+  },
+  {
+    label: "IOC Blocked Apps",
+    value: "2",
+    change: "-2%",
+    up: false,
+    icon: AlertCircle,
+  },
+  {
+    label: "Files Remediation",
+    value: "47",
+    change: "+3%",
+    up: true,
+    icon: CheckCircle,
+  },
+];
+const attackScenarioOverview = [
+  { label: "Weak Version", count: 180, severity: "high" },
+  { label: "Open Port", count: 127, severity: "medium" },
+  { label: "Weak Security", count: 114, severity: "high" },
+  { label: "Weak Auth", count: 97, severity: "medium" },
+  { label: "Config Error", count: 73, severity: "low" },
+  { label: "Missing Patch", count: 45, severity: "high" },
+];
 export default function Home() {
   const [deviceBreakdown, setDeviceBreakdown] = useState([]);
   const [open, setOpen] = useState(false);
@@ -47,8 +121,9 @@ export default function Home() {
   console.log("deviceBreakdown : ", deviceBreakdown);
   useEffect(() => {
     const fetchData = async () => {
-
-      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getHostStatus");
+      const res = await axios.get(
+        "http://182.48.194.218:9191/api/v1/dashboard/getHostStatus"
+      );
       console.log("log api response in app", res);
 
       setData(res.data);
@@ -56,11 +131,11 @@ export default function Home() {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     const fetchData = async () => {
-
-      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getDeviceStatus");
+      const res = await axios.get(
+        "http://182.48.194.218:9191/api/v1/dashboard/getDeviceStatus"
+      );
       console.log("log api response in app", res);
 
       setGetDeviceStatus(res.data);
@@ -70,8 +145,9 @@ export default function Home() {
 
   useEffect(() => {
     const fetchData = async () => {
-
-      const res = await axios.get("http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus");
+      const res = await axios.get(
+        "http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus"
+      );
       console.log("log api response in app", res);
 
       setGetUSBStatus(res.data);
@@ -79,26 +155,30 @@ export default function Home() {
     fetchData();
   }, []);
 
-
   console.log("data check for pie", data);
 
-
-  const Card = ({ title, action, children, className = "", noPadding = false }) => (
-    <div
-      className={`rounded-lg border bg-gray-800 shadow-sm transition-shadow flex flex-col border-gray-700 ${className}`}
-    >
-      <div className="px-3 py-2 border-b bg-gray-800/50 flex-shrink-0 border-gray-700">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-gray-100">{title}</h3>
-          {action}
-        </div>
-      </div>
-      {/* If noPadding=true, skip padding */}
-      <div className={`flex-1 overflow-hidden ${noPadding ? "" : "p-3"}`}>
-        {children}
-      </div>
-    </div>
-  );
+  // const Card = ({
+  //   title,
+  //   action,
+  //   children,
+  //   className = "",
+  //   noPadding = false,
+  // }) => (
+  //   <div
+  //     className={`rounded-lg border bg-gray-800 shadow-sm transition-shadow flex flex-col border-gray-700 ${className}`}
+  //   >
+  //     <div className="px-3 py-2 border-b bg-gray-800/50 flex-shrink-0 border-gray-700">
+  //       <div className="flex items-center justify-between">
+  //         <h3 className="text-sm font-bold text-gray-100">{title}</h3>
+  //         {action}
+  //       </div>
+  //     </div>
+  //     {/* If noPadding=true, skip padding */}
+  //     <div className={`flex-1 overflow-hidden ${noPadding ? "" : "p-3"}`}>
+  //       {children}
+  //     </div>
+  //   </div>
+  // );
 
   const tooltipStyle = {
     background: darkPalette.cardBackground,
@@ -107,6 +187,29 @@ export default function Home() {
     fontSize: 12,
     boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.3)",
     color: darkPalette.textPrimary,
+  };
+
+  const KPI = ({ kpi }) => {
+    const IconComponent = kpi.icon;
+    return (
+      <div className="rounded-lg border bg-gray-800 p-3 shadow-sm hover:shadow-md transition-shadow border-gray-700 hover:border-gray-600">
+        <div className="flex items-center justify-between mb-1">
+          <div className="text-xs text-gray-400 font-medium">{kpi.label}</div>
+          <IconComponent className="h-4 w-4 text-gray-500" />
+        </div>
+        <div className="flex items-end justify-between">
+          <div className="text-xl font-bold text-gray-100">{kpi.value}</div>
+          <div
+            className={`flex items-center gap-1 text-xs font-semibold ${
+              kpi.up ? "text-green-400" : "text-red-400"
+            }`}
+          >
+            {kpi.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+            {kpi.change}
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -130,59 +233,67 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
+        {kpis.map((k) => (
+          <KPI key={k.label} kpi={k} />
+        ))}
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        <div className="lg:col-span-4 space-y-3">
-          <Card title="Test" className="h-[320px]">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+        <div className="lg:col-span-1 space-y-3">
+          <Card title="Host Details" className="h-[400px]">
             <PieChartComponent
-              onClick={() => setOpen(true)}
+              // onClick={() => setOpen(true)}
               data={data}
-              endpoint="demoChart"
-              title="Device Security Status"
-              action="somethinfg"
+              // endpoint="demoChart"
+              // title="Device Security Status"
+              // action="somethinfg"
             />
           </Card>
         </div>
-        <div className="lg:col-span-4 space-y-3">
-          <Card title="Device Status" className="h-[320px]">
+        <div className="lg:col-span-1 space-y-3">
+          <Card title="Device Status" className="h-[400px]">
             <PieChartComponent
               onClick={() => setOpen(true)}
               // query="SELECT IP_ADDRESS,AGENT_STATUS,COUNT(*) OVER() AS total_count FROM all_ipaddress"
               data={getDeviceStatus}
-              endpoint="demoChart"
+              // endpoint="demoChart"
               title="Device Security Status"
               action="somethinfg"
             />
           </Card>
         </div>
-        <div className="lg:col-span-4 space-y-3">
-          <Card title="Spring boot Get USBStatus" className="h-[320px]">
-            <PieChartComponent
-              onClick={() => setOpen(true)}
-              data={getUSBStatus}
-              endpoint="demoChart"
-              title="Device Security Status"
-              action="somethinfg"
-            />
+        <div className="lg:col-span-1 space-y-3">
+          <Card
+            title="USB Detection"
+            className="h-[400px]"
+            noPadding
+          >
+            <div className="p-2 h-full flex flex-col">
+              <BarChartComponent
+                apiEndpoint="http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus"
+                dataKey="count"
+                xAxisKey="label"
+              />
+            </div>
           </Card>
         </div>
-        <div className="lg:col-span-4 space-y-3">
-          <Card title="Blacklisted Appplication" className="h-[320px]">
-            <PieChartComponent
-              onClick={() => setOpen(true)}
-              query=" SELECT 
-    ip_address, 
-    malware_status, 
-    COUNT(*) OVER() AS total_count
-FROM 
-    application_info_report_edr"
-              endpoint="demoChart"
-              title="Device Security Status"
-              action="somethinfg"
-            />
+        <div className="lg:col-span-1 space-y-3">
+          <Card
+            title="Threat Detection"
+            className="h-[400px]"
+            noPadding
+          >
+            <div className="p-2 h-full flex flex-col">
+              <BarChartComponent
+                apiEndpoint="http://182.48.194.218:9191/api/v1/dashboard/threatDetectionPiechart"
+                dataKey="count"
+                xAxisKey="label"
+              />
+            </div>
           </Card>
         </div>
-        <div className="lg:col-span-4 space-y-3">
+        {/* <div className="lg:col-span-4 space-y-3">
           <Card title="Device Security Data" className="h-[320px]">
             <PieChartComponent
               onClick={() => setOpen(true)}
@@ -225,14 +336,14 @@ FROM
         <div className="lg:col-span-4 space-y-3">
           <Card title="Security Anomaly Trends" className="h-[320px]">
             <BarChartComponent
-              data={getUSBStatus}
+             data={getUSBStatus}
             />
           </Card>
         </div>
-
+       
         <div className="lg:col-span-4 space-y-3">
           <DeviceSecurityPieChart2 />
-        </div>
+        </div> */}
       </div>
     </div>
   );

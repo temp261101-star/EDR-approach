@@ -1131,6 +1131,7 @@
 import React, { useState } from "react";
 import { Plus, Trash2, ChevronDown } from "lucide-react";
 import GenericPopupModal from "../../components/MODAL/GenericPopupModal";
+import { useWebSocket } from "../../lib/useWebSocket";
 
 const GenericFormBuilder = ({ config }) => {
 const [activeTab, setActiveTab] = useState(config.tabs?.[0]?.id || Object.keys(config.screens || {})[0] || "");
@@ -1138,8 +1139,12 @@ const [activeTab, setActiveTab] = useState(config.tabs?.[0]?.id || Object.keys(c
     { id: 1, name: "Policy 1", data: {} },
     // to do ->> ad new policies using btn
   ]);
-const [editMode, setEditMode] = useState(false);
-const [editingId, setEditingId] = useState(null);
+// const [editMode, setEditMode] = useState(false);
+// const [editingId, setEditingId] = useState(null);
+
+
+// WebSocket connection
+  const { isConnected, sendMessage } = useWebSocket('to do ->> url for socket');
 
   const initializeFormWithDefaults = (config) => {
     const defaultData = {};
@@ -1610,10 +1615,44 @@ const updateFormState = (path, value) => {
   };
 
   const activeScreen = config.screens?.[activeTab];
+const handleSubmit = () => {
+    const mergedData = Object.values(formState || {}).reduce(
+      (acc, tabData) => ({ ...acc, ...tabData }),
+      {}
+    );
 
+    // Prepare data for WebSocket
+    const wsData = {
+      type: 'form_submission',
+      timestamp: new Date().toISOString(),
+      data: mergedData,
+      policyCount: policies.length,
+      activePolicy: selectedPolicyId
+    };
+
+    // Send via WebSocket
+    sendMessage(wsData);
+
+    // Also keep the console log for debugging
+    console.log("Submit:", mergedData);
+  };
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6">
       <div className="max-w-6xl mx-auto">
+
+        {/* for connection status of websocket */}
+          <div className="mb-4 flex justify-between items-center">
+        <h1 className="text-2xl font-bold">Form Builder</h1>
+        <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+          isConnected ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+        }`}>
+          <div className={`w-2 h-2 rounded-full ${
+            isConnected ? 'bg-green-300' : 'bg-red-300'
+          }`}></div>
+          {isConnected ? 'Connected' : 'Disconnected'}
+        </div>
+      </div>
+
         <div className=" lg:flex">
           <div className="lg:w-64 w-full bg-gray-900 border-r border-gray-800 p-4 flex flex-col">
             <h2 className="text-lg font-semibold text-gray-100 mb-4">
@@ -1693,26 +1732,14 @@ const updateFormState = (path, value) => {
       Previous
     </button>
 
-    <button
-      onClick={() => {
-        const currentIndex = config.tabs?.findIndex((t) => t.id === activeTab) ?? -1;
-        if (currentIndex < config.tabs.length - 1) {
-          setActiveTab(config.tabs[currentIndex + 1].id);
-        } else {
-          const mergedData = Object.values(formState || {}).reduce(
-  (acc, tabData) => ({ ...acc, ...tabData }),
-  {}
-);
-
-console.log("Submit:", mergedData);
-        }
-      }}
-      className={`px-6 py-2.5 text-sm font-medium rounded-lg transition-colors ${
-        config.tabs && config.tabs.findIndex((t) => t.id === activeTab) === config.tabs.length - 1
-          ? "bg-green-600 hover:bg-green-700 text-white"
-          : "bg-blue-600 hover:bg-blue-700 text-white"
-      }`}
-    >
+     <button
+    onClick={handleSubmit}
+    className={`px-6 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+      config.tabs && config.tabs.findIndex((t) => t.id === activeTab) === config.tabs.length - 1
+        ? "bg-green-600 hover:bg-green-700 text-white"
+        : "bg-blue-600 hover:bg-blue-700 text-white"
+    }`}
+  >
       {config.tabs && config.tabs.findIndex((t) => t.id === activeTab) === config.tabs.length - 1
         ? "Submit"
         : "Next"}

@@ -450,7 +450,7 @@ const AddApplicationTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
+        <div className='mx-5'>
           <Table tableTitle="Add Application" />
         </div>
 

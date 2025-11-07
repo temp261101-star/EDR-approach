@@ -120,7 +120,7 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
 
       hooks: {
         onSuccess: () => {
-          toast.success('PreventedApplicationReport successful');
+          toast.success('Prevented Application Report fetched successfully');
             setLoading(false); 
           setTimeout(() => {
             if (formRef.current) {
@@ -218,13 +218,13 @@ const PreventedApplicationTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
-  <Table tableTitle="Prevent Application Report Table" />
+        <div className="mx-4">
+  <Table tableTitle="Prevent Application Report " />
         </div>
       
       ) : (
-        <div>
-          <Table tableTitle="Prevent Application Report Table" data={tableData} />
+        <div className='mx-4'>
+          <Table tableTitle="Prevent Application Report " data={tableData} />
         </div>
         
       )}

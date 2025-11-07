@@ -57,11 +57,12 @@ const ExternalUsbListTable = ({ tableData, loading, onBack }) => {
     <>
      <div className="flex justify-end mb-2">
         <button
-          className="cursor-pointer px-4 py-1 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2  mr-25 translate-y-2"
+          className="cursor-pointer px-4 py-1 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2  mr-8 translate-y-2"
              
                     
          onClick={() => navigate('/dashboard/externalusb/externalusbform')}
-         >          New
+         >  
+          New
          </button>
        </div>
 
@@ -69,13 +70,13 @@ const ExternalUsbListTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
-  <Table tableTitle="View Mode Table" />
+        <div className='mx-4'>
+  <Table tableTitle="External USB" />
         </div>
       
       ) : (
-        <div>
-          <Table tableTitle="View Mode Table" data={tableData} />
+        <div className='mx-4'>
+          <Table tableTitle="External USB" data={tableData} />
         </div>
         
       )}

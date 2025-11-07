@@ -223,12 +223,12 @@ const ViewApplicationTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
+        <div className='mx-4'>
           <Table tableTitle="View Application" />
         </div>
 
       ) : (
-        <div>
+        <div className='mx-4'>
           <Table tableTitle="View Application" data={tableData} />
         </div>
 
