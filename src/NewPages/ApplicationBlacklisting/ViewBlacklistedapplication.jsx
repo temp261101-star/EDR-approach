@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
@@ -11,14 +11,91 @@ import api from '../../lib/api';
 import { useDispatch } from "react-redux";
 
 import { setViewApplicationResultData } from "../../store/appSlice";
+import Table from '../../components/Table';
+
 
 const ViewBlacklistedapplication = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  console.log("showTable : ", showTable);
+
+
+  // // Fetch table data API
+  // const getBlacklistedDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "commonMode/ManageBlacklistedApplicationListing",
+  //     });
+
+  //     console.log("response in getBlacklistedDetails : ",res);
+
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        // <ViewBlacklistedapplicationForm
+        //   onSuccessViewblacklist={(response) => {
+        //     setShowTable(true);
+        //     // Load table after submit
+        //     // getBlacklistedDetails();
+        //     setTableData(response || []);
+        //     console.log("table dataaa response:"+response)
+        //   }}
+        // />
+        <ViewBlacklistedapplicationForm
+          onSuccessViewblacklist={(response) => {
+            setShowTable(true);
+            setTableData(response || []);
+            console.log("table dataaa response:", response);
+          }}
+        />
+
+      ) : (
+
+        <div className="mx-5">
+
+          <ViewBlacklistedapplicationTable
+
+            tableData={tableData}
+            loading={loading}
+            //  Pass back function
+            onBack={handleBack}
+          />
+        </div>
+
+      )}
+
+
+    </div>
+  );
+};
+
+export default ViewBlacklistedapplication;
+
+const ViewBlacklistedapplicationForm = ({ onSuccessViewblacklist }) => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -50,7 +127,7 @@ const ViewBlacklistedapplication = () => {
 
       actions: {
         viewBlacklistedapplication: async (payload) => {
-          return api.createResource("/dashboard/viewApplicationListing", payload);
+          return api.createResource("/dashboard/ViewApplicationInfoReport", payload);
         },
       },
 
@@ -58,30 +135,44 @@ const ViewBlacklistedapplication = () => {
         onSuccess: (response) => {
           toast.success("View Application successful");
           dispatch(setViewApplicationResultData(response));
-          console.log("check res : ",response);
-   
+          console.log("check res : ", response);
+            setLoading(false); 
+
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
             }
-            formRef.current.reset();
+            // formRef.current.reset();
 
           }, 100);
+          // onSuccessViewblacklist(response.recentFileData);
+          onSuccessViewblacklist(response);
+
         },
 
         onError: (error) => {
           console.error("Submission error:", error);
           toast.error(error.message);
+            setLoading(false); 
         },
 
         onBeforeSubmit: (payload) => {
           console.log("Submitting payload:", payload);
+           setLoading(true); 
         },
       },
     });
 
     return () => controller.destroy();
   }, []);
+    const reset = () => {
+  
+            formRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
+          
+      
+  };
   return (
     <div className="mt-10">
       <Form ref={formRef} apiAction="viewBlacklistedapplication" title="View Application">
@@ -114,13 +205,13 @@ const ViewBlacklistedapplication = () => {
         <FormActions>
           <button
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit" 
+            type="submit"
           >
-            Submit
-          </button> 
-        
+             {loading?(<p> loading..</p>):(<p>Submit</p>)}  
+          </button>
+
           <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-          >
+          onClick={reset}>
             Reset
           </button>
         </FormActions>
@@ -129,4 +220,32 @@ const ViewBlacklistedapplication = () => {
   )
 }
 
-export default ViewBlacklistedapplication;
+//  TABLE COMPONENT
+const ViewBlacklistedapplicationTable = ({ tableData, loading, onBack }) => {
+  console.log(tableData + "tabledata")
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+          <Table tableTitle="View Application Table" />
+        </div>
+
+      ) : (
+        <div>
+          <Table tableTitle="View Application Table" data={tableData} />
+        </div>
+
+      )}
+    </>
+  );
+};

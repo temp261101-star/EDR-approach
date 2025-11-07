@@ -22,14 +22,15 @@ import ManageBlackListed from "./NewPages/ApplicationControl/ManageBlackListed.j
 import PreventedApplicationReport from "./NewPages/ApplicationControl/PreventedApplicationReport.jsx";
 import WhiteListedApplication from "./NewPages/ApplicationControl/WhiteListedApplication.jsx";
 import SummaryDashboard from "./NewPages/Dashboards/SummaryDashboard.jsx";
-import ViewApplicationList from "./NewPages/ApplicationControl/ViewApplicationList.jsx";
-import SetModeReport from "./NewPages/ApplicationControl/SetModeReport.jsx";
+
+
 
 import ExternalUsbForm from "./NewPages/USB Protection/ExternalUsbForm.jsx";
 
-import ViewPreventedApplication from "./NewPages/ApplicationControl/ViewPreventedApplication.jsx";
-import WhitelistedApplicationReport from "./NewPages/ApplicationControl/WhitelistedApplicationReport.jsx";
-import ManageBlackListedResult from "./NewPages/ApplicationControl/ManageBlackListedResult.jsx";
+
+
+
+
 import WebsiteDashboard from "./NewPages/WebsiteProtection/WebsiteDashboard.jsx";
 import CaptureWebsiteHistory from "./NewPages/WebsiteProtection/CaptureWebsiteHistory.jsx";
 import WebsiteBlacklistHistory from "./NewPages/WebsiteProtection/WebsiteBlacklistHistory.jsx";
@@ -38,7 +39,7 @@ import WebsiteHistoryReport from "./NewPages/WebsiteProtection/WebsiteHistoryRep
 import DownloadBrowserHistoryReport from "./NewPages/WebsiteProtection/DownloadBrowserHistoryReport.jsx";
 import WebsiteBlacklistingForm from "./NewPages/WebsiteProtection/WebsiteBlacklistingForm.jsx";
 
-import ExternalUsbReportList from "./NewPages/USB Protection/ExternalUsbReportList.jsx";
+
 import AntiVirusEdr from "./NewPages/AntiVirus/AntiVirusEdr.jsx";
 import ExternalUsbReport from "./NewPages/USB Protection/ExternalUsbReport.jsx";
 import ExternalUsbList from "./NewPages/USB Protection/ExternalUsbList.jsx";
@@ -46,7 +47,7 @@ import ViewReport from "./NewPages/ApplicationBlacklisting/ViewReport.jsx";
 import ViewBlacklistedapplication from "./NewPages/ApplicationBlacklisting/ViewBlacklistedapplication.jsx";
 import AddBlacklistedapplication from "./NewPages/ApplicationBlacklisting/AddBlacklistedapplication.jsx";
 import ManageWhitelisted from "./NewPages/ApplicationBlacklisting/ManageWhitelisted.jsx";
-import ManageWhitelistedApplicationReport from "./NewPages/ApplicationBlacklisting/ManageWhitelistedApplicationReport.jsx";
+
 import PolicyCreatorPage from "./NewPages/PolicyUi/PolicyCreatorPage.jsx";
 import JsonToUi from "./NewPages/PolicyUi/JsonToUi.jsx";
 import DynamicFormBuilder from "./NewPages/PolicyUi/DynamicFormBuilder.jsx";
@@ -113,12 +114,12 @@ function App() {
         <Route path="/dashboard/viewApplication" element={<ViewApplication />} />
       
         <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport />} />
-        <Route path="/dashboard/preventedApplicationReport/viewpreventedApplication" element={<ViewPreventedApplication />} />
+       
         <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication />} />
-        <Route path="/dashboard/whitelistedApplication/WhitelistedApplicationReport" element={<WhitelistedApplicationReport />} />
+        
          <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed />} />
-        <Route path="/dashboard/manageBlacklisted/manageBlacklistedResult" element={<ManageBlackListedResult />} />
-        <Route path="/dashboard/viewApplication/viewApplicationListing" element={<ViewApplicationList />} />
+
+       
         <Route path="/dashboard/WebsiteDashboard" element={<WebsiteDashboard />} />
         <Route path="/dashboard/CaptureWebsiteHistory" element={<CaptureWebsiteHistory />} />
         <Route path="/dashboard/WebsiteBlacklistHistory" element={<WebsiteBlacklistHistory />} />
@@ -129,14 +130,14 @@ function App() {
         <Route path="/dashboard/externalusb" element={<ExternalUsbList />} />
         <Route path="/dashboard/externalusb/externalusbform" element={<ExternalUsbForm />} />
         <Route path="/dashboard/externalUsbReport" element={<ExternalUsbReport />} />
-        <Route path="/dashboard/externalUsbReportlist" element={<ExternalUsbReportList />} />
+      
         <Route path="/dashboard/antivirusEdr" element={<AntiVirusEdr />} />
 
         <Route path="/dashboard/addBlacklistedapplication" element={<AddBlacklistedapplication />} />
         <Route path="/dashboard/ViewBlacklistedapplication" element={<ViewBlacklistedapplication />} />
         <Route path="/dashboard/managewhitelisted" element={<ManageWhitelisted />} />
         <Route path="/dashboard/viewreport" element={<ViewReport />} />
-         <Route path="/dashboard/managewhitelisted/manageWhitelistedApplicationReport" element={<ManageWhitelistedApplicationReport />} />
+        
 
 
 

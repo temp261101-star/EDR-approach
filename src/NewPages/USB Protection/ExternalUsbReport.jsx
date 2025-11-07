@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 
 import Form, { FormActions, FormFields } from '../../components/Form'
@@ -11,12 +11,78 @@ import DateTimeInput from '../../components/FormComponent/DateTimeInput';
 import { useNavigate } from 'react-router-dom';
 import FormController from '../../lib/FormController';
 import api from '../../lib/api';
+import toast from 'react-hot-toast';
+
+
+const ExternalUsbReport = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  console.log("showTable : ",showTable);
+  
+
+  // // Fetch table data API
+  // const getBlacklistedDetails = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await api.fetchResource({
+  //       resource: "commonMode/ManageBlacklistedApplicationListing",
+  //     });
+
+  //     console.log("response in getBlacklistedDetails : ",res);
+      
+  //     setTableData(res || []);
+  //   } catch (err) {
+  //     toast.error("Failed to load mode data");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <ExternalUsbReportForm
+          onSuccessExternalUsbReport={(response) => {
+            setShowTable(true);
+            // Load table after submit
+            // getBlacklistedDetails();
+            setTableData(response|| []);
+            console.log("table dataaa response:"+response)
+          }}
+        />
+      ) : (
+
+        <div className="mx-5">
+
+          <ExternalUsbReportTable
+          
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        /> 
+        </div>
+       
+      )}
+
+    
+    </div>
+  );
+};
+
+export default ExternalUsbReport;
 
 
 
-
-
-function ExternalUsbReport() {
+function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
 
     const formRef = useRef();
     const branchRef = useRef();
@@ -54,22 +120,23 @@ function ExternalUsbReport() {
 
             actions: {
                 ExternalUsbReport: async (payload) => {
-                    return api.createResource("/setexternalUSB/addExternalUSB", payload);
+                    return api.createResource("/dashboard/externalUSBListing", payload);
                 },
             },
 
             hooks: {
-                onSuccess: () => {
-                    toast.success("Set mode successful");
+                onSuccess: (response) => {
+                    toast.success("External USB Report data fetched successful");
 
                     //  to do ->   add navigation
                     setTimeout(() => {
                         if (formRef.current) {
                             formRef.current.reset();
                         }
-                        formRef.current.reset();
+                        // formRef.current.reset();
 
                     }, 100);
+                    onSuccessExternalUsbReport(response)
                 },
                 onError: (error) => {
                     console.error("Submission error:", error);
@@ -91,17 +158,19 @@ function ExternalUsbReport() {
 
                 <FormFields grid={2}>
                     <DateTimeInput
-                        name="From"
+                        name="from_date"
                         label="From Date"
                         placeholder="Enter the from Date"
+                         data-key="from_date"
                         required
                     />
 
 
                     <DateTimeInput
-                        name="To"
+                        name="to_date"
                         label="To Date"
                         placeholder="Enter the To Date"
+                         data-key="to_date"
                         required
                     />
 
@@ -117,11 +186,12 @@ function ExternalUsbReport() {
                     />
 
                     <MultiSelect
-                        name="deviceName"
+                        name="deviceNames"
                         label="Host name"
                         ref={deviceRef}
                         dataSource="commonMode/getDeviceOnBranchName"
                         dataDependsOn="branches"
+                         data-key="deviceNames"
                         multiSelect={true}
                         sendAsArray={true}
                         required
@@ -133,7 +203,7 @@ function ExternalUsbReport() {
                 <FormActions>
                     <button
                         className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-                        type="submit" onClick={() => navigate('/dashboard/externalUsbReportlist')}
+                        type="submit" 
                     >
                         Submit
                     </button>
@@ -151,4 +221,35 @@ function ExternalUsbReport() {
     )
 }
 
-export default ExternalUsbReport
+
+
+
+//  TABLE COMPONENT
+const ExternalUsbReportTable = ({ tableData, loading, onBack }) => {
+ console.log(tableData+"tabledata")
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+  <Table tableTitle="External USB Report Table" />
+        </div>
+      
+      ) : (
+        <div>
+          <Table tableTitle="External USB Report Table" data={tableData} />
+        </div>
+        
+      )}
+    </>
+  );
+};
