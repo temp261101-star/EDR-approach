@@ -1,40 +1,12 @@
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  BarChart,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-  Bar,
-} from "recharts";
 import { useEffect, useState } from "react";
-import { getApi } from "../../lib/api.js";
-// import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
-// import BarChartComponent from "../components/DynamicGraphs/BarChartComponent";
-// import DeviceSecurityPieChart2 from "../NewPages/DeviceSecurityPieChart2";
-import { data } from "jquery";
+import api, { getApi } from "../../lib/api.js";
 import axios from "axios";
 import PieChartComponent from "../../components/DynamicGraphs/PieChartComponent.jsx";
-// import BarChartComponent from "../../components/DynamicGraphs/BarChartComponentold.jsx";
-import DeviceSecurityPieChart2 from "../DeviceSecurityPieChart2.jsx";
-// import Table from "../../components/Table.jsx";
-import {
-  Activity,
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle,
-  Eye,
-  Shield,
-  TrendingDown,
-  TrendingUp,
-} from "lucide-react";
+import Table from "../../components/Table.jsx";
 import DataCard from "../../components/Cards/DataCard.jsx";
 import BarChartComponent from "../../components/DynamicGraphs/BarChartComponent.jsx";
 import GenericPopupModal from "../../components/MODAL/GenericPopupModal.jsx";
-import Table from "../../components/Table.jsx";
+import Card from "../../components/Cards/Card.jsx";
 
 const darkPalette = {
   primary: "#3B82F6",
@@ -64,17 +36,12 @@ const attackScenarioOverview = [
 export default function SummaryDashboard() {
   const [deviceBreakdown, setDeviceBreakdown] = useState([]);
   const [open, setOpen] = useState(false);
-  const [openModal, setOpenModal]= useState(false);
-
   const [data, setData] = useState([]);
-  const [getDeviceStatus, setGetDeviceStatus] = useState([]);
-  const [getUSBStatus, setGetUSBStatus] = useState([]);
   const [kpiData, setKpiData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedKpi, setSelectedKpi] = useState(null);
 
-
-  console.log("state for car change : ",openModal);
-  
   const formatLabel = (key) => {
     return key
       .split("_")
@@ -86,15 +53,13 @@ export default function SummaryDashboard() {
     const fetchKPIData = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(
-          "http://192.168.0.156:9191/api/v1/dashboard/newDetection"
-        );
-        console.log("KPI API response:", response.data);
+        const response = await api.fetchResource({
+          resource: "dashboard/newDetection",
+        });
+        console.log("KPI API response:", response);
 
-        // API returns array with single object
-        if (response.data && response.data.length > 0) {
-          const dataObj = response.data[0];
-          // Convert object to array of {label, value} for mapping
+        if (response && response.length > 0) {
+          const dataObj = response[0];
           const kpiArray = Object.keys(dataObj).map((key) => ({
             key: key,
             label: formatLabel(key),
@@ -103,10 +68,8 @@ export default function SummaryDashboard() {
           console.log(kpiArray);
           setKpiData(kpiArray);
         }
-        setError(null);
       } catch (err) {
         console.error("Error fetching KPI data:", err);
-        setError("Failed to load KPI data");
       } finally {
         setIsLoading(false);
       }
@@ -115,132 +78,90 @@ export default function SummaryDashboard() {
     fetchKPIData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const query =
-        "SELECT a.app_name, COUNT(c.cve_id) AS total_cves FROM dbo.cve_scan_result a JOIN dbo.app_cves c ON a.app_id = c.app_id GROUP BY a.app_name ORDER BY total_cves DESC;";
-
-      const res = await getApi(query, "demoChart");
-      console.log("log api response in app", res);
-
-      setDeviceBreakdown(res);
-    };
-    fetchData();
-  }, []);
-
   console.log("deviceBreakdown : ", deviceBreakdown);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(
-        "http://192.168.0.156:9191/api/v1/dashboard/getHostStatus"
-      );
+      const res = await api.fetchResource({
+        resource: "dashboard/getHostStatus",
+      });
       console.log("log api response in app", res);
-
-      setData(res.data);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(
-        "http://192.168.0.156:9191/api/v1/dashboard/getDeviceStatus"
-      );
-      console.log("log api response in app", res);
-
-      setGetDeviceStatus(res.data);
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(
-        "http://192.168.0.156:9191/api/v1/dashboard/getUSBStatus"
-      );
-      console.log("log api response in app", res);
-
-      setGetUSBStatus(res.data);
+      setData(res);
     };
     fetchData();
   }, []);
 
   console.log("data check for pie", data);
 
-
-  const handleOpenModal = (data)=>{
-  console.log("data in hnadle : ",data);
-  setOpenModal(!openModal)
-  }
-
-  const Card = ({
-    title,
-    action,
-    children,
-    className = "",
-    noPadding = false,
-  }) => (
-    <div
-      className={`rounded-lg border bg-gray-800 shadow-sm transition-shadow flex flex-col border-gray-700 ${className}`}
-    >
-      <div className="px-3 py-2 border-b bg-gray-800/50 flex-shrink-0 border-gray-700">
-        <div className="flex items-center justify-between">
-          <h3 className="text-sm font-bold text-gray-100">{title}</h3>
-          {action}
-        </div>
-      </div>
-      {/* If noPadding=true, skip padding */}
-      <div className={`flex-1 overflow-hidden ${noPadding ? "" : "p-3"}`}>
-        {children}
-      </div>
-    </div>
-  );
-
-  const tooltipStyle = {
-    background: darkPalette.cardBackground,
-    border: `1px solid ${darkPalette.cardBorder}`,
-    borderRadius: 8,
-    fontSize: 12,
-    boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.3)",
-    color: darkPalette.textPrimary,
+  const handleOpenModal = (kpiData) => {
+    console.log("data in handle : ", kpiData);
+    setSelectedKpi(kpiData); // Store the clicked KPI data
+    setOpenModal(true);
   };
 
+  const getEndpointForKpi = (kpiKey) => {
+    const endpointMap = {
+      "Todays Detection": "dashboard/newDetection",
+      "Prevented Attacks": "dashboard/PreventedAttacks",
+      "Remediation Detection": "dashboard/getRemediationDetectionInfo",
+      "BlackListed Application": "dashboard/TotalHunting",
+      "End Point Affected": "dashboard/EndPointAffectedInfo",
+      "Peripheral Detection": "dashboard/PeripheralDetection",
+      // missing_patch: "dashboard/missingPatchList",
+      // Add more mappings as needed for your KPIs
+    };
+
+    return endpointMap[kpiKey] || ""; // fallback
+  };
+
+  const getDataPathForKpi = (kpiKey) => {
+    const dataPathMap = {
+      "Todays Detection": "data.NewDetection",
+      "Prevented Attacks": "data.PreventedAttacks",
+      "Remediation Detection": "data.RemediationDetectionInfo",
+      "BlackListed Application": "data.TotalHunting",
+      "End Point Affected": "data.EndPointAffectedInfo",
+      "Peripheral Detection": "data.PeripheralDetection",
+      // missing_patch: "data.missingPatchList",
+      // Add more mappings as needed for your KPIs
+    };
+
+    return dataPathMap[kpiKey] || "data"; // fallback
+  };
+  const getTableTitleForKpi = (kpiLabel) => {
+    return `${kpiLabel} - Details`;
+  };
   return (
     <div className="bg-gray-900 p-4 min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 mb-4">
         {kpiData.map((kpi) => (
-            <div  onClick={() => handleOpenModal(kpi)}>
-
-          <DataCard
-            key={kpi.key}
-            label={kpi.label}
-            value={kpi.value}
-            isLoading={isLoading}
-            
-           
-          />
+          <div onClick={() => handleOpenModal(kpi)}>
+            <DataCard
+              key={kpi.key}
+              label={kpi.label}
+              value={kpi.value}
+              isLoading={isLoading}
+            />
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
         {/* Host Details */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="lg:col-span-1 space-y-3">
           <Card title="Host Details" className="h-[400px]">
             <PieChartComponent
-              onClick={() => setOpen(true)}
+              // onClick={() => setOpen(true)}
               data={data}
-              endpoint="demoChart"
-              title="Device Security Status"
+              // endpoint="demoChart"
+              // title="Device Security Status"
             />
           </Card>
         </div>
-        
 
         {/* Threat Detection */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="lg:col-span-1 space-y-3">
           <Card title="Threat Detection" className="h-[400px]" noPadding>
-            <div className="p-3 h-full flex flex-col">
+            <div className="p-2 h-full flex flex-col">
               {/* <BarChartComponent
                 apiEndpoint="http://192.168.0.156:9191/api/v1/dashboard/threatDetectionPiechart"
                 dataKey="count"
@@ -251,22 +172,22 @@ export default function SummaryDashboard() {
                 xAxisAngle={-35}
               /> */}
               <BarChartComponent
-                apiEndpoint="http://192.168.0.156:9191/api/v1/dashboard/threatDetectionPiechart"
+                apiEndpoint="dashboard/threatDetectionPiechart"
                 dataKey="count"
-                xAxisKey="label"
+                xAxisKey="label" //req on bar chart
               />
             </div>
           </Card>
         </div>
 
         {/* Blacklisted Applications */}
-        <div className="lg:col-span-4 space-y-3">
+        <div className="lg:col-span-1 space-y-3">
           <Card
             title="Blacklisted Applications"
             className="h-[400px]"
             noPadding
           >
-            <div className="p-3 h-full flex flex-col">
+            <div className="p-2 h-full flex flex-col">
               {/* <BarChartComponent
                 apiEndpoint="http://192.168.0.203:9191/api/v1/dashboard/malwareStatusDistribution"
                 dataKey="count"
@@ -277,7 +198,34 @@ export default function SummaryDashboard() {
                 xAxisAngle={-35}
               /> */}
               <BarChartComponent
-                apiEndpoint="http://192.168.0.156:9191/api/v1/dashboard/malwareStatusDistribution"
+                apiEndpoint="dashboard/malwareStatusDistribution"
+                dataKey="count"
+                xAxisKey="label"
+              />
+            </div>
+          </Card>
+        </div>
+        <div className="lg:col-span-1 space-y-3">
+          <Card
+            title="Blacklisted Applications"
+            className="h-[400px]"
+            noPadding
+          >
+            <div className="p-2 h-full flex flex-col">
+
+              {/* to check all the functionality of BarChartComponent */}
+              
+              {/* <BarChartComponent
+                apiEndpoint="http://192.168.0.203:9191/api/v1/dashboard/malwareStatusDistribution"
+                dataKey="count"
+                xAxisKey="label"
+                barColor="#F59E0B"
+                barSize={50}
+                height={165}
+                xAxisAngle={-35}
+              /> */}
+              <BarChartComponent
+                apiEndpoint="http://182.48.194.218:9191/api/v1/dashboard/malwareStatusDistribution"
                 dataKey="count"
                 xAxisKey="label"
               />
@@ -285,29 +233,16 @@ export default function SummaryDashboard() {
           </Card>
         </div>
       </div>
-
-     {/* {openModal && (
-  <GenericPopupModal 
-    isOpen={openModal} 
-    onClose={() => setOpenModal(false)}
-    title="KPI Details"
-  >
-    <div>this is a modal div to check the ui</div>
-  </GenericPopupModal>
-)} */}
-
-
-<GenericPopupModal 
-  isOpen={openModal} 
-  onClose={() => setOpenModal(false)}
->
-  <Table tableTitle="Recent File Data"
-        showCheckboxes={false}
-        endpoint="dashboard/recentFileData"
-        dataPath="data.recentFileData"/>
-</GenericPopupModal>
-
-
+      <GenericPopupModal isOpen={openModal} onClose={() => setOpenModal(false)}>
+        {selectedKpi && (
+          <Table
+            tableTitle={getTableTitleForKpi(selectedKpi.label)}
+            showCheckboxes={false}
+            endpoint={getEndpointForKpi(selectedKpi.key)}
+            dataPath={getDataPathForKpi(selectedKpi.key)} // Changed from static "data"
+          />
+        )}
+      </GenericPopupModal>
       {/* <Table tableTitle={"Recent File Data"} showCheckboxes={false} /> */}
       <Table
         tableTitle="Recent File Data"
@@ -315,7 +250,13 @@ export default function SummaryDashboard() {
         endpoint="dashboard/recentFileData"
         dataPath="data.recentFileData"
       />
-      <Table tableTitle={"Threat Detection Details"} showCheckboxes={false} />
+      <Table
+        tableTitle="Threat Detection Details"
+        showCheckboxes={false}
+        endpoint="dashboard/detectionList"
+        dataPath="data.detectionList"
+      />
+      {/* <Table tableTitle={"Threat Detection Details"} showCheckboxes={false} /> */}
     </div>
   );
 }

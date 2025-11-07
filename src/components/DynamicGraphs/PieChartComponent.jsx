@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getApi } from "../../lib/api";
 import GenericDrawerModal from "../MODAL/GenericDrawerModal";
+import { ChevronDown } from "lucide-react";
 
 const PieChartComponent = React.memo(function PieChartComponent({
   query,
@@ -13,6 +14,8 @@ const PieChartComponent = React.memo(function PieChartComponent({
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [dataToSend, setDataToSend] = useState({});
+  const [viewMode, setViewMode] = useState("both");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleOpenModal = useCallback((item) => {
     setIsOpen(true);
@@ -26,7 +29,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
       setLoading(true);
       try {
         let res = query ? await getApi(query, endpoint) : data;
- 
+
         const dynamicPalette = [
           "#22D3EE",
           "#FB923C",
@@ -40,6 +43,21 @@ const PieChartComponent = React.memo(function PieChartComponent({
           "#F97316",
           "#A78BFA",
           "#60A5FA",
+          "#3B82F6",
+          "#10B981",
+          "#EF4444",
+          "#DC2626",
+          "#F97316",
+          "#14B8A6",
+          "#C2410C",
+          "#A855F7",
+          "#71717A",
+          "#991B1B",
+          "#16A34A",
+          "#DC2626",
+          "#059669",
+          "#0EA5E9",
+          "#B91C1C",
         ];
 
         const statusColors = {
@@ -67,19 +85,16 @@ const PieChartComponent = React.memo(function PieChartComponent({
 
         if (!Array.isArray(res)) res = [];
 
-        // Detect numeric vs categorical
         const isNumeric = res.length > 0 && !isNaN(res[0].value);
 
         let formattedData;
         if (isNumeric) {
-          // Numeric data → assign dynamic colors
           formattedData = res.map((item, i) => ({
             ...item,
             color: dynamicPalette[i % dynamicPalette.length],
             value: Number(item.value),
           }));
         } else {
-          // Categorical data → count occurrences
           const grouped = res.reduce((acc, curr) => {
             acc[curr.value] = (acc[curr.value] || 0) + 1;
             return acc;
@@ -88,7 +103,8 @@ const PieChartComponent = React.memo(function PieChartComponent({
           formattedData = Object.entries(grouped).map(([key, count], i) => ({
             name: key,
             value: count,
-            color: statusColors[key] || dynamicPalette[i % dynamicPalette.length],
+            color:
+              statusColors[key] || dynamicPalette[i % dynamicPalette.length],
           }));
         }
 
@@ -109,104 +125,298 @@ const PieChartComponent = React.memo(function PieChartComponent({
   );
 
   return (
-    <div className="bg-gray-900 shadow-sm flex flex-col h-full w-full rounded-lg">
+    <div className="bg-gray-900 shadow-sm flex flex-col h-full w-full">
+      <div className="flex items-center justify-between px-3 py-1">
+        <div className="flex-1"></div>
+        <div className="relative">
+          <button
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+            className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold text-gray-200 bg-gray-800 hover:bg-gray-700 rounded-md transition-all duration-200 border border-gray-700 hover:border-gray-600"
+          >
+            {viewMode === "chart" ? "📊" : viewMode === "table" ? "📋" : "📊📋"}
+            <ChevronDown
+              size={12}
+              className={`transition-transform ${
+                dropdownOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-1 w-28 bg-gray-800 border border-gray-700 rounded-md shadow-lg z-20">
+              <button
+                onClick={() => {
+                  setViewMode("both");
+                  setDropdownOpen(false);
+                }}
+                className={`w-full px-2.5 py-1.5 text-left text-xs font-medium flex items-center gap-2 hover:bg-gray-700 transition-colors ${
+                  viewMode === "both"
+                    ? "text-blue-400 bg-gray-700/50"
+                    : "text-gray-300"
+                }`}
+              >
+                <span>📊📋</span> Both
+              </button>
+              <button
+                onClick={() => {
+                  setViewMode("chart");
+                  setDropdownOpen(false);
+                }}
+                className={`w-full px-2.5 py-1.5 text-left text-xs font-medium flex items-center gap-2 hover:bg-gray-700 transition-colors border-t border-gray-700 ${
+                  viewMode === "chart"
+                    ? "text-blue-400 bg-gray-700/50"
+                    : "text-gray-300"
+                }`}
+              >
+                <span>📊</span> Chart
+              </button>
+              <button
+                onClick={() => {
+                  setViewMode("table");
+                  setDropdownOpen(false);
+                }}
+                className={`w-full px-2.5 py-1.5 text-left text-xs font-medium flex items-center gap-2 hover:bg-gray-700 transition-colors border-t border-gray-700 ${
+                  viewMode === "table"
+                    ? "text-blue-400 bg-gray-700/50"
+                    : "text-gray-300"
+                }`}
+              >
+                <span>📋</span> Table
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
       {loading ? (
-        //  Skeleton Loader
-        <div className="mt-4 p-4 w-full flex space-x-4">
-          <div className="flex-shrink-0 w-32 h-32 rounded-full bg-gray-700 animate-pulse" />
-          <div className="flex-1 flex flex-col justify-center space-y-3">
-            {[...Array(5)].map((_, i) => (
+        <div className="mt-3 p-3 w-full flex gap-3 flex-1">
+          <div className="flex-shrink-0 w-24 h-24 rounded-full bg-gray-700 animate-pulse" />
+          <div className="flex-1 flex flex-col justify-center gap-2">
+            {[...Array(4)].map((_, i) => (
               <div
                 key={i}
-                className="h-4 bg-gray-700 rounded w-full animate-pulse"
+                className="h-3 bg-gray-700 rounded w-full animate-pulse"
               />
             ))}
           </div>
         </div>
       ) : (
-        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 h-full p-2">
-          {/* ==== Pie Chart ==== */}
-          <div className="h-full w-40 flex-shrink-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={apiData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={55}
-                  outerRadius={75}
-                  stroke="none"
-                >
-                  {apiData.map((d, i) => (
-                    <Cell key={i} fill={d.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(v, n) => [`${v}`, n]}
-                  contentStyle={{
-                    background: "#fafafa",
-                    border: "1px solid #374151",
-                    borderRadius: 6,
-                    fontSize: 11,
-                    color: "#f9fafb",
-                  }}
-                />
-              </PieChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* ==== Legend List ==== */}
-          <div className="flex-1 w-full overflow-y-auto h-full divide-y divide-gray-700 scrollbar-hide">
-            {apiData.map((d) => {
-              const percent = ((d.value / total) * 100).toFixed(1);
-              return (
-                <div
-                  key={d.name}
-                  className="flex justify-between items-center w-full px-2 py-1.5 rounded-lg hover:bg-gray-800/70 transition-colors cursor-pointer"
-                  onClick={() => handleOpenModal(d)}
-                >
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <span
-                      className="h-3 w-3 rounded-full ring-1 ring-gray-900/40 flex-shrink-0"
-                      style={{ background: d.color }}
-                    />
-                    <span className="text-gray-100 font-medium text-sm break-words">
-                      {d.name}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-end flex-shrink-0 text-right leading-tight">
-                    <span className="text-gray-300 text-xs font-semibold">
-                      {d.value}
-                    </span>
-                    <span className="text-gray-400 text-xs       font-medium">
-                      {percent}%
-                    </span>
-                  </div>
+        <>
+          {viewMode === "both" && (
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              {/* Chart Section - Top */}
+              <div className="flex-shrink-0 flex flex-col items-center justify-center py-2">
+                <div className="w-36 h-36">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={apiData}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={40}
+                        outerRadius={60}
+                        stroke="none"
+                      >
+                        {apiData.map((d, i) => (
+                          <Cell key={i} fill={d.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        formatter={(v, n) => [`${v}`, n]}
+                        contentStyle={{
+                          background: "rgba(17, 24, 39, 0.98)",
+                          border: "1px solid #374151",
+                          borderRadius: 8,
+                          fontSize: 12,
+                          color: "#f9fafb",
+                          padding: "8px 12px",
+                          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.6)",
+                        }}
+                        contentWrapper={{ outline: "none" }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
                 </div>
-              );
-            })}
-          </div>
+              </div>
 
-          {/* ==== Drawer Modal ==== */}
-          <GenericDrawerModal
-            isOpen={isOpen}
-            onClose={handleCloseModal}
-            title={title || "Details"}
-            size="max-w-4xl"
-            data={dataToSend}
-          >
-            <div className="bg-gray-800 p-6 rounded">
-              {Object.entries(dataToSend).map(([key, value]) => (
-                <div key={key} className="text-sm text-gray-300">
-                  <strong className="text-gray-100">{key}</strong>: {value}
+              {/* Table Section - Bottom */}
+              <div className="flex-1 overflow-hidden flex flex-col min-h-0  pb-2">
+                <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-500">
+                  <table className="w-full">
+                    <thead className="sticky top-0 bg-gray-800/95 backdrop-blur-sm z-10">
+                      <tr className="border-b border-gray-700/60">
+                        <th className="text-left py-2 px-2.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
+                          Status
+                        </th>
+                        <th className="text-right py-2 px-2.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
+                          Count
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {apiData.map((d) => {
+                        const percent = ((d.value / total) * 100).toFixed(1);
+                        return (
+                          <tr
+                            key={d.name}
+                            className="border-b border-gray-700/30 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
+                            onClick={() => handleOpenModal(d)}
+                          >
+                            <td className="py-2 px-2.5">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span
+                                  className="h-3 w-3 rounded-full ring-1 ring-gray-900/40 flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
+                                  style={{ background: d.color }}
+                                />
+                                <span className="text-gray-300 font-medium truncate text-[12px] group-hover:text-white transition-colors">
+                                  {d.name}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="py-2 px-2.5 text-right">
+                              <div className="flex flex-col items-end gap-0.5">
+                                <span className="text-gray-200 font-semibold text-sm">
+                                  {d.value}
+                                </span>
+                                <span
+                                  className="text-[12px] font-medium px-2 py-1 rounded transition-all duration-150"
+                                  style={{
+                                    color: d.color,
+                                    backgroundColor: `${d.color}15`,
+                                  }}
+                                >
+                                  {percent}%
+                                </span>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
                 </div>
-              ))}
+              </div>
             </div>
-          </GenericDrawerModal>
-        </div>
+          )}
+
+          {/* Chart View Only */}
+          {viewMode === "chart" && (
+            <div className="flex-1 flex flex-col items-center justify-center p-3 min-h-0">
+              <div className="w-48 h-48">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={apiData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={75}
+                      stroke="none"
+                    >
+                      {apiData.map((d, i) => (
+                        <Cell key={i} fill={d.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip
+                      formatter={(v, n) => [`${v}`, n]}
+                      contentStyle={{
+                        background: "rgba(17, 24, 39, 0.98)",
+                        border: "1px solid #374151",
+                        borderRadius: 8,
+                        fontSize: 12,
+                        color: "#f9fafb",
+                        padding: "8px 12px",
+                        boxShadow: "0 8px 16px rgba(0, 0, 0, 0.6)",
+                      }}
+                      contentWrapper={{ outline: "none" }}
+                    />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+
+          {/* Table View Only */}
+          {viewMode === "table" && (
+            <div className="flex-1 overflow-hidden flex flex-col min-h-0 p-2">
+              <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-500">
+                <table className="w-full">
+                  <thead className="sticky top-0 bg-gray-800/95 backdrop-blur-sm z-10">
+                    <tr className="border-b border-gray-700/60">
+                      <th className="text-left py-2.5 px-3 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
+                        Status
+                      </th>
+                      <th className="text-right py-2.5 px-3 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
+                        Count
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {apiData.map((d) => {
+                      const percent = ((d.value / total) * 100).toFixed(1);
+                      return (
+                        <tr
+                          key={d.name}
+                          className="border-b border-gray-700/30 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
+                          onClick={() => handleOpenModal(d)}
+                        >
+                          <td className="py-2.5 px-3">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <span
+                                className="h-3 w-3 rounded-full ring-1 ring-gray-900/40 flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
+                                style={{ background: d.color }}
+                              />
+                              <span className="text-gray-300 font-medium truncate text-[13px] group-hover:text-white transition-colors">
+                                {d.name}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-2.5 px-3 text-right">
+                            <div className="flex flex-col items-end gap-0.5">
+                              <span className="text-gray-200 font-semibold text-[13px]">
+                                {d.value}
+                              </span>
+                              <span
+                                className="text-[12px] font-medium px-2.5 py-1.5 rounded transition-all duration-150"
+                                style={{
+                                  color: d.color,
+                                  backgroundColor: `${d.color}15`,
+                                }}
+                              >
+                                {percent}%
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </>
       )}
+
+      <GenericDrawerModal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        title={title || "Details"}
+        size="max-w-4xl"
+        data={dataToSend}
+      >
+        <div className="bg-gray-800 p-6 rounded">
+          {Object.entries(dataToSend).map(([key, value]) => (
+            <div key={key} className="text-sm text-gray-300">
+              <strong className="text-gray-100">{key}</strong>: {value}
+            </div>
+          ))}
+        </div>
+      </GenericDrawerModal>
     </div>
   );
 });

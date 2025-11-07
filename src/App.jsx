@@ -48,6 +48,10 @@ import ViewBlacklistedapplication from "./NewPages/ApplicationBlacklisting/ViewB
 import AddBlacklistedapplication from "./NewPages/ApplicationBlacklisting/AddBlacklistedapplication.jsx";
 import ManageWhitelisted from "./NewPages/ApplicationBlacklisting/ManageWhitelisted.jsx";
 
+import PolicyCreatorPage from "./NewPages/PolicyUi/PolicyCreatorPage.jsx";
+import JsonToUi from "./NewPages/PolicyUi/JsonToUi.jsx";
+import DynamicFormBuilder from "./NewPages/PolicyUi/DynamicFormBuilder.jsx";
+import GenericFormBuilder from "./NewPages/PolicyUi/GenericFormBuilder.jsx";
 
 
 
@@ -74,6 +78,11 @@ function App() {
           )
         }
       />
+     
+        <Route path="/test" element={<PolicyCreatorPage />} />
+     <Route path="/policy1" element={<JsonToUi />} />
+     <Route path="/policy2" element={<DynamicFormBuilder />} />
+     <Route path="/policy3" element={<GenericFormBuilder  />} />
       <Route
         path="/dashboard"
         element={
@@ -134,6 +143,18 @@ function App() {
 
       </Route>
     </Routes>
+//  <PolicyCreatorPage/>
+//  <JsonToUi/>
+
+
+
+/* <Routes>
+     <Route path="/" element={<PolicyCreatorPage />} />
+     <Route path="/withJson" element={<JsonToUi />} />
+     <Route path="/test" element={<DynamicFormBuilder />} />
+     <Route path="/test2" element={<GenericFormBuilder  />} />
+
+</Routes> */
 
   );
 }

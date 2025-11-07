@@ -32,6 +32,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
     reports: false,
     Application: false,
     usb: false,
+    policy:false
   });
 
   const location = useLocation();
@@ -357,8 +358,32 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             View Report
             </NavLink>
             </AccordionItem>
+          <AccordionItem
+            title="Policy"
+            icon={Banknote}
+            isOpen={openAccordions.policy}
+            onToggle={() => toggleAccordion("policy")}>
 
-            
+        
+
+             <NavLink to="/test" icon={CircleSmall}>
+          policy View 
+            </NavLink>
+
+             <NavLink to="/policy1" icon={CircleSmall}>
+          policy View 1
+            </NavLink>
+
+             <NavLink to="/policy2" icon={CircleSmall}>
+              policy View 2
+            </NavLink>
+
+               <NavLink to="/policy3" icon={CircleSmall}>
+            Latest policy View
+            </NavLink>
+            </AccordionItem>
+
+          
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">
@@ -370,7 +395,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             className="w-full flex items-center gap-1.5 p-1.5 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-md transition-colors duration-200"
             title={collapsed ? "Logout" : ""}
           >
-            <LogOut size={12} />
+          <LogOut size={12} />
             {!collapsed && <span className="font-medium text-sm">Logout</span>}
           </button>
         </div>

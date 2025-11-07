@@ -831,7 +831,7 @@ export default function Table({
   };
 
   return (
-    <div className=" max-w-7xl mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
+    <div className=" w-full mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
       {/* Header */}
       <div className="relative bg-gradient-to-r from-gray-800 via-gray-900 to-black px-6 py-4 border-b border-gray-600">
         <div className="absolute inset-0 bg-gray-800/20 backdrop-blur-sm"></div>

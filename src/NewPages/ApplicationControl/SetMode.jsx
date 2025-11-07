@@ -209,7 +209,7 @@ const ModeTable = ({ tableData, loading, onBack }) => {
       </button>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center my-28">Loading...</div>
       ) : tableData.length === 0 ? (
 
         <div>
