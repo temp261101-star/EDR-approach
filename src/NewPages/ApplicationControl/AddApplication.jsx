@@ -208,9 +208,53 @@ import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
 import TextInput from '../../components/FormComponent/TextInput';
 import toast from 'react-hot-toast';
+import Table from '../../components/Table';
 // import { toast } from 'react-toastify';
 
 const AddApplication = () => {
+  const [showTable, setShowTable] = useState(false);
+    const [tableData, setTableData] = useState([]);
+    const [loading, setLoading] = useState(false);
+  
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+return (
+    <div className="mt-10">
+      {!showTable ? (
+        // <ViewApplicationForm
+        //   onSuccess={() => {
+        //     setShowTable(true);
+
+        //     // Load table after submit
+        //     getDriveDetails();
+        //   }}
+        // />
+        <AddApplicationForm
+          onSuccess={(response) => {
+            setShowTable(true);
+            setTableData(response || []); // use API response directly
+          }}
+        />
+
+      ) : (
+        <AddApplicationTable
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        />
+      )}
+
+
+    </div>
+  );
+}
+export default AddApplication;
+
+const AddApplicationForm = ({ onSuccess }) => {
   const formRef = useRef(null);
   const branchRef = useRef();
   const deviceRef = useRef();
@@ -251,7 +295,7 @@ const AddApplication = () => {
 
       actions: {
         addTrustedApp: async (payload) => {
-          return api.createResource("commonMode/add-application-set", [payload]);
+          return api.createResource("/commonMode/add-application-set", [payload]);
         },
       },
 
@@ -272,7 +316,7 @@ const AddApplication = () => {
             deviceRef.current?.reset();
             typeRef.current?.reset();
           }, 0);
-
+          onSuccess();
           setReloadTable(prev => prev + 1);
         },
       },
@@ -376,6 +420,34 @@ const AddApplication = () => {
       </Form>
     </div>
   );
-};
+}
 
-export default AddApplication;
+
+const AddApplicationTable = ({ tableData, loading, onBack }) => {
+
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+          <Table tableTitle="Add Application" />
+        </div>
+
+      ) : (
+        <div>
+          <Table tableTitle="Add Application" data={tableData} />
+        </div>
+
+      )}
+    </>
+  );
+};

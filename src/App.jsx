@@ -42,6 +42,15 @@ import ExternalUsbReportList from "./NewPages/USB Protection/ExternalUsbReportLi
 import AntiVirusEdr from "./NewPages/AntiVirus/AntiVirusEdr.jsx";
 import ExternalUsbReport from "./NewPages/USB Protection/ExternalUsbReport.jsx";
 import ExternalUsbList from "./NewPages/USB Protection/ExternalUsbList.jsx";
+import ViewReport from "./NewPages/ApplicationBlacklisting/ViewReport.jsx";
+import ViewBlacklistedapplication from "./NewPages/ApplicationBlacklisting/ViewBlacklistedapplication.jsx";
+import AddBlacklistedapplication from "./NewPages/ApplicationBlacklisting/AddBlacklistedapplication.jsx";
+import ManageWhitelisted from "./NewPages/ApplicationBlacklisting/ManageWhitelisted.jsx";
+import ManageWhitelistedApplicationReport from "./NewPages/ApplicationBlacklisting/ManageWhitelistedApplicationReport.jsx";
+import PolicyCreatorPage from "./NewPages/PolicyUi/PolicyCreatorPage.jsx";
+import JsonToUi from "./NewPages/PolicyUi/JsonToUi.jsx";
+import DynamicFormBuilder from "./NewPages/PolicyUi/DynamicFormBuilder.jsx";
+import GenericFormBuilder from "./NewPages/PolicyUi/GenericFormBuilder.jsx";
 
 
 
@@ -68,6 +77,11 @@ function App() {
           )
         }
       />
+     
+        <Route path="/test" element={<PolicyCreatorPage />} />
+     <Route path="/policy1" element={<JsonToUi />} />
+     <Route path="/policy2" element={<DynamicFormBuilder />} />
+     <Route path="/policy3" element={<GenericFormBuilder  />} />
       <Route
         path="/dashboard"
         element={
@@ -118,8 +132,28 @@ function App() {
         <Route path="/dashboard/externalUsbReportlist" element={<ExternalUsbReportList />} />
         <Route path="/dashboard/antivirusEdr" element={<AntiVirusEdr />} />
 
+        <Route path="/dashboard/addBlacklistedapplication" element={<AddBlacklistedapplication />} />
+        <Route path="/dashboard/ViewBlacklistedapplication" element={<ViewBlacklistedapplication />} />
+        <Route path="/dashboard/managewhitelisted" element={<ManageWhitelisted />} />
+        <Route path="/dashboard/viewreport" element={<ViewReport />} />
+         <Route path="/dashboard/managewhitelisted/manageWhitelistedApplicationReport" element={<ManageWhitelistedApplicationReport />} />
+
+
+
       </Route>
     </Routes>
+//  <PolicyCreatorPage/>
+//  <JsonToUi/>
+
+
+
+/* <Routes>
+     <Route path="/" element={<PolicyCreatorPage />} />
+     <Route path="/withJson" element={<JsonToUi />} />
+     <Route path="/test" element={<DynamicFormBuilder />} />
+     <Route path="/test2" element={<GenericFormBuilder  />} />
+
+</Routes> */
 
   );
 }

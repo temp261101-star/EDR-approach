@@ -1,6 +1,4 @@
-
-
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Form, { FormActions, FormFields } from '../../components/Form';
 import MultiSelect from '../../components/MultiSelect';
@@ -11,14 +9,72 @@ import api from '../../lib/api';
 import { useDispatch } from "react-redux";
 
 import { setViewApplicationResultData } from "../../store/appSlice";
-
+import Table from '../../components/Table';
 const ViewApplication = () => {
+  const [showTable, setShowTable] = useState(false);
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // Fetch table data API
+  const getDriveDetails = async () => {
+    setLoading(true);
+    try {
+      const res = await api.fetchResource({
+        resource: "dashboard/viewApplicationListing",
+      });
+      setTableData(res || []);
+    } catch (err) {
+      toast.error("Failed to load mode data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //  Back Button Handler
+  const handleBack = () => {
+    setShowTable(false);
+  };
+
+  return (
+    <div className="mt-10">
+      {!showTable ? (
+        <ViewApplicationForm
+          onSuccess={() => {
+            setShowTable(true);
+
+            // Load table after submit
+            getDriveDetails();
+          }}
+        />
+        // <ViewApplicationForm
+        //   onSuccess={(response) => {
+        //     setShowTable(true);
+        //     setTableData(response || []); // use API response directly
+        //   }}
+        // />
+
+      ) : (
+        <ViewApplicationTable
+          tableData={tableData}
+          loading={loading}
+          //  Pass back function
+          onBack={handleBack}
+        />
+      )}
+
+
+    </div>
+  );
+};
+
+
+export default ViewApplication;
+const ViewApplicationForm = ({ onSuccess }) => {
   const formRef = useRef();
   const deviceRef = useRef();
   const branchRef = useRef();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     if (!formRef.current) return;
 
@@ -58,8 +114,8 @@ const ViewApplication = () => {
         onSuccess: (response) => {
           toast.success("View Application successful");
           dispatch(setViewApplicationResultData(response));
-          console.log("check res : ",response);
-   
+          console.log("check res : ", response);
+
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
@@ -67,6 +123,8 @@ const ViewApplication = () => {
             formRef.current.reset();
 
           }, 100);
+          // onSuccess();
+          if (onSuccess) onSuccess(response);
         },
 
         onError: (error) => {
@@ -99,7 +157,7 @@ const ViewApplication = () => {
           />
 
           <MultiSelect
-            name="deviceNames"
+            name="deviceName"
             label="Device Name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"
@@ -114,16 +172,11 @@ const ViewApplication = () => {
         <FormActions>
           <button
             className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
-            type="submit" onClick={()=>navigate('/dashboard/viewApplication/viewApplicationListing')}
-          >
-            Submit
-          </button> 
-                   {/* <button
-            className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
             type="submit"
           >
             Submit
-          </button> */}
+          </button>
+
           <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
           >
             Reset
@@ -134,4 +187,34 @@ const ViewApplication = () => {
   )
 }
 
-export default ViewApplication;
+
+//  TABLE COMPONENT
+
+const ViewApplicationTable = ({ tableData, loading, onBack }) => {
+
+  return (
+    <>
+      <button
+        onClick={onBack}
+        className="mb-4 px-4 py-2 ml-3.5 cursor-pointer bg-gray-700 text-white rounded-lg hover:bg-gray-900"
+      >
+        ← Back
+      </button>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
+
+        <div>
+          <Table tableTitle="View Application" />
+        </div>
+
+      ) : (
+        <div>
+          <Table tableTitle="View Application" data={tableData} />
+        </div>
+
+      )}
+    </>
+  );
+};

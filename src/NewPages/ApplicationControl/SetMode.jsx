@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import FormController from "../../lib/FormController";
@@ -197,6 +195,7 @@ const SetModeForm = ({ onSuccess }) => {
 //  TABLE COMPONENT
 
 const ModeTable = ({ tableData, loading, onBack }) => {
+  // alert(tableData)
   return (
     <>
       <button
@@ -207,7 +206,7 @@ const ModeTable = ({ tableData, loading, onBack }) => {
       </button>
 
       {loading ? (
-        <p>Loading...</p>
+        <div className="flex justify-center items-center my-28">Loading...</div>
       ) : tableData.length === 0 ? (
 
         <div>

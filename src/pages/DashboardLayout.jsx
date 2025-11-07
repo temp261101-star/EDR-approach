@@ -32,6 +32,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
     reports: false,
     Application: false,
     usb: false,
+    policy:false
   });
 
   const location = useLocation();
@@ -321,6 +322,8 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             
             
           </AccordionItem>
+
+
           <AccordionItem
             title="AntiVirus "
             icon={Banknote}
@@ -332,6 +335,55 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink>
 
             </AccordionItem>
+            
+          <AccordionItem
+            title="Application Blacklisting "
+            icon={Banknote}
+            isOpen={openAccordions.blacklisting}
+            onToggle={() => toggleAccordion("blacklisting")}>
+
+               <NavLink to="/dashboard/addBlacklistedapplication" icon={CircleSmall}>
+             Add Application
+            </NavLink>
+
+             <NavLink to="/dashboard/ViewBlacklistedapplication" icon={CircleSmall}>
+             View Application
+            </NavLink>
+
+             <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
+             Manage Whitelisted
+            </NavLink>
+
+               <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
+            View Report
+            </NavLink>
+            </AccordionItem>
+          <AccordionItem
+            title="Policy"
+            icon={Banknote}
+            isOpen={openAccordions.policy}
+            onToggle={() => toggleAccordion("policy")}>
+
+        
+
+             <NavLink to="/test" icon={CircleSmall}>
+          policy View 
+            </NavLink>
+
+             <NavLink to="/policy1" icon={CircleSmall}>
+          policy View 1
+            </NavLink>
+
+             <NavLink to="/policy2" icon={CircleSmall}>
+              policy View 2
+            </NavLink>
+
+               <NavLink to="/policy3" icon={CircleSmall}>
+            Latest policy View
+            </NavLink>
+            </AccordionItem>
+
+          
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">
