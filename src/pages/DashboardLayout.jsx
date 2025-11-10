@@ -172,6 +172,11 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/summaryDashboard" icon={Database}>
              Summary Dashboard
             </NavLink>
+
+            
+            <NavLink to="/dashboard/dashboard" icon={Database}>
+             Dashboard
+            </NavLink>
           </AccordionItem>
 
           <AccordionItem

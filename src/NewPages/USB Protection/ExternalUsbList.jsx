@@ -29,7 +29,7 @@ const ExternalUsbList = () => {
       });
       setTableData(res.data.recentFileData|| []);
     } catch (err) {
-      toast.error("Failed to load mode data");
+      toast.error("Failed to load external usb data");
     } finally {
       setLoading(false);
     }

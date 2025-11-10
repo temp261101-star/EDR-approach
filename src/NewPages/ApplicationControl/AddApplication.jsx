@@ -241,13 +241,14 @@ return (
         />
 
       ) : (
+        <div className="mx-5">
         <AddApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
-
+ </div>
       )}
 
 

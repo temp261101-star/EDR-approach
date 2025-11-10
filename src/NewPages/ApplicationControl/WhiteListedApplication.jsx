@@ -54,12 +54,14 @@ const WhiteListedApplication = () => {
         />
 
       ) : (
+        <div className="mx-5">
         <WhiteListedApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
+         </div>
       )}
 
 

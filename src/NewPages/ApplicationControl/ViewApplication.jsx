@@ -54,12 +54,14 @@ const ViewApplication = () => {
         />
 
       ) : (
+        <div className="mx-5">
         <ViewApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
+         </div>
       )}
 
 

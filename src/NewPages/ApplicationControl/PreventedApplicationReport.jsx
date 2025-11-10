@@ -53,12 +53,14 @@ const PreventedApplicationReport = () => {
         />
 
       ) : (
+        <div className="mx-5">
         <PreventedApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
+         </div>
       )}
 
 

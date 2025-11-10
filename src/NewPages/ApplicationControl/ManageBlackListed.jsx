@@ -155,7 +155,7 @@ const ManageBlackListedForm = ({onSuccessHandle}) => {
         },
         onError: (error) => {
           console.error("Submission error:", error);
-          toast.error(error.message+"hyy");
+          toast.error(error.message);
             setLoading(false); 
         },
 
