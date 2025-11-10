@@ -11,7 +11,7 @@ import {
   Bar,
 } from "recharts";
 import { useEffect, useState } from "react";
-import { getApi } from "../lib/api";
+import api, { getApi } from "../lib/api";
 import PieChartComponent from "../components/DynamicGraphs/PieChartComponent";
 import BarChartComponent from "../components/DynamicGraphs/BarChartComponent.jsx";
 import DeviceSecurityPieChart2 from "../NewPages/DeviceSecurityPieChart2";
@@ -105,55 +105,33 @@ export default function Home() {
   const [getDeviceStatus, setGetDeviceStatus] = useState([]);
   const [getUSBStatus, setGetUSBStatus] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const query =
-        "SELECT a.app_name, COUNT(c.cve_id) AS total_cves FROM dbo.cve_scan_result a JOIN dbo.app_cves c ON a.app_id = c.app_id GROUP BY a.app_name ORDER BY total_cves DESC;";
-
-      const res = await getApi(query, "demoChart");
-      console.log("log api response in app", res);
-
-      setDeviceBreakdown(res);
-    };
-    fetchData();
-  }, []);
-
   console.log("deviceBreakdown : ", deviceBreakdown);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(
-        "http://182.48.194.218:9191/api/v1/dashboard/getHostStatus"
-      );
+      const res = await api.fetchResource({
+        resource: "dashboard/getHostStatus",
+      });
+
       console.log("log api response in app", res);
 
-      setData(res.data);
+      setData(res);
     };
     fetchData();
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get(
-        "http://182.48.194.218:9191/api/v1/dashboard/getDeviceStatus"
-      );
+      const res = await api.fetchResource({
+        resource: "dashboard/getDeviceStatus",
+      });
       console.log("log api response in app", res);
 
-      setGetDeviceStatus(res.data);
+      setGetDeviceStatus(res);
     };
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await axios.get(
-        "http://182.48.194.218:9191/api/v1/dashboard/getUSBStatus"
-      );
-      console.log("log api response in app", res);
 
-      setGetUSBStatus(res.data);
-    };
-    fetchData();
-  }, []);
 
   console.log("data check for pie", data);
 

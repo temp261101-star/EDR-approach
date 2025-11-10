@@ -3,6 +3,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getApi } from "../../lib/api";
 import GenericDrawerModal from "../MODAL/GenericDrawerModal";
 import { ChevronDown } from "lucide-react";
+import GenericPopupModal from "../MODAL/GenericPopupModal";
+import Table from "../Table";
 
 const PieChartComponent = React.memo(function PieChartComponent({
   query,
@@ -218,23 +220,54 @@ const PieChartComponent = React.memo(function PieChartComponent({
                         innerRadius={40}
                         outerRadius={60}
                         stroke="none"
+                        onClick={(data) => handleOpenModal(data.payload)}
                       >
                         {apiData.map((d, i) => (
                           <Cell key={i} fill={d.color} />
                         ))}
                       </Pie>
-                      <Tooltip
+                      {/* <Tooltip
                         formatter={(v, n) => [`${v}`, n]}
                         contentStyle={{
-                          background: "rgba(17, 24, 39, 0.98)",
-                          border: "1px solid #374151",
+                          background: "gray",
+                          border: "1px solid red",
                           borderRadius: 8,
                           fontSize: 12,
-                          color: "#f9fafb",
+                          color: "#ffff",
                           padding: "8px 12px",
                           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.6)",
                         }}
                         contentWrapper={{ outline: "none" }}
+                      /> */}
+
+                      <Tooltip
+                        formatter={(v, n) => [`${v}`, n]}
+                        contentStyle={{
+                          background: "rgba(17, 24, 39, 0.95)",
+                          border: "1px solid rgba(55, 65, 81, 0.8)",
+                          borderRadius: "8px",
+                          fontSize: "14px",
+                          color: "#f9fafb",
+                          padding: "12px 16px",
+                          boxShadow:
+                            "0 10px 25px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(0, 0, 0, 0.5)",
+                          backdropFilter: "blur(8px)",
+                          fontWeight: "500",
+                        }}
+                        labelStyle={{
+                          color: "#d1d5db",
+                          fontWeight: "600",
+                          marginBottom: "4px",
+                          fontSize: "13px",
+                        }}
+                        itemStyle={{
+                          color: "#f9fafb",
+                          fontSize: "13px",
+                          padding: "2px 0",
+                        }}
+                        contentWrapper={{
+                          outline: "none",
+                        }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -311,6 +344,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
                       innerRadius={50}
                       outerRadius={75}
                       stroke="none"
+                      onClick={(data) => handleOpenModal(data.payload)}
                     >
                       {apiData.map((d, i) => (
                         <Cell key={i} fill={d.color} />
@@ -319,7 +353,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
                     <Tooltip
                       formatter={(v, n) => [`${v}`, n]}
                       contentStyle={{
-                        background: "rgba(17, 24, 39, 0.98)",
+                        background: "red",
                         border: "1px solid #374151",
                         borderRadius: 8,
                         fontSize: 12,
@@ -357,7 +391,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
                         <tr
                           key={d.name}
                           className="border-b border-gray-700/20 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
-                          // onClick={() => handleOpenModal(d)}
+                          onClick={() => handleOpenModal(d)}
                         >
                           <td className="py-1 px-1.5">
                             <div className="flex items-center gap-2 min-w-0">
@@ -392,21 +426,20 @@ const PieChartComponent = React.memo(function PieChartComponent({
         </>
       )}
 
-      {/* <GenericDrawerModal
+      <GenericPopupModal
         isOpen={isOpen}
         onClose={handleCloseModal}
         title={title || "Details"}
-        size="max-w-4xl"
-        data={dataToSend}
       >
-        <div className="bg-gray-800 p-6 rounded">
-          {Object.entries(dataToSend).map(([key, value]) => (
+        <div className="space-y-2">
+          {/* {Object.entries(dataToSend).map(([key, value]) => (
             <div key={key} className="text-sm text-gray-300">
               <strong className="text-gray-100">{key}</strong>: {value}
             </div>
-          ))}
+          ))} */}
+          <Table tableTitle="" showCheckboxes={false} endpoint="" dataPath="" />
         </div>
-      </GenericDrawerModal> */}
+      </GenericPopupModal>
     </div>
   );
 });
