@@ -1,14 +1,3 @@
-// import React from 'react'
-
-// function WebsiteHistoryReport() {
-//   return (
-//     <div>
-//       WebsiteHistoryReport
-//     </div>
-//   )
-// }
-
-// export default WebsiteHistoryReport
 
 
 import React, { useEffect, useRef, useState } from 'react'
@@ -36,23 +25,6 @@ const WebsiteHistoryReport = () => {
   console.log("showTable : ",showTable);
   
 
-  // // Fetch table data API
-  // const getBlacklistedDetails = async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await api.fetchResource({
-  //       resource: "commonMode/ManageBlacklistedApplicationListing",
-  //     });
-
-  //     console.log("response in getBlacklistedDetails : ",res);
-      
-  //     setTableData(res || []);
-  //   } catch (err) {
-  //     toast.error("Failed to load mode data");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   //  Back Button Handler
   const handleBack = () => {
@@ -63,10 +35,11 @@ const WebsiteHistoryReport = () => {
     <div className="mt-10">
       {!showTable ? (
         <WebsiteHistoryReportForm
-          onSuccessExternalUsbReport={(response) => {
+          onSuccessWebsiteHistoryReport={(response) => {
             setShowTable(true);
             // Load table after submit
             // getBlacklistedDetails();
+             console.log("table dataaa response:"+response)
             setTableData(response|| []);
             console.log("table dataaa response:"+response)
           }}
@@ -96,7 +69,7 @@ export default WebsiteHistoryReport;
 
 
 
-function WebsiteHistoryReportForm({onSuccessExternalUsbReport}) {
+function WebsiteHistoryReportForm({onSuccessWebsiteHistoryReport}) {
 
     const formRef = useRef();
     const branchRef = useRef();
@@ -134,7 +107,7 @@ const [loading, setLoading] = useState(false);
 
             actions: {
                 websitehistoryreport: async (payload) => {
-                    return api.createResource("websiteprotection/branchwise", payload);
+                    return api.createResource("/websiteprotection/branchwise", payload);
                 },
             },
 
@@ -151,7 +124,7 @@ const [loading, setLoading] = useState(false);
                         // formRef.current.reset();
 
                     }, 100);
-                    onSuccessExternalUsbReport(response)
+                    onSuccessWebsiteHistoryReport(response.recentFileData)
                 },
                 onError: (error) => {
                     console.error("Submission error:", error);
@@ -159,6 +132,23 @@ const [loading, setLoading] = useState(false);
                 },
 
                 onBeforeSubmit: (payload) => {
+
+                            const formatDateTime = (isoString) => {
+            if (!isoString) return '';
+            const date = new Date(isoString);
+            const pad = (n) => n.toString().padStart(2, '0');
+            const year = date.getFullYear();
+            const month = pad(date.getMonth() + 1);
+            const day = pad(date.getDate());
+            const hours = pad(date.getHours());
+            const minutes = pad(date.getMinutes());
+            const seconds = pad(date.getSeconds());
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+          };
+
+          // ✅ Modify just the date fields
+          payload.from_date = formatDateTime(payload.from_date);
+          payload.to_date = formatDateTime(payload.to_date);
                     console.log("Submitting payload:", payload);
                     setLoading(true);
                 },
@@ -186,6 +176,7 @@ const [loading, setLoading] = useState(false);
                         label="From Date"
                         placeholder="Enter the from Date"
                          data-key="from_date"
+                         showTime={true}
                         required
                     />
 
@@ -195,13 +186,15 @@ const [loading, setLoading] = useState(false);
                         label="To Date"
                         placeholder="Enter the To Date"
                          data-key="to_date"
+                         showTime={true}
                         required
                     />
 
                     <MultiSelect
                         name="branches"
                         label="Branch"
-                        dataSource="commonMode/getBranchName"
+                         dataSource="commonMode/getBranchName"
+                        // options={[{value:"ISRO" ,name:"ISRO"}]}
                         multiSelect={true}
                         sendAsArray={true}
                         data-key="branches"
@@ -216,6 +209,7 @@ const [loading, setLoading] = useState(false);
                         dataSource="commonMode/getDeviceOnBranchName"
                         dataDependsOn="branches"
                          data-key="deviceNames"
+                    //  options={[{value:"DESKTOP-13021UM" ,name:"DESKTOP-13021UM"}]}
                         multiSelect={true}
                         sendAsArray={true}
                         required

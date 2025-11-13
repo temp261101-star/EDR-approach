@@ -40,6 +40,9 @@ import JsonToUi from "./NewPages/PolicyUi/JsonToUi.jsx";
 import DynamicFormBuilder from "./NewPages/PolicyUi/DynamicFormBuilder.jsx";
 import GenericFormBuilder from "./NewPages/PolicyUi/GenericFormBuilder.jsx";
 import Dashboard from "./NewPages/Dashboards/Dashboard.jsx";
+import WebsiteBlacklistingForm from "./NewPages/WebsiteProtection/WebsiteBlacklistingForm.jsx";
+import CaptureWebsiteHistoryForm from "./NewPages/WebsiteProtection/CaptureWebsiteHistoryForm.jsx";
+import ExternalUsb from "./NewPages/USB Protection/ExternalUsb.jsx";
 
 
 
@@ -66,11 +69,11 @@ function App() {
           )
         }
       />
-     
-        <Route path="/test" element={<PolicyCreatorPage />} />
+
+      {/* <Route path="/test" element={<PolicyCreatorPage />} />
      <Route path="/policy1" element={<JsonToUi />} />
-     <Route path="/policy2" element={<DynamicFormBuilder />} />
-     <Route path="/policy3" element={<GenericFormBuilder  />} />
+     <Route path="/policy2" element={<DynamicFormBuilder />} /> */}
+      <Route path="/policy3" element={<GenericFormBuilder />} />
       <Route
         path="/dashboard"
         element={
@@ -100,14 +103,14 @@ function App() {
         <Route path="/dashboard/viewMode" element={<ViewMode />} />
         <Route path="/dashboard/addApplication" element={<AddApplication />} />
         <Route path="/dashboard/viewApplication" element={<ViewApplication />} />
-      
-        <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport />} />
-       
-        <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication />} />
-        
-         <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed />} />
 
-       
+        <Route path="/dashboard/preventedApplicationReport" element={<PreventedApplicationReport />} />
+
+        <Route path="/dashboard/whitelistedApplication" element={<WhiteListedApplication />} />
+
+        <Route path="/dashboard/manageBlacklisted" element={<ManageBlackListed />} />
+
+
         <Route path="/dashboard/WebsiteDashboard" element={<WebsiteDashboard />} />
         <Route path="/dashboard/CaptureWebsiteHistory" element={<CaptureWebsiteHistory />} />
         <Route path="/dashboard/WebsiteBlacklistHistory" element={<WebsiteBlacklistHistory />} />
@@ -116,31 +119,34 @@ function App() {
         <Route path="/dashboard/DownloadBrowserHistory" element={<DownloadBrowserHistoryReport />} />
         <Route path="/dashboard/externalusb" element={<ExternalUsbList />} />
         <Route path="/dashboard/externalUsbReport" element={<ExternalUsbReport />} />
-      
+
         <Route path="/dashboard/antivirusEdr" element={<AntiVirusEdr />} />
 
         <Route path="/dashboard/addBlacklistedapplication" element={<AddBlacklistedapplication />} />
         <Route path="/dashboard/ViewBlacklistedapplication" element={<ViewBlacklistedapplication />} />
         <Route path="/dashboard/managewhitelisted" element={<ManageWhitelisted />} />
         <Route path="/dashboard/viewreport" element={<ViewReport />} />
-         <Route path="/dashboard/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/WebsiteBlacklist/WebsiteBlacklistForm" element={<WebsiteBlacklistingForm />} />
+        <Route path="/dashboard/CaptureWebsiteHistory/NewCaptureWebsiteHistoryForm" element={<CaptureWebsiteHistoryForm />} />
+        <Route path="/dashboard/externalUsb/NewExternalUsbForm" element={<ExternalUsb />} />
 
 
 
       </Route>
     </Routes>
-//  <PolicyCreatorPage/>
-//  <JsonToUi/>
+    //  <PolicyCreatorPage/>
+    //  <JsonToUi/>
 
 
 
-/* <Routes>
-     <Route path="/" element={<PolicyCreatorPage />} />
-     <Route path="/withJson" element={<JsonToUi />} />
-     <Route path="/test" element={<DynamicFormBuilder />} />
-     <Route path="/test2" element={<GenericFormBuilder  />} />
-
-</Routes> */
+    /* <Routes>
+         <Route path="/" element={<PolicyCreatorPage />} />
+         <Route path="/withJson" element={<JsonToUi />} />
+         <Route path="/test" element={<DynamicFormBuilder />} />
+         <Route path="/test2" element={<GenericFormBuilder  />} />
+    
+    </Routes> */
 
   );
 }

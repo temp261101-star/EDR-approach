@@ -55,12 +55,12 @@ const ViewModeTable = ({ tableData, loading, onBack }) => {
       ) : tableData.length === 0 ? (
 
         <div>
-  <Table tableTitle="View Mode Table" />
+  <Table tableTitle="View Mode " />
         </div>
       
       ) : (
         <div>
-          <Table tableTitle="View Mode Table" data={tableData} />
+          <Table tableTitle="View Mode " data={tableData} />
         </div>
         
       )}

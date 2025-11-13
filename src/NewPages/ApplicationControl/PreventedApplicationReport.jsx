@@ -108,28 +108,28 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
 
       actions: {
         PreventedApplication: async (payload) => {
-           if (Array.isArray(payload.branches)) {
-            payload.branches = payload.branches.join(',');
-          }
-          if (Array.isArray(payload.ip_address)) {
-            payload.ip_address = payload.ip_address.join(',');
-          }
-           payload.branch_name = payload.branches; 
-           delete payload.branches; 
-          return api.createResource('/EndPointSecurity/ApplicationWhitelisting/ManageBlacklistedprotectionApplicationListing', payload);
+          //  if (Array.isArray(payload.branches)) {
+          //   payload.branches = payload.branches.join(',');
+          // }
+          // if (Array.isArray(payload.ip_address)) {
+          //   payload.ip_address = payload.ip_address.join(',');
+          // }
+          //  payload.branch_name = payload.branches; 
+          //  delete payload.branches; 
+          return api.createResource('/EndPointSecurity/protectionApplicationListing', payload);
         },
       },
 
       hooks: {
-        onSuccess: () => {
-          toast.success('PreventedApplicationReport successful');
+        onSuccess: (response) => {
+          toast.success('Prevented Application Report fetched successfully');
             setLoading(false); 
           setTimeout(() => {
             if (formRef.current) {
               formRef.current.reset();
             }
           }, 100);
-           onSuccessPreventApplication()
+           onSuccessPreventApplication(response)
         },
         onError: (error) => {
           console.error('Submission error:', error);
@@ -168,7 +168,7 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
         />
 
         <MultiSelect
-          name="ip_address"
+          name="deviceNames"
           label="Device Name"
           dataSource="commonMode/getDeviceOnBranchName"
           ref={deviceRef}
@@ -220,13 +220,13 @@ const PreventedApplicationTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
-  <Table tableTitle="Prevent Application Report Table" />
+        <div className="mx-4">
+  <Table tableTitle="Prevent Application Report " />
         </div>
       
       ) : (
-        <div>
-          <Table tableTitle="Prevent Application Report Table" data={tableData} />
+        <div className='mx-4'>
+          <Table tableTitle="Prevent Application Report " data={tableData} />
         </div>
         
       )}

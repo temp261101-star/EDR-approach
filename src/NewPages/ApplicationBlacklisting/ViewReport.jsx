@@ -164,7 +164,7 @@ function ViewReportForm({onSuccessViewReport}) {
   };
     return (
          <div className="mt-10">
-            <Form ref={formRef} apiAction="viewBlacklistingREport" title="View Blacklisting Report">
+            <Form ref={formRef} apiAction="viewBlacklistingREport" title="View Blacklisting Applications" >
 
 
                 <FormFields grid={2}>
@@ -251,12 +251,12 @@ const ViewReportTable = ({ tableData, loading, onBack }) => {
         <p>Loading...</p>
       ) : tableData.length === 0 ? (
 
-        <div>
+        <div className='mx-4'>
   <Table tableTitle="View Report Table" />
         </div>
       
       ) : (
-        <div>
+        <div className='mx-4'>
           <Table tableTitle="View Report Table" data={tableData} />
         </div>
         

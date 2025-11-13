@@ -122,12 +122,12 @@ const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
           // if (Array.isArray(payload.devices)) {
           //   payload.devices = payload.devices.join(',');
           // }
-          return api.createResource("/EndPointSecurity/ApplicationWhitelisting/ManageBlacklistedprotectionApplicationListing", payload);
+          return api.createResource("/ApplicationBlacklisting/AddApplicationSet", payload);
         },
       },
 
       hooks: {
-        onSuccess: () => {
+        onSuccess: (response) => {
           toast.success("Trusted Application Added!");
             setLoading(false); 
 
@@ -144,7 +144,7 @@ const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
             deviceRef.current?.reset();
             typeRef.current?.reset();
           }, 0);
-          onSuccessAddBlacklist();
+          onSuccessAddBlacklist(response);
 
           setReloadTable(prev => prev + 1);
         },
@@ -214,22 +214,22 @@ const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
             onChange={handleApplicationTypeChange}
             options={[
               
-              { value: "ApplicationName", name: "Application Name" },
+              { value: "Application Path", name: "Application Path" },
             ]}
             required
           />
 
-          {showApplicationFields === "ApplicationName" && (
+          {showApplicationFields === "Application Path" && (
             <>
               <TextInput
-                label="Application Name"
-                name="applicationName"
+                label="Application Path"
+                name="applicationPath"
                 placeholder="Enter Application Name"
                 required
               />
               <TextInput
                 label="Hash (SHA-256)"
-                name="hash"
+                name="applicationHash"
                 placeholder="Enter Hash (SHA-256)"
                 required
               />

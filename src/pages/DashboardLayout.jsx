@@ -179,23 +179,23 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink>
           </AccordionItem>
 
-          <AccordionItem
+          {/* <AccordionItem
             title="Dynamic Form Data"
             icon={Database}
             iconSize={18}
             isOpen={openAccordions.masters}
             onToggle={() => toggleAccordion("masters")}
           >
-            {/* <NavLink to="/dashboard/dynamicGraph" icon={LayoutDashboard }>
+            <NavLink to="/dashboard/dynamicGraph" icon={LayoutDashboard }>
               Dynamic Dashboard
-            </NavLink> */}
+            </NavLink>
 
             <NavLink to="/dashboard/addAntiVirusForm" icon={Settings}>
               Add Antivirus
             </NavLink>
-          </AccordionItem>
+          </AccordionItem> */}
 
-          <AccordionItem
+          {/* <AccordionItem
             title="Listing On date"
             icon={Banknote}
               iconSize={18}
@@ -206,31 +206,26 @@ export default function DashboardLayout({ setIsAuthenticated }) {
               Report Panel
             </NavLink>
 
-            {/* <NavLink to="/dashboard/version-update" icon={TrendingUp}>
-              Version Update
-            </NavLink> */}
-            {/* <NavLink to="/dashboard/add-application" icon={Banknote}>
-              Add Application
-            </NavLink> */}
+          
             <NavLink to="/dashboard/add-application-user" icon={UserRound}>
               Add Application User
             </NavLink>
-          </AccordionItem>
+          </AccordionItem> */}
 
-          <AccordionItem
+          {/* <AccordionItem
             title="Dynamic Listings"
             icon={FileBarChart}
               iconSize={18}
             isOpen={openAccordions.reports}
             onToggle={() => toggleAccordion("reports")}
           >
-            {/* <NavLink to="/dashboard/reports" icon={FileBarChart}>
+            <NavLink to="/dashboard/reports" icon={FileBarChart}>
               Reports
-            </NavLink> */}
+            </NavLink>
             <NavLink to="/dashboard/virusListing" icon={FileBarChart}>
               Virus Listing
             </NavLink>
-          </AccordionItem>
+          </AccordionItem> */} 
 
           <AccordionItem
             title="Application Control"
@@ -289,17 +284,17 @@ export default function DashboardLayout({ setIsAuthenticated }) {
 
              </AccordionItem>
 
-            <AccordionItem
+             <AccordionItem
             title="Website Protection"
             icon={Banknote}
             isOpen={openAccordions.website}
             onToggle={() => toggleAccordion("website")}
           >
           
-           
+{/*            
             <NavLink to="/dashboard/WebsiteDashboard" icon={CircleSmall}>
             Website Dashboard
-            </NavLink>
+            </NavLink> */}
 
             <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
             Capture Website History
@@ -326,10 +321,10 @@ export default function DashboardLayout({ setIsAuthenticated }) {
            
             
             
-          </AccordionItem>
+          </AccordionItem> 
 
 
-          <AccordionItem
+          {/* <AccordionItem
             title="AntiVirus "
             icon={Banknote}
             isOpen={openAccordions.antivirus}
@@ -339,7 +334,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             Antivirus EDR
             </NavLink>
 
-            </AccordionItem>
+            </AccordionItem> */}
             
           <AccordionItem
             title="Application Blacklisting "
@@ -371,7 +366,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
 
         
 
-             <NavLink to="/test" icon={CircleSmall}>
+             {/* <NavLink to="/test" icon={CircleSmall}>
           policy View 
             </NavLink>
 
@@ -381,7 +376,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
 
              <NavLink to="/policy2" icon={CircleSmall}>
               policy View 2
-            </NavLink>
+            </NavLink> */}
 
                <NavLink to="/policy3" icon={CircleSmall}>
             Latest policy View

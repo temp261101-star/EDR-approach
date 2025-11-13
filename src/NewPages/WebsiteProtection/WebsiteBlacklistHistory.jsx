@@ -12,7 +12,7 @@ const WebsiteBlacklistHistory = () => {
     setLoading(true);
     try {
       const res = await api.fetchResource({
-        resource: "dashboard/ViewModeListing",
+        resource: "restrict-site/listing",
       });
       setTableData(res.data || []);
     } catch (err) {

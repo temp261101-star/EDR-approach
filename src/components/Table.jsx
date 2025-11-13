@@ -564,8 +564,8 @@ import api from "../lib/api.js";
 
 export default function Table({
   data = [],
-  endpoint, // NEW: API endpoint
-  dataPath, // NEW: path to extract data from response (e.g., "data.recentFileData")
+  endpoint, 
+  dataPath, 
   onBulkAction,
   showCheckboxes = true,
   bulkActionLabel = "Bulk Action",
@@ -1191,12 +1191,12 @@ export default function Table({
               {selectedRows.length !== 1 ? "s" : ""} selected across all pages
             </span>
             <div className="flex gap-2">
-              <button
+         {   onBulkAction &&  <button
                 onClick={handleBulkActionClick}
                 className="px-3 py-1 text-xs bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-400 rounded-lg transition-colors"
               >
                 {bulkActionLabel}
-              </button>
+              </button>}
               <button
                 className="px-3 py-1 text-xs bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition-colors"
                 onClick={() => setSelectedRows([])}

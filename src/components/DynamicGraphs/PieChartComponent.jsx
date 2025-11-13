@@ -3,6 +3,8 @@ import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { getApi } from "../../lib/api";
 import GenericDrawerModal from "../MODAL/GenericDrawerModal";
 import { ChevronDown } from "lucide-react";
+import GenericPopupModal from "../MODAL/GenericPopupModal";
+import Table from "../Table";
 
 const PieChartComponent = React.memo(function PieChartComponent({
   query,
@@ -218,23 +220,54 @@ const PieChartComponent = React.memo(function PieChartComponent({
                         innerRadius={40}
                         outerRadius={60}
                         stroke="none"
+                        onClick={(data) => handleOpenModal(data.payload)}
                       >
                         {apiData.map((d, i) => (
                           <Cell key={i} fill={d.color} />
                         ))}
                       </Pie>
-                      <Tooltip
+                      {/* <Tooltip
                         formatter={(v, n) => [`${v}`, n]}
                         contentStyle={{
-                          background: "rgba(17, 24, 39, 0.98)",
-                          border: "1px solid #374151",
+                          background: "gray",
+                          border: "1px solid red",
                           borderRadius: 8,
                           fontSize: 12,
-                          color: "#f9fafb",
+                          color: "#ffff",
                           padding: "8px 12px",
                           boxShadow: "0 8px 16px rgba(0, 0, 0, 0.6)",
                         }}
                         contentWrapper={{ outline: "none" }}
+                      /> */}
+
+                      <Tooltip
+                        formatter={(v, n) => [`${v}`, n]}
+                        contentStyle={{
+                          background: "rgba(17, 24, 39, 0.95)",
+                          border: "1px solid rgba(55, 65, 81, 0.8)",
+                          borderRadius: "8px",
+                          fontSize: "14px",
+                          color: "#f9fafb",
+                          padding: "12px 16px",
+                          boxShadow:
+                            "0 10px 25px -3px rgba(0, 0, 0, 0.7), 0 4px 6px -2px rgba(0, 0, 0, 0.5)",
+                          backdropFilter: "blur(8px)",
+                          fontWeight: "500",
+                        }}
+                        labelStyle={{
+                          color: "#d1d5db",
+                          fontWeight: "600",
+                          marginBottom: "4px",
+                          fontSize: "13px",
+                        }}
+                        itemStyle={{
+                          color: "#f9fafb",
+                          fontSize: "13px",
+                          padding: "2px 0",
+                        }}
+                        contentWrapper={{
+                          outline: "none",
+                        }}
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -243,14 +276,14 @@ const PieChartComponent = React.memo(function PieChartComponent({
 
               {/* Table Section - Bottom */}
               <div className="flex-1 overflow-hidden flex flex-col min-h-0  pb-2">
-                <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-500">
+                <div className="overflow-y-auto scrollbar-hide ">
                   <table className="w-full">
-                    <thead className="sticky top-0 bg-gray-800/95 backdrop-blur-sm z-10">
-                      <tr className="border-b border-gray-700/60">
-                        <th className="text-left py-2 px-2.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
+                    <thead className="sticky top-0 backdrop-blur-sm z-10">
+                      <tr className="border-b border-white">
+                        <th className="text-left py-1 px-1.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
                           Status
                         </th>
-                        <th className="text-right py-2 px-2.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
+                        <th className="text-right py-1 px-1.5 font-bold text-gray-200 uppercase tracking-wider text-[10px]">
                           Count
                         </th>
                       </tr>
@@ -261,35 +294,30 @@ const PieChartComponent = React.memo(function PieChartComponent({
                         return (
                           <tr
                             key={d.name}
-                            className="border-b border-gray-700/30 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
+                            className="border-b border-gray-700/20 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
                             onClick={() => handleOpenModal(d)}
                           >
-                            <td className="py-2 px-2.5">
+                            <td className="py-1 px-1.5">
                               <div className="flex items-center gap-2 min-w-0">
                                 <span
-                                  className="h-3 w-3 rounded-full ring-1 ring-gray-900/40 flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
+                                  className="w-2.5 h-2.5 rounded-full transition-all duration-200 shadow-md flex-shrink-0 group-hover:shadow-lg"
                                   style={{ background: d.color }}
                                 />
-                                <span className="text-gray-300 font-medium truncate text-[12px] group-hover:text-white transition-colors">
+                                <span className="text-gray-300 font-medium truncate text-xs group-hover:text-white transition-colors">
                                   {d.name}
                                 </span>
                               </div>
                             </td>
-                            <td className="py-2 px-2.5 text-right">
-                              <div className="flex flex-col items-end gap-0.5">
-                                <span className="text-gray-200 font-semibold text-sm">
-                                  {d.value}
-                                </span>
+                            <td className="py-1 px-1.5 text-right">
+                              <span className="text-xs font-semibold text-gray-200">
+                                {d.value}{" "}
                                 <span
-                                  className="text-[12px] font-medium px-2 py-1 rounded transition-all duration-150"
-                                  style={{
-                                    color: d.color,
-                                    backgroundColor: `${d.color}15`,
-                                  }}
+                                  className="text-[11px] ml-1"
+                                  style={{ color: d.color }}
                                 >
-                                  {percent}%
+                                  ({percent}%)
                                 </span>
-                              </div>
+                              </span>
                             </td>
                           </tr>
                         );
@@ -316,6 +344,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
                       innerRadius={50}
                       outerRadius={75}
                       stroke="none"
+                      onClick={(data) => handleOpenModal(data.payload)}
                     >
                       {apiData.map((d, i) => (
                         <Cell key={i} fill={d.color} />
@@ -324,7 +353,7 @@ const PieChartComponent = React.memo(function PieChartComponent({
                     <Tooltip
                       formatter={(v, n) => [`${v}`, n]}
                       contentStyle={{
-                        background: "rgba(17, 24, 39, 0.98)",
+                        background: "red",
                         border: "1px solid #374151",
                         borderRadius: 8,
                         fontSize: 12,
@@ -345,12 +374,12 @@ const PieChartComponent = React.memo(function PieChartComponent({
             <div className="flex-1 overflow-hidden flex flex-col min-h-0 p-2">
               <div className="overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-transparent hover:scrollbar-thumb-gray-500">
                 <table className="w-full">
-                  <thead className="sticky top-0 bg-gray-800/95 backdrop-blur-sm z-10">
+                  <thead className="sticky top-0 backdrop-blur-sm z-10">
                     <tr className="border-b border-gray-700/60">
-                      <th className="text-left py-2.5 px-3 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
+                      <th className="text-left py-1 px-1.5 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
                         Status
                       </th>
-                      <th className="text-right py-2.5 px-3 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
+                      <th className="text-right py-1 px-1.5 font-bold text-gray-200 uppercase tracking-wider text-[12px]">
                         Count
                       </th>
                     </tr>
@@ -361,35 +390,30 @@ const PieChartComponent = React.memo(function PieChartComponent({
                       return (
                         <tr
                           key={d.name}
-                          className="border-b border-gray-700/30 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
+                          className="border-b border-gray-700/20 hover:bg-gray-800/60 transition-all duration-150 cursor-pointer group"
                           onClick={() => handleOpenModal(d)}
                         >
-                          <td className="py-2.5 px-3">
+                          <td className="py-1 px-1.5">
                             <div className="flex items-center gap-2 min-w-0">
                               <span
-                                className="h-3 w-3 rounded-full ring-1 ring-gray-900/40 flex-shrink-0 shadow-md group-hover:shadow-lg transition-shadow"
+                                className="w-2.5 h-2.5 rounded-full transition-all duration-200 shadow-md flex-shrink-0 group-hover:shadow-lg"
                                 style={{ background: d.color }}
                               />
-                              <span className="text-gray-300 font-medium truncate text-[13px] group-hover:text-white transition-colors">
+                              <span className="text-gray-300 font-medium truncate group-hover:text-white transition-colors">
                                 {d.name}
                               </span>
                             </div>
                           </td>
-                          <td className="py-2.5 px-3 text-right">
-                            <div className="flex flex-col items-end gap-0.5">
-                              <span className="text-gray-200 font-semibold text-[13px]">
-                                {d.value}
-                              </span>
+                          <td className="py-1 px-1.5 text-right">
+                            <span className="font-semibold text-gray-200">
+                              {d.value}{" "}
                               <span
-                                className="text-[12px] font-medium px-2.5 py-1.5 rounded transition-all duration-150"
-                                style={{
-                                  color: d.color,
-                                  backgroundColor: `${d.color}15`,
-                                }}
+                                className="text-sm ml-1"
+                                style={{ color: d.color }}
                               >
-                                {percent}%
+                                ({percent}%)
                               </span>
-                            </div>
+                            </span>
                           </td>
                         </tr>
                       );
@@ -402,21 +426,20 @@ const PieChartComponent = React.memo(function PieChartComponent({
         </>
       )}
 
-      <GenericDrawerModal
+      <GenericPopupModal
         isOpen={isOpen}
         onClose={handleCloseModal}
         title={title || "Details"}
-        size="max-w-4xl"
-        data={dataToSend}
       >
-        <div className="bg-gray-800 p-6 rounded">
-          {Object.entries(dataToSend).map(([key, value]) => (
+        <div className="space-y-2">
+          {/* {Object.entries(dataToSend).map(([key, value]) => (
             <div key={key} className="text-sm text-gray-300">
               <strong className="text-gray-100">{key}</strong>: {value}
             </div>
-          ))}
+          ))} */}
+          <Table tableTitle="" showCheckboxes={false} endpoint="" dataPath="" />
         </div>
-      </GenericDrawerModal>
+      </GenericPopupModal>
     </div>
   );
 });
