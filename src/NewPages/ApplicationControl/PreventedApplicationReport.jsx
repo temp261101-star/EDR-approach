@@ -53,12 +53,14 @@ const PreventedApplicationReport = () => {
         />
 
       ) : (
+        <div className="mx-5">
         <PreventedApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
+         </div>
       )}
 
 
@@ -106,20 +108,20 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
 
       actions: {
         PreventedApplication: async (payload) => {
-           if (Array.isArray(payload.branches)) {
-            payload.branches = payload.branches.join(',');
-          }
-          if (Array.isArray(payload.ip_address)) {
-            payload.ip_address = payload.ip_address.join(',');
-          }
-           payload.branch_name = payload.branches; 
-           delete payload.branches; 
-          return api.createResource('/EndPointSecurity/ApplicationWhitelisting/ManageBlacklistedprotectionApplicationListing', payload);
+          //  if (Array.isArray(payload.branches)) {
+          //   payload.branches = payload.branches.join(',');
+          // }
+          // if (Array.isArray(payload.ip_address)) {
+          //   payload.ip_address = payload.ip_address.join(',');
+          // }
+          //  payload.branch_name = payload.branches; 
+          //  delete payload.branches; 
+          return api.createResource('/EndPointSecurity/protectionApplicationListing', payload);
         },
       },
 
       hooks: {
-        onSuccess: () => {
+        onSuccess: (response) => {
           toast.success('Prevented Application Report fetched successfully');
             setLoading(false); 
           setTimeout(() => {
@@ -127,7 +129,7 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
               formRef.current.reset();
             }
           }, 100);
-           onSuccessPreventApplication()
+           onSuccessPreventApplication(response)
         },
         onError: (error) => {
           console.error('Submission error:', error);
@@ -166,7 +168,7 @@ const PreventedApplicationReportForm = ({onSuccessPreventApplication}) => {
         />
 
         <MultiSelect
-          name="ip_address"
+          name="deviceNames"
           label="Device Name"
           dataSource="commonMode/getDeviceOnBranchName"
           ref={deviceRef}

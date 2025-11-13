@@ -54,12 +54,14 @@ const ViewApplication = () => {
         />
 
       ) : (
+        <div className="mx-5">
         <ViewApplicationTable
           tableData={tableData}
           loading={loading}
           //  Pass back function
           onBack={handleBack}
         />
+         </div>
       )}
 
 
@@ -128,8 +130,8 @@ const ViewApplicationForm = ({ onSuccess }) => {
             formRef.current.reset();
 
           }, 100);
-          // onSuccess();
-          if (onSuccess) onSuccess(response);
+          onSuccess(response);
+        
         },
 
         onError: (error) => {
@@ -173,7 +175,7 @@ const ViewApplicationForm = ({ onSuccess }) => {
           />
 
           <MultiSelect
-            name="deviceName"
+            name="deviceNames"
             label="Device Name"
             ref={deviceRef}
             dataSource="commonMode/getDeviceOnBranchName"

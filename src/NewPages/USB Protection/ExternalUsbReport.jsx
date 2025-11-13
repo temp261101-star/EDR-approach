@@ -88,7 +88,7 @@ function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
     const formRef = useRef();
     const branchRef = useRef();
     const deviceRef = useRef();
-
+ const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         if (!formRef.current) return;
@@ -128,7 +128,7 @@ function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
             hooks: {
                 onSuccess: (response) => {
                     toast.success("External USB Report data fetched successful");
-
+                  setLoading(false)
                     //  to do ->   add navigation
                     setTimeout(() => {
                         if (formRef.current) {
@@ -142,16 +142,27 @@ function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
                 onError: (error) => {
                     console.error("Submission error:", error);
                     toast.error(error.message);
+                    setLoading(false)
                 },
 
                 onBeforeSubmit: (payload) => {
                     console.log("Submitting payload:", payload);
+                    setLoading(true)
                 },
             },
         });
 
         return () => controller.destroy();
     }, []);
+         const reset = () => {
+  
+            formRef.current.reset();
+            deviceRef.current.reset();
+            branchRef.current.reset();
+          
+      
+  };
+    
     return (
          <div className="mt-10">
             <Form ref={formRef} apiAction="ExternalUsbReport" title="External USB Report">
@@ -206,11 +217,11 @@ function ExternalUsbReportForm({onSuccessExternalUsbReport}) {
                         className="px-6 py-2 bg-cyan-600 text-white text-sm font-medium rounded-lg hover:bg-cyan-700 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-cyan-500/25"
                         type="submit" 
                     >
-                        Submit
+                         {loading?(<p> loading..</p>):(<p>Submit</p>)}  
                     </button>
 
                     <button type="button" className="px-6 py-2 text-white text-sm font-medium rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-                    >
+                      onClick={reset}>
                         Reset
                     </button>
                 </FormActions>

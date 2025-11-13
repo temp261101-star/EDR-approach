@@ -1,46 +1,78 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import Table from '../../components/Table';
+import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import api from "../../lib/api";
+import Table from "../../components/Table";
+ import { useNavigate } from 'react-router-dom';
 
-function WebsiteBlacklisting() {
-   const navigate = useNavigate();
+const WebsiteBlacklisting = () => {
+  const [tableData, setTableData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const handleNewForm = () => {
+    setShowForm(true);
+  };
 
-  // Table data
-  const data = [
-    {
-      delete: '🗑️',
-      srNo: 1,
-      pcName: 'DESKTOP-CMCFJIQ',
-      aliasName: 'DESKTOP-CMCFJIQ',
-      branchName: 'NA',
-      deviceType: 'usb',
-      modeOfAccess: 'prevent',
-    },
-  ];
+  // const handleBack = () => {
+  //   setShowForm(false); // show table again
+  // };
 
-return (
-  <div className="p-4">
+  const getExternalUsbList = async () => {
+    console.log("hyy")
+    setLoading(true);
+    try {
+      const res = await api.fetchResource({
+        resource: "restrict-site/listing",
+      });
+      setTableData(res.data|| []);
+    } catch (err) {
+      toast.error("Failed to load website blacklisting data");
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getExternalUsbList();
+  }, []);
+  return (
+    <div className="mt-10 mx-5">
+      
+        <WebsiteBlacklistingTable
+          tableData={tableData}
+          loading={loading}
+          OnNew={handleNewForm}
+        />
+    </div>
+  );
+};
 
-    <div className="mb-4">
-   
+export default WebsiteBlacklisting;
+
+const WebsiteBlacklistingTable = ({ tableData, loading, onBack }) => {
+const navigate =useNavigate();
+
+  return (
+    <>
       <div className="flex justify-end mb-2">
-        <button
-              className="cursor-pointer px-4 py-2 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2 mr-25 translate-y-2"
-                     
-          onClick={() => navigate('/dashboard/WebsiteBlacklist/WebsiteBlacklistForm')}
-        >
-          New
+        <button  onClick={() => navigate('/dashboard/WebsiteBlacklist/WebsiteBlacklistForm')}
+          className="cursor-pointer px-4 py-1 rounded-md bg-cyan-600/80 hover:bg-cyan-500 backdrop-blur-sm border border-cyan-600/30 text-white text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-lg flex items-center gap-2  mr-25 translate-y-2"
+        >          New
         </button>
       </div>
 
-      {/* Table Section */}
-      <Table data={data}  showCheckboxes={false} />
-    </div>
-  </div>
-);
+      {loading ? (
+        <p>Loading...</p>
+      ) : tableData.length === 0 ? (
 
+        <div>
+          <Table tableTitle="Website Blacklisting Table" />
+        </div>
 
+      ) : (
+        <div>
+          <Table tableTitle="Website Blacklisting Table" data={tableData} />
+        </div>
 
-}
+      )}
+    </>
+  );
+};
 
-export default WebsiteBlacklisting

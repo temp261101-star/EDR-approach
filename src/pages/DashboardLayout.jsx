@@ -172,6 +172,11 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/summaryDashboard" icon={Database}>
               Summary Dashboard
             </NavLink>
+
+            
+            <NavLink to="/dashboard/dashboard" icon={Database}>
+             Dashboard
+            </NavLink>
           </AccordionItem>
 
           {/* <AccordionItem
@@ -276,17 +281,17 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink>
           </AccordionItem>
 
-          {/* <AccordionItem
+             <AccordionItem
             title="Website Protection"
             icon={Banknote}
             isOpen={openAccordions.website}
             onToggle={() => toggleAccordion("website")}
           >
           
-           
+{/*            
             <NavLink to="/dashboard/WebsiteDashboard" icon={CircleSmall}>
             Website Dashboard
-            </NavLink>
+            </NavLink> */}
 
             <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
             Capture Website History
@@ -313,7 +318,8 @@ export default function DashboardLayout({ setIsAuthenticated }) {
            
             
             
-          </AccordionItem> */}
+          </AccordionItem> 
+
 
           {/* <AccordionItem
             title="AntiVirus "
