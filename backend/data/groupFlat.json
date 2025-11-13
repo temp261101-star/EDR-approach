@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1763010757745,
+    "name": "mansi",
+    "description": "weqwewq",
+    "parentId": null,
+    "createdAt": "2025-11-13T05:12:37.745Z",
+    "type": "group"
+  },
+  {
+    "id": "1763010757745-1",
+    "name": "NYC-WS 001",
+    "ip": "192.168.1.10",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 11",
+    "status": "Online",
+    "parentId": 1763010757745,
+    "originalDeviceId": 1,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763010757745-2",
+    "name": "NYC-WS 002",
+    "ip": "192.168.1.11",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 10",
+    "status": "Online",
+    "parentId": 1763010757745,
+    "originalDeviceId": 2,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763010757745-3",
+    "name": "NYC-WS 003",
+    "ip": "192.168.1.12",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "macOS",
+    "status": "Offline",
+    "parentId": 1763010757745,
+    "originalDeviceId": 3,
+    "type": "groupDevice"
+  }
+]

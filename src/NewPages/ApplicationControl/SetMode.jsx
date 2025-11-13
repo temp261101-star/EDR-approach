@@ -43,20 +43,15 @@ const SetMode = () => {
           }}
         />
       ) : (
-
         <div className="mx-5">
-
           <ModeTable
-          tableData={tableData}
-          loading={loading}
-          //  Pass back function
-          onBack={handleBack}
-        /> 
+            tableData={tableData}
+            loading={loading}
+            //  Pass back function
+            onBack={handleBack}
+          />
         </div>
-       
       )}
-
-    
     </div>
   );
 };
@@ -71,7 +66,7 @@ const SetModeForm = ({ onSuccess }) => {
   const branchRef = useRef();
   const accessRef = useRef();
 
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (!formRef.current) return;
@@ -122,76 +117,71 @@ const SetModeForm = ({ onSuccess }) => {
 
     return () => controller.destroy();
   }, []);
- const reset = () => {
-  
-            formRef.current.reset();
-            deviceRef.current.reset();
-            branchRef.current.reset();
-            accessRef.current.reset();
-      
+  const reset = () => {
+    formRef.current.reset();
+    deviceRef.current.reset();
+    branchRef.current.reset();
+    accessRef.current.reset();
   };
   return (
-
     <div className="p-4">
-       <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
-      <FormFields grid={2}>
-        <MultiSelect
-          name="branches"
-          label="Branch"
-          dataSource="commonMode/getBranchName"
-          multiSelect
-          sendAsArray
-          data-key="branches"
-          ref={branchRef}
-          required
-        />
+      <Form ref={formRef} apiAction="AddSetMode" title="Set Mode">
+        <FormFields grid={2}>
+          <MultiSelect
+            name="branches"
+            label="Branch"
+            dataSource="commonMode/getBranchName"
+            multiSelect
+            sendAsArray
+            data-key="branches"
+            ref={branchRef}
+            required
+          />
 
-        <MultiSelect
-          name="deviceNames"
-          data-key="deviceNames"
-          label="Host Name"
-          ref={deviceRef}
-          dataSource="commonMode/getDeviceOnBranchName"
-          dataDependsOn="branches"
-          multiSelect
-          sendAsArray
-          required
-        />
+          <MultiSelect
+            name="deviceNames"
+            data-key="deviceNames"
+            label="Host Name"
+            ref={deviceRef}
+            dataSource="commonMode/getDeviceOnBranchName"
+            dataDependsOn="branches"
+            multiSelect
+            sendAsArray
+            required
+          />
 
-        <MultiSelect
-          name="ModeTypes"
-          label="Mode Type"
-          options={[
-            { value: "Learning", name: "Learning" },
-            { value: "Protection", name: "Protection" },
-          ]}
-          multiSelect={false}
-          sendAsArray
-          ref={accessRef}
-          required
-        />
-      </FormFields>
+          <MultiSelect
+            name="ModeTypes"
+            label="Mode Type"
+            options={[
+              { value: "Learning", name: "Learning" },
+              { value: "Protection", name: "Protection" },
+            ]}
+            multiSelect={false}
+            sendAsArray
+            ref={accessRef}
+            required
+          />
+        </FormFields>
 
-      <FormActions>
-        <button
-          className="px-6 py-2 bg-cyan-600 text-white rounded-lg cursor-pointer"
-          type="submit"
-        >
-        {loading?(<p> loading..</p>):(<p>Submit</p>)}  
-        </button>
+        <FormActions>
+          <button
+            className="px-6 py-2 bg-cyan-600 text-white rounded-lg cursor-pointer"
+            type="submit"
+          >
+            {loading ? <p> loading..</p> : <p>Submit</p>}
+          </button>
 
-        <button
-          type="button"
-          className="px-6 py-2 border rounded-lg ml-2"
-           onClick={reset}
-         
-        >
-          Reset
-        </button>
-      </FormActions>
-    </Form>
+          <button
+            type="button"
+            className="px-6 py-2 border rounded-lg ml-2"
+            onClick={reset}
+          >
+            Reset
+          </button>
+        </FormActions>
+      </Form>
     </div>
-   
   );
 };
 
@@ -211,16 +201,13 @@ const ModeTable = ({ tableData, loading, onBack }) => {
       {loading ? (
         <div className="flex justify-center items-center my-28">Loading...</div>
       ) : tableData.length === 0 ? (
-
         <div>
-  <Table tableTitle="Set Mode Table" />
+          <Table tableTitle="Set Mode Table" />
         </div>
-      
       ) : (
         <div>
           <Table tableTitle="Set Mode Table" data={tableData} />
         </div>
-        
       )}
     </>
   );

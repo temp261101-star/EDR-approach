@@ -32,7 +32,8 @@ export default function DashboardLayout({ setIsAuthenticated }) {
     reports: false,
     Application: false,
     usb: false,
-    policy:false
+    policy: false,
+    group: false,
   });
 
   const location = useLocation();
@@ -67,7 +68,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
         </div>
         {!collapsed && (
           <div className="transition-transform duration-200">
-            {isOpen ? <ChevronUp size={18} />: <ChevronDown size={18} />}
+            {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
           </div>
         )}
       </button>
@@ -157,8 +158,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             )}
           </Link>
 
-
-            <AccordionItem
+          <AccordionItem
             title="Dashboards"
             icon={Database}
             iconSize={18}
@@ -170,7 +170,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink> */}
 
             <NavLink to="/dashboard/summaryDashboard" icon={Database}>
-             Summary Dashboard
+              Summary Dashboard
             </NavLink>
           </AccordionItem>
 
@@ -220,12 +220,12 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             <NavLink to="/dashboard/virusListing" icon={FileBarChart}>
               Virus Listing
             </NavLink>
-          </AccordionItem> */} 
+          </AccordionItem> */}
 
           <AccordionItem
             title="Application Control"
             icon={Banknote}
-              iconSize={18}
+            iconSize={18}
             isOpen={openAccordions.Application}
             onToggle={() => toggleAccordion("Application")}
           >
@@ -264,7 +264,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
           <AccordionItem
             title="USB Protection"
             icon={Banknote}
-              iconSize={18}
+            iconSize={18}
             isOpen={openAccordions.usb}
             onToggle={() => toggleAccordion("usb")}
           >
@@ -272,14 +272,11 @@ export default function DashboardLayout({ setIsAuthenticated }) {
               External USB
             </NavLink>
             <NavLink to="/dashboard/externalUsbReport" icon={CircleSmall}>
-            External USB Report
+              External USB Report
             </NavLink>
+          </AccordionItem>
 
-
-
-             </AccordionItem>
-
-            {/* <AccordionItem
+          {/* <AccordionItem
             title="Website Protection"
             icon={Banknote}
             isOpen={openAccordions.website}
@@ -318,7 +315,6 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             
           </AccordionItem> */}
 
-
           {/* <AccordionItem
             title="AntiVirus "
             icon={Banknote}
@@ -330,55 +326,69 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </NavLink>
 
             </AccordionItem> */}
-            
+
           <AccordionItem
             title="Application Blacklisting "
             icon={Banknote}
             isOpen={openAccordions.blacklisting}
-            onToggle={() => toggleAccordion("blacklisting")}>
-
-               <NavLink to="/dashboard/addBlacklistedapplication" icon={CircleSmall}>
-             Add Application
+            onToggle={() => toggleAccordion("blacklisting")}
+          >
+            <NavLink
+              to="/dashboard/addBlacklistedapplication"
+              icon={CircleSmall}
+            >
+              Add Application
             </NavLink>
 
-             <NavLink to="/dashboard/ViewBlacklistedapplication" icon={CircleSmall}>
-             View Application
+            <NavLink
+              to="/dashboard/ViewBlacklistedapplication"
+              icon={CircleSmall}
+            >
+              View Application
             </NavLink>
 
-             <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
-             Manage Whitelisted
+            <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
+              Manage Whitelisted
             </NavLink>
 
-               <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
-            View Report
+            <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
+              View Report
             </NavLink>
-            </AccordionItem>
+          </AccordionItem>
           <AccordionItem
             title="Policy"
             icon={Banknote}
             isOpen={openAccordions.policy}
-            onToggle={() => toggleAccordion("policy")}>
-
-        
-
-             {/* <NavLink to="/test" icon={CircleSmall}>
-          policy View 
+            onToggle={() => toggleAccordion("policy")}
+          >
+       
+{/* 
+            <NavLink to="/policy3" icon={CircleSmall}>
+              Latest policy View
             </NavLink>
-
-             <NavLink to="/policy1" icon={CircleSmall}>
-          policy View 1
-            </NavLink>
-
-             <NavLink to="/policy2" icon={CircleSmall}>
-              policy View 2
+            <NavLink to="/dashboard/PolicySetupAll" icon={CircleSmall}>
+              Latest policy v1 
             </NavLink> */}
-
-               <NavLink to="/policy3" icon={CircleSmall}>
-            Latest policy View
+            <NavLink to="/dashboard/PolicySetupFirewall" icon={CircleSmall}>
+             Latest policy Integrated
             </NavLink>
-            </AccordionItem>
-
-          
+          </AccordionItem>
+          <AccordionItem
+            title="Group"
+            icon={Banknote}
+            isOpen={openAccordions.group}
+            onToggle={() => toggleAccordion("group")}
+          >
+       
+    <NavLink to="/dashboard/CreateGroup" icon={CircleSmall}>
+           Create Group
+            </NavLink>
+            <NavLink to="/dashboard/GroupList" icon={CircleSmall}>
+            View Groups
+            </NavLink>
+        
+        
+          </AccordionItem>
         </nav>
 
         <div className="p-1.5 border-t border-gray-700">
@@ -390,7 +400,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             className="w-full flex items-center gap-1.5 p-1.5 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-md transition-colors duration-200"
             title={collapsed ? "Logout" : ""}
           >
-          <LogOut size={12} />
+            <LogOut size={12} />
             {!collapsed && <span className="font-medium text-sm">Logout</span>}
           </button>
         </div>

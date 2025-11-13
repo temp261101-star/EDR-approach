@@ -226,19 +226,6 @@ const PieChartComponent = React.memo(function PieChartComponent({
                           <Cell key={i} fill={d.color} />
                         ))}
                       </Pie>
-                      {/* <Tooltip
-                        formatter={(v, n) => [`${v}`, n]}
-                        contentStyle={{
-                          background: "gray",
-                          border: "1px solid red",
-                          borderRadius: 8,
-                          fontSize: 12,
-                          color: "#ffff",
-                          padding: "8px 12px",
-                          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.6)",
-                        }}
-                        contentWrapper={{ outline: "none" }}
-                      /> */}
 
                       <Tooltip
                         formatter={(v, n) => [`${v}`, n]}

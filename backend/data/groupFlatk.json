@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1763012085909,
+    "name": "Mansi",
+    "description": "testing ",
+    "parentId": null,
+    "createdAt": "2025-11-13T05:34:45.909Z",
+    "type": "group"
+  },
+  {
+    "id": "1763012085909-9",
+    "name": "LON-WS 001",
+    "ip": "192.168.10.10",
+    "location": "London",
+    "branch": "Main",
+    "os": "Windows 11",
+    "status": "Online",
+    "parentId": 1763012085909,
+    "originalDeviceId": 9,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763012085909-10",
+    "name": "LON-WS 002",
+    "ip": "192.168.10.11",
+    "location": "London",
+    "branch": "Main",
+    "os": "Ubuntu Desktop",
+    "status": "Online",
+    "parentId": 1763012085909,
+    "originalDeviceId": 10,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763012085909-11",
+    "name": "LON-WS 003",
+    "ip": "192.168.10.12",
+    "location": "London",
+    "branch": "Main",
+    "os": "macOS",
+    "status": "Online",
+    "parentId": 1763012085909,
+    "originalDeviceId": 11,
+    "type": "groupDevice"
+  },
+  {
+    "id": 1763017117829,
+    "name": "react",
+    "description": "testing group",
+    "parentId": "1763012085909",
+    "createdAt": "2025-11-13T06:58:37.829Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017141094,
+    "name": "react 2",
+    "description": "testing new group",
+    "parentId": "1763012085909",
+    "createdAt": "2025-11-13T06:59:01.094Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017161687,
+    "name": "react child",
+    "description": "new child",
+    "parentId": "1763017117829",
+    "createdAt": "2025-11-13T06:59:21.687Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017176358,
+    "name": "child 2",
+    "description": "rewrwer",
+    "parentId": "1763017141094",
+    "createdAt": "2025-11-13T06:59:36.358Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017189186,
+    "name": "child 3",
+    "description": "32323",
+    "parentId": "1763017141094",
+    "createdAt": "2025-11-13T06:59:49.186Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017203878,
+    "name": "testing",
+    "description": "hghfghgf",
+    "parentId": "1763017189186",
+    "createdAt": "2025-11-13T07:00:03.878Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017232521,
+    "name": "test",
+    "description": "trtret",
+    "parentId": "1763017203878",
+    "createdAt": "2025-11-13T07:00:32.521Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017249355,
+    "name": "trtrt",
+    "description": "trtr",
+    "parentId": "1763017189186",
+    "createdAt": "2025-11-13T07:00:49.355Z",
+    "type": "group"
+  },
+  {
+    "id": 1763017265196,
+    "name": "trtrtrt",
+    "description": "trtrtrtr",
+    "parentId": "1763017249355",
+    "createdAt": "2025-11-13T07:01:05.196Z",
+    "type": "group"
+  },
+  {
+    "id": 1763026105235,
+    "name": "Test",
+    "description": "B",
+    "parentId": null,
+    "createdAt": "2025-11-13T09:28:25.235Z",
+    "type": "group"
+  },
+  {
+    "id": "1763026105235-1",
+    "name": "NYC-WS 001",
+    "ip": "192.168.1.10",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 11",
+    "status": "Online",
+    "parentId": 1763026105235,
+    "originalDeviceId": 1,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026105235-2",
+    "name": "NYC-WS 002",
+    "ip": "192.168.1.11",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 10",
+    "status": "Online",
+    "parentId": 1763026105235,
+    "originalDeviceId": 2,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026105235-3",
+    "name": "NYC-WS 003",
+    "ip": "192.168.1.12",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "macOS",
+    "status": "Offline",
+    "parentId": 1763026105235,
+    "originalDeviceId": 3,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026105235-5",
+    "name": "NYC-WS 004",
+    "ip": "192.168.1.13",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 11",
+    "status": "Online",
+    "parentId": 1763026105235,
+    "originalDeviceId": 5,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026105235-4",
+    "name": "NYC-SRV 001",
+    "ip": "192.168.1.50",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Ubuntu Server",
+    "status": "Online",
+    "parentId": 1763026105235,
+    "originalDeviceId": 4,
+    "type": "groupDevice"
+  },
+  {
+    "id": 1763026322773,
+    "name": "Jaipur",
+    "description": "",
+    "parentId": "1763026105235",
+    "createdAt": "2025-11-13T09:32:02.773Z",
+    "type": "group"
+  },
+  {
+    "id": 1763026408613,
+    "name": "fdsf",
+    "description": "dfsdfdsfsdfdsf",
+    "parentId": null,
+    "createdAt": "2025-11-13T09:33:28.613Z",
+    "type": "group"
+  },
+  {
+    "id": "1763026408613-4",
+    "name": "NYC-SRV 001",
+    "ip": "192.168.1.50",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Ubuntu Server",
+    "status": "Online",
+    "parentId": 1763026408613,
+    "originalDeviceId": 4,
+    "type": "groupDevice"
+  },
+  {
+    "id": 1763026538406,
+    "name": "Mumbai-VIP",
+    "description": "This group contrains the devices from managmement and manger  from mumbai location , and using laotp",
+    "parentId": null,
+    "createdAt": "2025-11-13T09:35:38.406Z",
+    "type": "group"
+  },
+  {
+    "id": "1763026538406-3",
+    "name": "NYC-WS 003",
+    "ip": "192.168.1.12",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "macOS",
+    "status": "Offline",
+    "parentId": 1763026538406,
+    "originalDeviceId": 3,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026538406-4",
+    "name": "NYC-SRV 001",
+    "ip": "192.168.1.50",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Ubuntu Server",
+    "status": "Online",
+    "parentId": 1763026538406,
+    "originalDeviceId": 4,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026538406-5",
+    "name": "NYC-WS 004",
+    "ip": "192.168.1.13",
+    "location": "New York",
+    "branch": "HQ",
+    "os": "Windows 11",
+    "status": "Online",
+    "parentId": 1763026538406,
+    "originalDeviceId": 5,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026538406-7",
+    "name": "NYC-SALES 002",
+    "ip": "192.168.2.11",
+    "location": "New York",
+    "branch": "Sales",
+    "os": "macOS",
+    "status": "Online",
+    "parentId": 1763026538406,
+    "originalDeviceId": 7,
+    "type": "groupDevice"
+  },
+  {
+    "id": "1763026538406-6",
+    "name": "NYC-SALES 001",
+    "ip": "192.168.2.10",
+    "location": "New York",
+    "branch": "Sales",
+    "os": "Windows 10",
+    "status": "Online",
+    "parentId": 1763026538406,
+    "originalDeviceId": 6,
+    "type": "groupDevice"
+  }
+]

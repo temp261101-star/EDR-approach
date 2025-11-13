@@ -52,6 +52,11 @@ import PolicyCreatorPage from "./NewPages/PolicyUi/PolicyCreatorPage.jsx";
 import JsonToUi from "./NewPages/PolicyUi/JsonToUi.jsx";
 import DynamicFormBuilder from "./NewPages/PolicyUi/DynamicFormBuilder.jsx";
 import GenericFormBuilder from "./NewPages/PolicyUi/GenericFormBuilder.jsx";
+import PolicySetupAll from "./NewPages/PolicyUi/PolicySetupAll.jsx";
+import PolicySetupFirewall from "./NewPages/PolicyUi/PolicySetupFirewall.jsx";
+import GroupsList from "./NewPages/Group/GroupsList.jsx";
+import CreateGroup from "./NewPages/Group/CreateGroup.jsx";
+import CustomTree from "./components/CustomTree.jsx";
 
 
 
@@ -137,9 +142,14 @@ function App() {
         <Route path="/dashboard/ViewBlacklistedapplication" element={<ViewBlacklistedapplication />} />
         <Route path="/dashboard/managewhitelisted" element={<ManageWhitelisted />} />
         <Route path="/dashboard/viewreport" element={<ViewReport />} />
+        <Route path="/dashboard/PolicySetupAll" element={<PolicySetupAll />} />
+        <Route path="/dashboard/PolicySetupFirewall" element={<PolicySetupFirewall />} />
         
 
-
+    {/* <Route path="/dashboard/view-group" element={<CustomTree />} /> */}
+    <Route path="/dashboard/GroupList" element={<GroupsList />} />
+        <Route path="/dashboard/CreateGroup" element={<CreateGroup />} />
+        <Route path="/dashboard/tree" element={<CustomTree />} />
 
       </Route>
     </Routes>

@@ -13,7 +13,6 @@ const AddBlacklistedapplication = () => {
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-
   console.log("showTable : ",showTable);
   
 
@@ -72,6 +71,9 @@ const AddBlacklistedapplication = () => {
   );
 };
 export default AddBlacklistedapplication;
+
+
+
 const AddBlacklistedapplicationForm = ({onSuccessAddBlacklist}) => {
   const formRef = useRef(null);
   const branchRef = useRef();

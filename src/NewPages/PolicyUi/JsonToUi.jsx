@@ -72,7 +72,7 @@ export default function JsonToUi() {
       },
       rules: {
         type: "rules",
-        rules: [], // this will grow
+        rules: [],
       },
 
       matrix: {
@@ -235,11 +235,7 @@ export default function JsonToUi() {
                         exit={{ opacity: 0, x: 8 }}
                         className="bg-white dark:bg-slate-800 rounded-xl shadow-lg border p-8"
                       >
-                        {/* {currentForm ? (
-                          <FormRenderer schema={currentForm} />
-                        ) : (
-                          <div className="text-sm text-gray-500">Coming Soon...</div>
-                        )} */}
+                     
 
                         {screen?.type === "form" && (
                           <FormRenderer schema={screen} />
@@ -265,7 +261,7 @@ export default function JsonToUi() {
           </div>
         </div>
       </div>
-    </div>
+    </div>     
   );
 }
 

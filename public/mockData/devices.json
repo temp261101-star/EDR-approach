@@ -1,0 +1,14 @@
+[
+  { "id": 1, "name": "NYC-WS 001", "ip": "192.168.1.10", "location": "New York", "branch": "HQ", "os": "Windows 11", "status": "Online" },
+  { "id": 2, "name": "NYC-WS 002", "ip": "192.168.1.11", "location": "New York", "branch": "HQ", "os": "Windows 10", "status": "Online" },
+  { "id": 3, "name": "NYC-WS 003", "ip": "192.168.1.12", "location": "New York", "branch": "HQ", "os": "macOS", "status": "Offline" },
+  { "id": 4, "name": "NYC-SRV 001", "ip": "192.168.1.50", "location": "New York", "branch": "HQ", "os": "Ubuntu Server", "status": "Online" },
+  { "id": 5, "name": "NYC-WS 004", "ip": "192.168.1.13", "location": "New York", "branch": "HQ", "os": "Windows 11", "status": "Online" },
+  { "id": 6, "name": "NYC-SALES 001", "ip": "192.168.2.10", "location": "New York", "branch": "Sales", "os": "Windows 10", "status": "Online" },
+  { "id": 7, "name": "NYC-SALES 002", "ip": "192.168.2.11", "location": "New York", "branch": "Sales", "os": "macOS", "status": "Online" },
+  { "id": 8, "name": "NYC-SALES 003", "ip": "192.168.2.12", "location": "New York", "branch": "Sales", "os": "Windows 11", "status": "Maintenance" },
+  { "id": 9, "name": "LON-WS 001", "ip": "192.168.10.10", "location": "London", "branch": "Main", "os": "Windows 11", "status": "Online" },
+  { "id": 10, "name": "LON-WS 002", "ip": "192.168.10.11", "location": "London", "branch": "Main", "os": "Ubuntu Desktop", "status": "Online" },
+  { "id": 11, "name": "LON-WS 003", "ip": "192.168.10.12", "location": "London", "branch": "Main", "os": "macOS", "status": "Online" }
+]
+

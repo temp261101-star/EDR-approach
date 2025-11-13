@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1762947198945,
+    "name": "abc ",
+    "description": "sdsdfsdfsdf",
+    "devices": [
+      {
+        "id": 1,
+        "name": "NYC-WS 001",
+        "ip": "192.168.1.10",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "Windows 11",
+        "status": "Online"
+      },
+      {
+        "id": 2,
+        "name": "NYC-WS 002",
+        "ip": "192.168.1.11",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "Windows 10",
+        "status": "Online"
+      },
+      {
+        "id": 3,
+        "name": "NYC-WS 003",
+        "ip": "192.168.1.12",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "macOS",
+        "status": "Offline"
+      },
+      {
+        "id": 4,
+        "name": "NYC-SRV 001",
+        "ip": "192.168.1.50",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "Ubuntu Server",
+        "status": "Online"
+      }
+    ],
+    "createdAt": "2025-11-12T11:33:18.945Z"
+  },
+  {
+    "id": 1762947719582,
+    "name": "Mansi",
+    "description": "check for testing ",
+    "devices": [
+      {
+        "id": 6,
+        "name": "NYC-SALES 001",
+        "ip": "192.168.2.10",
+        "location": "New York",
+        "branch": "Sales",
+        "os": "Windows 10",
+        "status": "Online"
+      },
+      {
+        "id": 7,
+        "name": "NYC-SALES 002",
+        "ip": "192.168.2.11",
+        "location": "New York",
+        "branch": "Sales",
+        "os": "macOS",
+        "status": "Online"
+      },
+      {
+        "id": 8,
+        "name": "NYC-SALES 003",
+        "ip": "192.168.2.12",
+        "location": "New York",
+        "branch": "Sales",
+        "os": "Windows 11",
+        "status": "Maintenance"
+      }
+    ],
+    "createdAt": "2025-11-12T11:41:59.582Z"
+  }
+ 
+]
