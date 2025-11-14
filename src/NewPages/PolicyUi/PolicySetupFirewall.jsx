@@ -669,14 +669,14 @@ const PolicySetupFirewall = ({ config }) => {
       </div>
 
       {/* Debug Panel */}
-      {/* <div className="mt-6 bg-gray-900 rounded-lg border border-gray-800 p-4 h-[calc(30vh-2rem)]">
+      <div className="mt-6 bg-gray-900 rounded-lg border border-gray-800 p-4 h-[calc(30vh-2rem)]">
         <h3 className="text-sm font-semibold text-gray-300 mb-2">
           For JSON Testing (this will be send to backend)
         </h3>
         <pre className="text-xs text-gray-400 overflow-auto h-[calc(100%-2rem)] bg-gray-950 rounded p-3">
           {JSON.stringify(formState, null, 2)}
         </pre>
-      </div> */}
+      </div>
     </div>
   </div>
 );
@@ -2495,3 +2495,8 @@ firewallRulesConfig: {
 };
 
 export default () => <PolicySetupFirewall config={dataForUi} />;
+
+
+
+
+

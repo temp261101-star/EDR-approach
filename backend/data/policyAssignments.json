@@ -1,0 +1,42 @@
+[
+  {
+    "deviceIP": "192.168.1.10",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763106726260",
+    "assignedAt": "2025-11-14T07:25:03.946Z",
+    "lastUpdated": "2025-11-14T07:57:05.970Z"
+  },
+  {
+    "deviceIP": "192.168.1.11",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763106726260",
+    "assignedAt": "2025-11-14T07:25:03.946Z",
+    "lastUpdated": "2025-11-14T07:57:05.970Z"
+  },
+  {
+    "deviceIP": "192.168.1.12",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763106726260",
+    "assignedAt": "2025-11-14T07:25:03.946Z",
+    "lastUpdated": "2025-11-14T07:57:05.970Z"
+  },
+  {
+    "deviceIP": "192.168.1.50",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763106726260",
+    "assignedAt": "2025-11-14T07:25:03.946Z",
+    "lastUpdated": "2025-11-14T07:57:05.970Z"
+  },
+  {
+    "deviceIP": "192.168.1.13",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763106726260",
+    "assignedAt": "2025-11-14T07:57:05.970Z",
+    "lastUpdated": "2025-11-14T07:57:05.970Z"
+  }
+]

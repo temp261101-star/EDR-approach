@@ -77,6 +77,40 @@
       }
     ],
     "createdAt": "2025-11-12T11:41:59.582Z"
+  },
+  {
+    "id": 1763033276111,
+    "name": "mansi",
+    "description": "sfdfdssfd",
+    "devices": [
+      {
+        "id": 1,
+        "name": "NYC-WS 001",
+        "ip": "192.168.1.10",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "Windows 11",
+        "status": "Online"
+      },
+      {
+        "id": 2,
+        "name": "NYC-WS 002",
+        "ip": "192.168.1.11",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "Windows 10",
+        "status": "Online"
+      },
+      {
+        "id": 3,
+        "name": "NYC-WS 003",
+        "ip": "192.168.1.12",
+        "location": "New York",
+        "branch": "HQ",
+        "os": "macOS",
+        "status": "Offline"
+      }
+    ],
+    "createdAt": "2025-11-13T11:27:56.111Z"
   }
- 
 ]

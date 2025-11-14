@@ -352,6 +352,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             >
               View Application
             </NavLink>
+            
 
             <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
               Manage Whitelisted
@@ -386,9 +387,9 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             onToggle={() => toggleAccordion("group")}
           >
        
-    <NavLink to="/dashboard/CreateGroup" icon={CircleSmall}>
+    {/* <NavLink to="/dashboard/CreateGroup" icon={CircleSmall}>
            Create Group
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/dashboard/GroupList" icon={CircleSmall}>
             View Groups
             </NavLink>

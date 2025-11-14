@@ -6,11 +6,19 @@ import {
   Trash,
   ChevronRight,
   ChevronDown,
+  X,
 } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import Table from "../../components/Table";
 export default function GroupsList() {
+
+  const [deleteModal, setDeleteModal] = useState({ show: false, node: null });
+const [editModal, setEditModal] = useState({ show: false, node: null, name: '', description: '' });
+const [addChildModal, setAddChildModal] = useState({ show: false, parent: null, name: '' });
+const [successModal, setSuccessModal] = useState({ show: false, message: '' });
+const [errorModal, setErrorModal] = useState({ show: false, message: '' });
+
   const [treeData, setTreeData] = useState([]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [contextMenu, setContextMenu] = useState({
@@ -20,29 +28,24 @@ export default function GroupsList() {
     node: null,
   });
   const [groupDevices, setGroupDevices] = useState([]);
+  const [showCreateParentModal, setShowCreateParentModal] = useState(false);
+  const [newParentGroup, setNewParentGroup] = useState({
+    name: "",
+    description: "",
+  });
   const menuRef = useRef(null);
 
-  const preventClickOnContextMenu = (e) => {
-    if (e.button === 2) {
-      // Right click
-      e.stopPropagation();
-    }
-  };
-
   const navigate = useNavigate();
-
   const API = "http://192.168.0.196:5000/api/groups";
 
-  // 🔄 Fetch all data and build tree structure
+  // Fetch all data and build tree structure
   const loadGroups = async () => {
     try {
-      // Get all records including groups and devices
       const res = await axios.get(
         "http://192.168.0.196:5000/api/all-groups-with-devices"
       );
       const allRecords = res.data;
 
-      // Build nested tree structure
       const buildTree = (parentId = null) => {
         return allRecords
           .filter(
@@ -64,7 +67,6 @@ export default function GroupsList() {
       const tree = buildTree();
       setTreeData(tree);
 
-      // If a node was selected, reload its devices
       if (selectedNode) {
         loadGroupDevices(selectedNode.id);
       }
@@ -107,7 +109,38 @@ export default function GroupsList() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  // Recursive TreeNode Component
+  // === NEW: Create Parent Group Function ===
+  const handleCreateParentGroup = async () => {
+    if (!newParentGroup.name.trim()) {
+      alert("Please provide a group name");
+      return;
+    }
+
+    const parentGroup = {
+      id: Date.now(),
+      name: newParentGroup.name.trim(),
+      description: newParentGroup.description.trim() || "",
+      parentId: null, // This makes it a parent/root group
+      createdAt: new Date().toISOString(),
+      type: "group",
+    };
+
+    try {
+      await axios.post(API, [parentGroup]);
+      await loadGroups();
+
+      // Reset form and close modal
+      setNewParentGroup({ name: "", description: "" });
+      setShowCreateParentModal(false);
+
+      alert(`Parent group "${parentGroup.name}" created successfully`);
+    } catch (err) {
+      console.error("Error creating parent group:", err);
+      alert("Failed to create parent group");
+    }
+  };
+
+  // TreeNode Component (keep your existing one)
   const TreeNode = ({ node, depth = 0 }) => {
     const [isExpanded, setIsExpanded] = useState(depth === 0);
     const isRightClick = useRef(false);
@@ -115,20 +148,16 @@ export default function GroupsList() {
     const handleContextMenu = (e) => {
       e.preventDefault();
       e.stopPropagation();
-      isRightClick.current = true; // Mark as right-click
+      isRightClick.current = true;
       setContextMenu({ visible: true, x: e.clientX, y: e.clientY, node });
 
-      // Reset flag after a short delay
       setTimeout(() => {
         isRightClick.current = false;
       }, 100);
     };
 
     const handleClick = (e) => {
-      // Ignore clicks if it was a right-click
-      if (isRightClick.current) {
-        return;
-      }
+      if (isRightClick.current) return;
       e.stopPropagation();
       setSelectedNode(node);
     };
@@ -142,7 +171,6 @@ export default function GroupsList() {
 
     return (
       <div className="relative">
-        {/* Node - Compact Version */}
         <div
           className={`group flex items-center cursor-pointer py-1.5 px-2 rounded-md transition-all text-sm ${
             selectedNode?.id === node.id
@@ -152,14 +180,10 @@ export default function GroupsList() {
           onClick={handleClick}
           onContextMenu={handleContextMenu}
           onMouseDown={(e) => {
-            // Prevent default behavior for right-click
-            if (e.button === 2) {
-              e.preventDefault();
-            }
+            if (e.button === 2) e.preventDefault();
           }}
           style={{ marginLeft: `${depth * 16}px` }}
         >
-          {/* Expand/Collapse Icon - Smaller */}
           {hasChildren ? (
             <button
               onClick={handleToggle}
@@ -175,10 +199,8 @@ export default function GroupsList() {
             <div className="w-4 mr-1 flex-shrink-0"></div>
           )}
 
-          {/* Group Icon - Smaller */}
           <Users className="w-3.5 h-3.5 mr-1.5 text-blue-400 flex-shrink-0" />
 
-          {/* Node Content - Compact */}
           <div className="flex-1 min-w-0 flex items-center gap-2">
             <div className="flex-1 min-w-0">
               <span className="font-medium text-gray-100 truncate block leading-tight">
@@ -198,7 +220,6 @@ export default function GroupsList() {
           </div>
         </div>
 
-        {/* Children - Tighter spacing */}
         {hasChildren && isExpanded && (
           <div className="ml-3 border-l border-gray-700/30 pl-1">
             {node.children.map((child) => (
@@ -210,6 +231,7 @@ export default function GroupsList() {
     );
   };
 
+  // Keep your existing functions (handleAddChildGroup, handleEditGroup, handleDeleteGroup, etc.)
   const handleAddChildGroup = async (parent) => {
     const name = prompt(`Enter name for child group under "${parent.name}":`);
     if (!name) return;
@@ -217,31 +239,42 @@ export default function GroupsList() {
     const description = prompt("Enter description (optional):", "");
 
     try {
-      // Use the dedicated child group endpoint
-      const response = await axios.post(
+      await axios.post(
         `http://192.168.0.196:5000/api/groups/${parent.id}/children`,
-        {
-          name,
-          description: description || "",
-        }
+        { name, description: description || "" }
       );
-
       await loadGroups();
-
-      // Show success message
       alert(
         `Child group "${name}" created successfully under "${parent.name}"`
       );
     } catch (err) {
       console.error("Error creating child group:", err);
-
-      // Show specific error message
-      if (err.response && err.response.data && err.response.data.error) {
+      if (err.response?.data?.error) {
         alert(`Failed to create child group: ${err.response.data.error}`);
       } else {
         alert("Failed to create child group. Please try again.");
       }
     }
+  };
+
+  const handleManageGroup = (node) => {
+    navigate("/dashboard/CreateGroup", {
+      state: {
+        isManageMode: true,
+        groupId: node.id,
+        groupName: node.name,
+        groupDescription: node.description || "",
+      },
+    });
+  };
+
+  const handleAddPolicyToGroup = (node) => {
+    navigate(`/dashboard/group-policy/${node.id}`, {
+      state: {
+        groupName: node.name,
+        groupId: node.id,
+      },
+    });
   };
 
   const handleEditGroup = async (node) => {
@@ -274,7 +307,6 @@ export default function GroupsList() {
         await axios.delete(`${API}/${node.id}`);
         await loadGroups();
 
-        // Clear selection if deleted node was selected
         if (selectedNode?.id === node.id) {
           setSelectedNode(null);
           setGroupDevices([]);
@@ -288,51 +320,51 @@ export default function GroupsList() {
     }
   };
 
-  const handleAddRootGroup = async () => {
-    const name = prompt("Enter name for new root group:");
-    if (!name) return;
+  const getContextMenuOptions = (node) => {
+    const isParentGroup = node.parentId === null; // Parent groups have null parentId
+    const isChildGroup = node.parentId !== null; // Child groups have a parentId
 
-    const description = prompt("Enter description (optional):", "");
+    const options = [
+      // Only show "Manage Group" for child groups
+      ...(isParentGroup
+        ? []
+        : [
+            {
+              label: "Manage Group",
+              icon: <Edit size={14} />,
+              onClick: () => handleManageGroup(node),
+            },
+          ]),
+      {
+        label: "Add Policy to Group",
+        icon: <Plus size={14} />,
+        onClick: () => handleAddPolicyToGroup(node),
+      },
+      // Only show "Add Child Group" for parent groups
+      ...(isChildGroup
+        ? []
+        : [
+            {
+              label: "Add Child Group",
+              icon: <Plus size={14} />,
+              onClick: () => handleAddChildGroup(node),
+            },
+          ]),
+      {
+        label: "Edit Group",
+        icon: <Edit size={14} />,
+        onClick: () => handleEditGroup(node),
+      },
+      {
+        label: "Delete Group",
+        icon: <Trash size={14} />,
+        onClick: () => handleDeleteGroup(node),
+        destructive: true,
+      },
+    ];
 
-    const rootGroup = {
-      id: Date.now(),
-      name,
-      description: description || "",
-      parentId: null,
-      createdAt: new Date().toISOString(),
-      type: "group",
-    };
-
-    try {
-      await axios.post(API, [rootGroup]);
-      await loadGroups();
-      alert(`Root group "${name}" created successfully`);
-    } catch (err) {
-      console.error("Error creating root group:", err);
-      alert("Failed to create root group");
-    }
+    return options;
   };
-
-  // Context menu options
-  const getContextMenuOptions = (node) => [
-    {
-      label: "Add Child Group",
-      icon: <Plus size={14} />,
-      onClick: () => handleAddChildGroup(node),
-    },
-    {
-      label: "Edit Group",
-      icon: <Edit size={14} />,
-      onClick: () => handleEditGroup(node),
-    },
-    {
-      label: "Delete Group",
-      icon: <Trash size={14} />,
-      onClick: () => handleDeleteGroup(node),
-      destructive: true,
-    },
-  ];
-
   return (
     <div className="flex bg-gray-950 text-gray-100 min-h-screen">
       {/* Left - Tree Panel */}
@@ -340,14 +372,14 @@ export default function GroupsList() {
         <div className="flex items-center justify-between mb-3 sticky top-0 bg-gray-950 pb-2 border-b border-gray-800/50 z-10">
           <h2 className="text-base font-semibold">Group Hierarchy</h2>
           <div className="flex items-center gap-2">
+            {/* Updated: Open modal instead of navigating */}
             <button
-              onClick={() => navigate("/dashboard/CreateGroup")}
+              onClick={() => setShowCreateParentModal(true)}
               className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-md transition-colors text-xs font-medium"
             >
               <Plus size={14} />
-              Create Group
+              Create Parent Group
             </button>
-           
           </div>
         </div>
 
@@ -362,27 +394,26 @@ export default function GroupsList() {
             <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
             <p>No groups found</p>
             <button
-              onClick={handleAddRootGroup}
-              className="mt-3 text-blue-400 hover:text-blue-300 text-sm underline"
+              onClick={() => setShowCreateParentModal(true)}
+              className="mt-5 text-blue-400 hover:text-blue-300 text-sm underline"
             >
-              Create your first group
+              Create your first parent group
             </button>
           </div>
         )}
       </div>
 
-      {/* Right - Details Panel */}
+      {/* Right - Details Panel (keep your existing details panel) */}
       <div className="flex-1 p-6 overflow-y-auto">
         {selectedNode ? (
           <div className="max-w-4xl">
-            {/* Group Header */}
-            <div className="bg-gray-900 rounded-xl p-6 mb-6 border border-gray-800">
+            <div className="bg-gray-900 rounded-xl p-6 mb-5 border border-gray-800">
               <div className="flex items-start justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold text-white mb-2">
+                  <h1 className="text-2xl font-bold text-white">
                     {selectedNode.name}
                   </h1>
-                  <p className="text-gray-400 mb-4">
+                  <p className="text-gray-400 mb-1">
                     {selectedNode.description || "No description provided"}
                   </p>
                 </div>
@@ -404,83 +435,45 @@ export default function GroupsList() {
                     {new Date(selectedNode.createdAt).toLocaleDateString()}
                   </p>
                 </div>
-                <div>
-                  <span className="text-gray-500">Subgroups:</span>
-                  <p className="text-gray-300">
-                    {selectedNode.children ? selectedNode.children.length : 0}
-                  </p>
-                </div>
-                <div>
-                  <span className="text-gray-500">Devices:</span>
-                  <p className="text-gray-300">{groupDevices.length}</p>
-                </div>
+
+                {selectedNode.parentId ? (
+                  <div>
+                    <span className="text-gray-500">Devices:</span>
+                    <p className="text-gray-300">{groupDevices.length}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <span className="text-gray-500">Subgroups:</span>
+                    <p className="text-gray-300">
+                      {selectedNode.children ? selectedNode.children.length : 0}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Devices Section */}
-            <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <Users size={20} />
-                Devices in Group ({groupDevices.length})
-              </h2>
+            {selectedNode.parentId && (
+              <div className="bg-gray-900 rounded-xl p-2 border border-gray-800">
+                <h2 className="text-xl font-semibold flex items-center gap-2">
+                  <Users size={20} />
+                  Devices in Group ({groupDevices.length})
+                </h2>
 
-              {groupDevices.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {groupDevices.map((device) => (
-                    <div
-                      key={device.id}
-                      className="bg-gray-800/50 p-4 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors"
-                    >
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-medium text-white truncate">
-                          {device.name}
-                        </h3>
-                        <span
-                          className={`px-2 py-1 text-xs rounded-full ${
-                            device.status === "Online"
-                              ? "bg-green-500/20 text-green-400 border border-green-500/30"
-                              : device.status === "Offline"
-                              ? "bg-red-500/20 text-red-400 border border-red-500/30"
-                              : "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30"
-                          }`}
-                        >
-                          {device.status}
-                        </span>
-                      </div>
-                      <div className="space-y-1 text-sm text-gray-400">
-                        <p>
-                          IP:{" "}
-                          <span className="text-gray-300 font-mono">
-                            {device.ip}
-                          </span>
-                        </p>
-                        <p>
-                          Location:{" "}
-                          <span className="text-gray-300">
-                            {device.location}
-                          </span>
-                        </p>
-                        <p>
-                          OS: <span className="text-gray-300">{device.os}</span>
-                        </p>
-                        <p>
-                          Branch:{" "}
-                          <span className="text-gray-300">{device.branch}</span>
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-gray-500">
-                  <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>No devices in this group</p>
-                  <p className="text-sm mt-1">
-                    Add devices to this group from the Create Group page
-                  </p>
-                </div>
-              )}
-            </div>
+                {groupDevices.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4">
+                    <Table showCheckboxes={false} data={groupDevices} />
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-gray-500">
+                    <Users className="w-12 h-12 mx-auto mb-3 opacity-50" />
+                    <p>No devices in this group</p>
+                    <p className="text-sm mt-1">
+                      Add devices to this group from the Create Group page
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-center py-16 text-gray-500">
@@ -491,7 +484,77 @@ export default function GroupsList() {
         )}
       </div>
 
-      {/* Context Menu */}
+      {/* === NEW: Create Parent Group Modal === */}
+      {showCreateParentModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-900 rounded-xl p-6 w-full max-w-md border border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Create Parent Group</h3>
+              <button
+                onClick={() => setShowCreateParentModal(false)}
+                className="text-gray-400 hover:text-gray-200 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm mb-1 text-gray-300">
+                  Group Name *
+                </label>
+                <input
+                  type="text"
+                  value={newParentGroup.name}
+                  onChange={(e) =>
+                    setNewParentGroup({
+                      ...newParentGroup,
+                      name: e.target.value,
+                    })
+                  }
+                  placeholder="Enter group name"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-600 focus:border-transparent"
+                  autoFocus
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1 text-gray-300">
+                  Description
+                </label>
+                <textarea
+                  value={newParentGroup.description}
+                  onChange={(e) =>
+                    setNewParentGroup({
+                      ...newParentGroup,
+                      description: e.target.value,
+                    })
+                  }
+                  placeholder="Enter group description (optional)"
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-600 focus:border-transparent h-20 resize-none"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                onClick={() => setShowCreateParentModal(false)}
+                className="px-4 py-2 rounded-lg bg-gray-800 text-gray-300 hover:bg-gray-700 transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleCreateParentGroup}
+                className="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-all"
+              >
+                Create Parent Group
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Context Menu (keep your existing context menu) */}
       {contextMenu.visible && (
         <div
           ref={menuRef}

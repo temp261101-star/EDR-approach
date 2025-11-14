@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors()); // allow your frontend origin in production restrict it
+app.use(cors()); 
 app.use(bodyParser.json());
 
 // helpers to read/write JSON files
@@ -67,6 +67,8 @@ app.get("/api/groups/:id", async (req, res) => {
 app.post("/api/groups", async (req, res) => {
   try {
     const payload = req.body;
+    console.log("test");
+    
     // minimal validation
     if (!payload || !payload.name) {
       return res.status(400).json({ error: "Group name is required" });

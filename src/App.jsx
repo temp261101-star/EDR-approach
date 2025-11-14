@@ -48,6 +48,9 @@ import PolicySetupFirewall from "./NewPages/PolicyUi/PolicySetupFirewall.jsx";
 import GroupsList from "./NewPages/Group/GroupsList.jsx";
 import CreateGroup from "./NewPages/Group/CreateGroup.jsx";
 import CustomTree from "./components/CustomTree.jsx";
+import AssignPolicy from "./NewPages/Group/AssignPolicy.jsx";
+import ManageGroup from "./NewPages/Group/ManageGroup.jsx";
+import GroupPolicy from "./NewPages/Group/GroupPolicy.jsx";
 
 
 
@@ -142,6 +145,9 @@ function App() {
     <Route path="/dashboard/GroupList" element={<GroupsList />} />
         <Route path="/dashboard/CreateGroup" element={<CreateGroup />} />
         <Route path="/dashboard/tree" element={<CustomTree />} />
+        <Route path="/dashboard/AssignPolicy" element={<AssignPolicy />} />
+        <Route path="/dashboard/manage-group/:groupId" element={<ManageGroup />} />
+        <Route path="/dashboard/group-policy/:groupId" element={<GroupPolicy />} />
 
       </Route>
     </Routes>

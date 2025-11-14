@@ -42,6 +42,17 @@ export default function SummaryDashboard() {
   const [openModal, setOpenModal] = useState(false);
   const [selectedKpi, setSelectedKpi] = useState(null);
 
+
+  const handleEdit = (row) => {
+    console.log("Edit clicked for:", row);
+    // Add your edit logic here
+  };
+
+  const handleDelete = (row) => {
+    console.log("Delete clicked for:", row);
+    // Add your delete logic here
+  };
+
   const formatLabel = (key) => {
     return key
       .split("_")
@@ -250,11 +261,16 @@ export default function SummaryDashboard() {
         endpoint="dashboard/recentFileData"
         dataPath="data.recentFileData"
       />
-      <Table
+    <Table
         tableTitle="Threat Detection Details"
         showCheckboxes={false}
         endpoint="dashboard/detectionList"
         dataPath="data.detectionList"
+        showActions={true}
+        actions={[
+          { label: "Edit", onClick: handleEdit, variant: "primary" },
+          { label: "Delete", onClick: handleDelete, variant: "danger" },
+        ]}
       />
       {/* <Table tableTitle={"Threat Detection Details"} showCheckboxes={false} /> */}
     </div>
