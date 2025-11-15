@@ -181,5 +181,40 @@
     "parentId": "1763212100036",
     "createdAt": "2025-11-15T13:08:10.540Z",
     "type": "group"
+  },
+  {
+    "id": "1763212079624-2",
+    "originalDeviceId": 2,
+    "parentId": "1763212079624",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T13:08:41.194Z"
+  },
+  {
+    "id": "1763212079624-6",
+    "originalDeviceId": 6,
+    "parentId": "1763212079624",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T13:08:41.208Z"
+  },
+  {
+    "id": "1763212079624-3",
+    "originalDeviceId": 3,
+    "parentId": "1763212079624",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T13:09:40.395Z"
+  },
+  {
+    "id": "1763212079624-4",
+    "originalDeviceId": 4,
+    "parentId": "1763212079624",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T13:09:40.403Z"
+  },
+  {
+    "id": "1763212079624-5",
+    "originalDeviceId": 5,
+    "parentId": "1763212079624",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T13:09:40.413Z"
   }
 ]
