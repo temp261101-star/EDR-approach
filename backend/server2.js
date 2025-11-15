@@ -250,7 +250,7 @@ app.get("/api/groups/:id/devices", async (req, res) => {
   });
   const cleanedGroupDevices = groupDevices.map(({ originalDeviceId, parentId,type, ...rest }) => rest);
 
-    console.log("groupDevices",cleanedGroupDevices);
+    // console.log("groupDevices",cleanedGroupDevices);
 
   res.json(cleanedGroupDevices);
 });

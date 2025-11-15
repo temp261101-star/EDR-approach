@@ -62,5 +62,29 @@
     "groupId": "1763122909321",
     "assignedAt": "2025-11-15T04:16:53.477Z",
     "lastUpdated": "2025-11-15T04:17:01.214Z"
+  },
+  {
+    "deviceIP": "192.168.10.10",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763198330085",
+    "assignedAt": "2025-11-15T09:19:33.015Z",
+    "lastUpdated": "2025-11-15T09:19:33.015Z"
+  },
+  {
+    "deviceIP": "192.168.10.11",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763198330085",
+    "assignedAt": "2025-11-15T09:19:33.015Z",
+    "lastUpdated": "2025-11-15T09:19:33.015Z"
+  },
+  {
+    "deviceIP": "192.168.10.12",
+    "policyId": "1",
+    "policyName": "Security Policy",
+    "groupId": "1763198330085",
+    "assignedAt": "2025-11-15T09:19:33.015Z",
+    "lastUpdated": "2025-11-15T09:19:33.015Z"
   }
 ]

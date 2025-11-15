@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, Trash2, ChevronDown } from "lucide-react";
 import GenericPopupModal from "../../components/MODAL/GenericPopupModal";
 import { useWebSocket } from "../../lib/useWebSocket";
@@ -12,10 +12,7 @@ const PolicySetupFirewall = ({ config }) => {
     { id: 1, name: "Policy 1", data: {} },
     // to do ->> ad new policies using btn
   ]);
-  // const [editMode, setEditMode] = useState(false);
-  // const [editingId, setEditingId] = useState(null);
 
-  // WebSocket connection
 
   const initializeFormWithDefaults = (config) => {
     
@@ -610,7 +607,7 @@ const PolicySetupFirewall = ({ config }) => {
     {/* <div className="max-w-6xl mx-auto "> */}
     <div className="w-full max-w-full mx-auto px-4">
       {/* <div className="lg:flex  h-[70vh]   overflow-hidden"> */}
-   <div className="lg:flex h-[70vh] overflow-hidden w-full">
+   <div className="lg:flex h-[85vh] overflow-hidden w-full">
         <div className="lg:w-64 w-full bg-gray-900 border-r border-gray-800 p-4 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-100 mb-4">
             Policies
@@ -669,14 +666,14 @@ const PolicySetupFirewall = ({ config }) => {
       </div>
 
       {/* Debug Panel */}
-      <div className="mt-6 bg-gray-900 rounded-lg border border-gray-800 p-4 h-[calc(30vh-2rem)]">
+      {/* <div className="mt-6 bg-gray-900 rounded-lg border border-gray-800 p-4 h-[calc(30vh-2rem)]">
         <h3 className="text-sm font-semibold text-gray-300 mb-2">
           For JSON Testing (this will be send to backend)
         </h3>
         <pre className="text-xs text-gray-400 overflow-auto h-[calc(100%-2rem)] bg-gray-950 rounded p-3">
           {JSON.stringify(formState, null, 2)}
         </pre>
-      </div>
+      </div> */}
     </div>
   </div>
 );
@@ -1732,6 +1729,8 @@ const FirewallRulesSection = ({ formData, setFormData, config }) => {
                 </tr>
               )}
             </tbody>
+
+           
           </table>
         </div>
 
@@ -1794,99 +1793,178 @@ const FirewallRulesSection = ({ formData, setFormData, config }) => {
 const MultiStepFormModal = ({ isOpen, onClose, screenConfig, formData, setFormData, onSubmit }) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [localFormData, setLocalFormData] = useState(formData || {});
-
+  const [fullPathMessage, setFullPathMessage] = useState('');
+ const [portSummary, setPortSummary] = useState('');
   const steps = screenConfig?.steps || [];
   const currentStepConfig = steps[currentStep];
 
-  // Custom form field renderer for the modal with consistent styling
+   useEffect(() => {
+    if (localFormData.applicationType === 'specific' && localFormData.applicationPath) {
+      setFullPathMessage(`Full Path: ${localFormData.applicationPath}`);
+    } else {
+      setFullPathMessage('');
+    }
+  }, [localFormData.applicationType, localFormData.applicationPath]);
+
+  // Update local form data when prop changes
+  useEffect(() => {
+    setLocalFormData(formData || {});
+  }, [formData]);
+ // Port Summary useEffect
+useEffect(() => {
+  if (currentStepConfig?.title === "Local TCP/UDP Ports") {
+    let summary = '';
+    
+    if (localFormData.portType === 'all') {
+      summary = 'All ports will be allowed';
+    } else if (localFormData.portType === 'specific' && localFormData.specificPorts) {
+      summary = `Specific ports: ${localFormData.specificPorts}`;
+    } else if (localFormData.portType === 'range' && localFormData.startPort && localFormData.endPort) {
+      summary = `Port range: ${localFormData.startPort} - ${localFormData.endPort}`;
+    } else if (localFormData.portType === 'specific') {
+      summary = 'Please specify port numbers';
+    } else if (localFormData.portType === 'range') {
+      summary = 'Please specify start and end ports';
+    } else {
+      summary = 'All ports will be allowed';
+    }
+    
+    setPortSummary(summary);
+  }
+}, [localFormData.portType, localFormData.specificPorts, localFormData.startPort, localFormData.endPort, currentStepConfig]);
   const renderField = (field) => {
     const value = localFormData[field.name] || field.defaultValue || '';
 
-    const handleChange = (newValue) => {
-      setLocalFormData(prev => ({
-        ...prev,
-        [field.name]: newValue
-      }));
+  const handleChange = (newValue) => {
+    const updatedData = {
+      ...localFormData,
+      [field.name]: newValue
     };
+    
+    // Clear dependent fields when radio selection changes
+    if (field.name === 'applicationType' && newValue === 'all') {
+      updatedData.applicationPath = '';
+    }
+    
+    if (field.name === 'portType') {
+      // Clear both port fields when switching types
+      updatedData.specificPorts = '';
+      updatedData.startPort = '';
+      updatedData.endPort = '';
+    }
+    
+    setLocalFormData(updatedData);
+  };
 
-    // Use the same styling as GenericFormFields
-    const inputClass = "w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-1 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
-    const labelClass = "block text-sm font-medium text-gray-200 mb-1";
+  const inputClass = "w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-1 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all";
+  const labelClass = "block text-sm font-medium text-gray-200 mb-1";
+
+  // Check if field should be disabled
+  let isDisabled = false;
+  let disabledReason = "";
+  
+  if (field.name === 'applicationPath') {
+    isDisabled = localFormData.applicationType !== 'specific';
+    disabledReason = "(Select 'Specific Application Path' to enable)";
+  }
+  
+  if (field.name === 'specificPorts') {
+    isDisabled = localFormData.portType !== 'specific';
+    disabledReason = "(Select 'Specific Port(s)' to enable)";
+  }
+  
+  if (field.name === 'startPort' || field.name === 'endPort') {
+    isDisabled = localFormData.portType !== 'range';
+    disabledReason = "(Select 'Port Range' to enable)";
+  }
 
     switch (field.type) {
       case "text":
       case "number":
-      case "email":
-        return (
-          <div key={field.name}>
-            <label className={labelClass}>{field.label}</label>
-            <input
-              type={field.type}
-              value={value || ''}
-              onChange={(e) => handleChange(e.target.value)}
-              placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
-              className={inputClass}
-            />
-          </div>
-        );
+     case "email":
+      return (
+        <div key={field.name}>
+          <label className={`${labelClass} ${isDisabled ? 'text-gray-500' : ''}`}>
+            {field.label}
+            {isDisabled && <span className="text-gray-400 text-xs ml-2">(Select "Specific Application Path" to enable)</span>}
+          </label>
+          <input
+            type={field.type}
+            value={value || ''}
+            onChange={(e) => handleChange(e.target.value)}
+            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+            className={`${inputClass} ${isDisabled ? 'opacity-50 cursor-not-allowed bg-gray-800/30' : ''}`}
+            disabled={isDisabled}
+          />
+        </div>
+      );
 
-      case "textarea":
-        return (
-          <div key={field.name}>
-            <label className={labelClass}>{field.label}</label>
-            <textarea
-              value={value || ''}
-              onChange={(e) => handleChange(e.target.value)}
-              rows={field.rows || 4}
-              placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
-              className={`${inputClass} resize-vertical`}
-            />
-          </div>
-        );
+    case "textarea":
+      return (
+        <div key={field.name}>
+          <label className={`${labelClass} ${isDisabled ? 'text-gray-500' : ''}`}>
+            {field.label}
+            {isDisabled && <span className="text-gray-400 text-xs ml-2">(Select "Specific Application Path" to enable)</span>}
+          </label>
+          <textarea
+            value={value || ''}
+            onChange={(e) => handleChange(e.target.value)}
+            rows={field.rows || 4}
+            placeholder={field.placeholder || `Enter ${field.label.toLowerCase()}`}
+            className={`${inputClass} resize-vertical ${isDisabled ? 'opacity-50 cursor-not-allowed bg-gray-800/30' : ''}`}
+            disabled={isDisabled}
+          />
+        </div>
+      );
 
-      case "select":
-        return (
-          <div key={field.name}>
-            <label className={labelClass}>{field.label}</label>
-            <select
-              value={value || ''}
-              onChange={(e) => handleChange(e.target.value)}
-              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-2 py-1 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer"
-            >
-              <option value="">Select {field.label}</option>
-              {field.options?.map((opt) => (
-                <option key={opt.value || opt} value={opt.value || opt}>
-                  {opt.label || opt}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
+    case "select":
+      return (
+        <div key={field.name}>
+          <label className={`${labelClass} ${isDisabled ? 'text-gray-500' : ''}`}>
+            {field.label}
+            {isDisabled && <span className="text-gray-400 text-xs ml-2">(Select "Specific Application Path" to enable)</span>}
+          </label>
+          <select
+            value={value || ''}
+            onChange={(e) => handleChange(e.target.value)}
+            className={`w-full bg-gray-800/50 border border-gray-600 rounded-lg px-2 py-1 text-sm text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent cursor-pointer ${isDisabled ? 'opacity-50 cursor-not-allowed bg-gray-800/30' : ''}`}
+            disabled={isDisabled}
+          >
+            <option value="">Select {field.label}</option>
+            {field.options?.map((opt) => (
+              <option key={opt.value || opt} value={opt.value || opt}>
+                {opt.label || opt}
+              </option>
+            ))}
+          </select>
+        </div>
+      );
 
-      case "radio":
-        return (
-          <div key={field.name}>
-            <label className={labelClass}>{field.label}</label>
-            <div className="space-y-1">
-              {field.options?.map((opt) => {
-                const val = opt.value || opt;
-                const label = opt.label || opt;
-                return (
-                  <label key={val} className="flex items-center gap-2 text-sm text-gray-300">
-                    <input
-                      type="radio"
-                      name={field.name}
-                      checked={value === val}
-                      onChange={() => handleChange(val)}
-                      className="w-4 h-4 border-gray-600 bg-gray-800 text-blue-500 focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span>{label}</span>
-                  </label>
-                );
-              })}
-            </div>
+    case "radio":
+      return (
+        <div key={field.name}>
+          <label className={labelClass}>{field.label}</label>
+          <div className="space-y-1">
+            {field.options?.map((opt) => {
+              const val = opt.value || opt;
+              const label = opt.label || opt;
+              return (
+                <label key={val} className="flex items-center gap-2 text-sm text-gray-300">
+                  <input
+                    type="radio"
+                    name={field.name}
+                    checked={value === val}
+                    onChange={() => handleChange(val)}
+                    className="w-4 h-4 border-gray-600 bg-gray-800 text-blue-500 focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span>{label}</span>
+                </label>
+              );
+            })}
           </div>
-        );
+        </div>
+      );
+
 
       case "checkbox":
         return (
@@ -1915,15 +1993,17 @@ const MultiStepFormModal = ({ isOpen, onClose, screenConfig, formData, setFormDa
     }
   };
 
+    
   const handleNext = () => {
     if (currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Last step - submit
       onSubmit(localFormData);
       onClose();
       setCurrentStep(0);
       setLocalFormData({});
+      setFullPathMessage('');
+      setPortSummary('');
     }
   };
 
@@ -1941,7 +2021,7 @@ const MultiStepFormModal = ({ isOpen, onClose, screenConfig, formData, setFormDa
         {/* Step Progress */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-semibold text-gray-100">
-            {currentStepConfig?.title || `Step ${currentStep + 1}`}rerer
+            {currentStepConfig?.title || `Step ${currentStep + 1}`} rerer
           </h2>
           <span className="text-sm text-gray-400">
             Step {currentStep + 1} of {steps.length}
@@ -1968,6 +2048,7 @@ const MultiStepFormModal = ({ isOpen, onClose, screenConfig, formData, setFormDa
               </div>
             ))}
           </div>
+               {/* {renderPathSummary()} */}
         </div>
 
         {/* Navigation Buttons */}
@@ -2421,17 +2502,64 @@ firewallRulesConfig: {
               ],
               defaultValue: "TCP"
             },
-            {
-              name: "Application Allow",
-              label: "Enable Rule Immediately",
-              type: "radio",
-               options: [
-                { label: "All", value: "All Application that meet specific condition" },
-                { label: "specific", value: "Specific application Path" },],
-              defaultValue: true
-            }
+           {
+      name: "applicationType",
+      label: "Application Allow",
+      type: "radio",
+      options: [
+        { label: "All Applications", value: "all" },
+        { label: "Specific Application Path", value: "specific" },
+      ],
+      defaultValue: "all"
+    },
+    //  this is conditional field for multistep form
+    {
+      name: "applicationPath",
+      label: "Application Path",
+      type: "text",
+      placeholder: "e.g., C:\\Program Files\\App\\app.exe",
+      required: false,
+    }
           ]
         },
+        {
+  title: "Local TCP/UDP Ports",
+  fields: [
+    {
+      name: "portType",
+      label: "Local TCP/UDP Ports",
+      type: "radio",
+      options: [
+        { label: "All Ports", value: "all" },
+        { label: "Specific Port(s)", value: "specific" },
+        { label: "Port Range", value: "range" }
+      ],
+      defaultValue: "all"
+    },
+    {
+      name: "specificPorts",
+      label: "Specific Port(s):",
+      type: "text",
+      placeholder: "e.g., 80, 443, 8080",
+      description: "Use commas between to enter multiple ports.",
+      required: false,
+    },
+    {
+      name: "startPort",
+      label: "Start Port:",
+      type: "text",
+      placeholder: "e.g., 1000",
+      required: false,
+    },
+    {
+      name: "endPort",
+      label: "End Port:",
+      type: "text",
+      placeholder: "e.g., 2000",       
+      required: false,
+    }
+  ]
+},
         {
           title: "Directions",
           fields: [

@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
+import TopbarCard from "../components/Cards/TopbarCard";
 
 export default function DashboardLayout({ setIsAuthenticated }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -90,9 +91,28 @@ export default function DashboardLayout({ setIsAuthenticated }) {
     }
   }, [location.pathname]);
 
-  const toggleAccordion = (key) => {
-    setOpenAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
+const toggleAccordion = (key) => {
+  setOpenAccordions((prev) => {
+    const newState = { ...prev };
+
+    // Define child-level accordions (nested under Controls)
+    const childKeys = ["Application", "usb", "website", "blacklisting"];
+
+    // If it's a child accordion, close other children
+    if (childKeys.includes(key)) {
+      childKeys.forEach((childKey) => {
+        if (childKey !== key) {
+          newState[childKey] = false;
+        }
+      });
+    }
+
+    // Toggle the clicked accordion
+    newState[key] = !prev[key];
+
+    return newState;
+  });
+};
   // This function closes siblings at the SAME level only
   const toggleParentAccordion = (key) => {
     setOpenAccordions((prev) => {
@@ -485,8 +505,11 @@ export default function DashboardLayout({ setIsAuthenticated }) {
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 ">
-        <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-4 py-2 flex items-center justify-between border-b border-gray-700 sticky top-0 z-10">
-          <div className="flex items-center gap-2">
+      <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-4 py-2.5 flex items-center justify-between border-b border-gray-700  top-0 z-10 relative">
+          {/* Stats Card - Now inside header with same height */}
+          <TopbarCard />
+
+          <div className="flex items-center gap-2 relative z-20">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
               className="md:hidden p-1 rounded-md hover:bg-gray-700 text-gray-400 hover:text-gray-200"
@@ -495,7 +518,7 @@ export default function DashboardLayout({ setIsAuthenticated }) {
             </button>
           </div>
 
-          <div className="flex items-center gap-2 mt-0.5">
+          <div className="flex items-center gap-2 relative z-20">
             <div className="flex items-center gap-1 bg-green-900/30 text-green-400 px-2 py-1 rounded-full text-xs border border-green-700/50">
               <div className="w-1 h-1 bg-green-400 rounded-full animate-pulse"></div>
               System Online

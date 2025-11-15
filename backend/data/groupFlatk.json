@@ -57,5 +57,129 @@
     "parentId": "1763180266745",
     "type": "groupDevice",
     "createdAt": "2025-11-15T04:25:12.912Z"
+  },
+  {
+    "id": "1763122909321-3",
+    "originalDeviceId": 3,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.726Z"
+  },
+  {
+    "id": "1763122909321-4",
+    "originalDeviceId": 4,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.743Z"
+  },
+  {
+    "id": "1763122909321-5",
+    "originalDeviceId": 5,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.748Z"
+  },
+  {
+    "id": "1763122909321-6",
+    "originalDeviceId": 6,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.757Z"
+  },
+  {
+    "id": "1763122909321-7",
+    "originalDeviceId": 7,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.763Z"
+  },
+  {
+    "id": "1763122909321-8",
+    "originalDeviceId": 8,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.769Z"
+  },
+  {
+    "id": "1763122909321-9",
+    "originalDeviceId": 9,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.777Z"
+  },
+  {
+    "id": "1763122909321-10",
+    "originalDeviceId": 10,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.783Z"
+  },
+  {
+    "id": "1763122909321-11",
+    "originalDeviceId": 11,
+    "parentId": "1763122909321",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T07:29:46.790Z"
+  },
+  {
+    "id": 1763198302654,
+    "name": "Vikas",
+    "description": "Test",
+    "parentId": null,
+    "createdAt": "2025-11-15T09:18:22.654Z",
+    "type": "group"
+  },
+  {
+    "id": 1763198330085,
+    "name": "Mumbai",
+    "description": "All mumbai location",
+    "parentId": "1763198302654",
+    "createdAt": "2025-11-15T09:18:50.085Z",
+    "type": "group"
+  },
+  {
+    "id": "1763198330085-9",
+    "originalDeviceId": 9,
+    "parentId": "1763198330085",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T09:19:12.689Z"
+  },
+  {
+    "id": "1763198330085-10",
+    "originalDeviceId": 10,
+    "parentId": "1763198330085",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T09:19:12.702Z"
+  },
+  {
+    "id": "1763198330085-11",
+    "originalDeviceId": 11,
+    "parentId": "1763198330085",
+    "type": "groupDevice",
+    "createdAt": "2025-11-15T09:19:12.713Z"
+  },
+  {
+    "id": 1763212100036,
+    "name": "Velox",
+    "description": "Main",
+    "parentId": null,
+    "createdAt": "2025-11-15T13:08:20.036Z",
+    "type": "group"
+  },
+  {
+    "id": 1763212079624,
+    "name": "Vashi",
+    "description": "Vashi location",
+    "parentId": "1763212100036",
+    "createdAt": "2025-11-15T13:07:59.624Z",
+    "type": "group"
+  },
+  {
+    "id": 1763212090540,
+    "name": "Nerul",
+    "description": "lcatoion",
+    "parentId": "1763212100036",
+    "createdAt": "2025-11-15T13:08:10.540Z",
+    "type": "group"
   }
 ]
