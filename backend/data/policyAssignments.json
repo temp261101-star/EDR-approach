@@ -1,42 +1,66 @@
 [
   {
     "deviceIP": "192.168.1.10",
-    "policyId": "1",
-    "policyName": "Security Policy",
-    "groupId": "1763106726260",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763180266745",
     "assignedAt": "2025-11-14T07:25:03.946Z",
-    "lastUpdated": "2025-11-14T07:57:05.970Z"
+    "lastUpdated": "2025-11-15T05:27:54.656Z"
   },
   {
     "deviceIP": "192.168.1.11",
-    "policyId": "1",
-    "policyName": "Security Policy",
-    "groupId": "1763106726260",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763180266745",
     "assignedAt": "2025-11-14T07:25:03.946Z",
-    "lastUpdated": "2025-11-14T07:57:05.970Z"
+    "lastUpdated": "2025-11-15T05:27:54.656Z"
   },
   {
     "deviceIP": "192.168.1.12",
-    "policyId": "1",
-    "policyName": "Security Policy",
-    "groupId": "1763106726260",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763180266745",
     "assignedAt": "2025-11-14T07:25:03.946Z",
-    "lastUpdated": "2025-11-14T07:57:05.970Z"
+    "lastUpdated": "2025-11-15T05:27:54.656Z"
   },
   {
     "deviceIP": "192.168.1.50",
-    "policyId": "1",
-    "policyName": "Security Policy",
-    "groupId": "1763106726260",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763121981493",
     "assignedAt": "2025-11-14T07:25:03.946Z",
-    "lastUpdated": "2025-11-14T07:57:05.970Z"
+    "lastUpdated": "2025-11-14T12:20:46.183Z"
   },
   {
     "deviceIP": "192.168.1.13",
-    "policyId": "1",
-    "policyName": "Security Policy",
-    "groupId": "1763106726260",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763121981493",
     "assignedAt": "2025-11-14T07:57:05.970Z",
-    "lastUpdated": "2025-11-14T07:57:05.970Z"
+    "lastUpdated": "2025-11-14T12:20:46.183Z"
+  },
+  {
+    "deviceIP": "192.168.2.10",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763121981493",
+    "assignedAt": "2025-11-14T12:20:39.022Z",
+    "lastUpdated": "2025-11-14T12:20:46.183Z"
+  },
+  {
+    "deviceIP": "192.168.2.11",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763122909321",
+    "assignedAt": "2025-11-15T04:16:53.477Z",
+    "lastUpdated": "2025-11-15T04:17:01.214Z"
+  },
+  {
+    "deviceIP": "192.168.2.12",
+    "policyId": "2",
+    "policyName": "Firewall Rules",
+    "groupId": "1763122909321",
+    "assignedAt": "2025-11-15T04:16:53.477Z",
+    "lastUpdated": "2025-11-15T04:17:01.214Z"
   }
 ]

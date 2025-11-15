@@ -800,7 +800,16 @@ export default function CreateGroup() {
     console.log("All devices:", devices.map(d => ({ id: d.id, name: d.name })));
     console.log("Existing group devices:", existingGroupDevices);
   }, [selectedDevices, devices, existingGroupDevices]);
-
+const toggleSelectAll = () => {
+  if (selectedDevices.length === filteredDevices.length) {
+    // If all are selected, deselect all
+    setSelectedDevices([]);
+  } else {
+    // Select all filtered devices
+    const allFilteredDeviceIds = filteredDevices.map(d => String(d.id));
+    setSelectedDevices(allFilteredDeviceIds);
+  }
+};
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 p-6 space-y-6">
       <h1 className="text-xl font-semibold mb-2">
@@ -869,77 +878,76 @@ export default function CreateGroup() {
           }
         </p>
 
-        {/* Filter Controls */}
-        <div className="flex flex-wrap gap-3 mb-4">
-          <div className="relative flex-1 min-w-[200px]">
-            <select
-              value={filterCategory}
-              onChange={(e) => {
-                setFilterCategory(e.target.value);
-                setFilterValue("");
-              }}
-              className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-sm appearance-none pr-8 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer hover:border-gray-600"
-            >
-              <option value="">Select Filter Category</option>
-              <option value="branch">Branch</option>
-              <option value="os">Operating System</option>
-              <option value="status">Status</option>
-              <option value="location">Location</option>
-            </select>
-            <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
-          </div>
+       <div className="flex items-center gap-3 mb-4">
 
-          {filterCategory && (
-            <div className="relative flex-1 min-w-[200px] animate-fadeIn">
-              <select
-                value={filterValue}
-                onChange={(e) => setFilterValue(e.target.value)}
-                className="w-full bg-gradient-to-r from-blue-900/30 to-blue-800/30 border border-blue-700/50 rounded-lg p-2.5 text-sm appearance-none pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:border-blue-600/70 text-gray-100"
-                style={{ colorScheme: "dark" }}
-              >
-                <option value="" className="bg-gray-800 text-gray-100">
-                  All {filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)}s
-                </option>
-                {getFilterOptions().map((option) => (
-                  <option key={option} value={option} className="bg-gray-800 text-gray-100 py-2">
-                    {option}
-                  </option>
-                ))}
-              </select>
-              <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 pointer-events-none" />
-            </div>
-          )}
+         <div className="flex items-center bg-gray-800 border border-gray-700 rounded-lg px-2 focus-within:ring-2 focus-within:ring-blue-600 focus-within:border-transparent transition-all flex-1 min-w-[250px]">
+    <Search className="w-4 h-4 text-gray-400 mr-2" />
+    <input
+      type="text"
+      placeholder="Search devices by name, IP, or location..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="bg-transparent w-full py-2 text-sm focus:outline-none"
+    />
+    {search && (
+      <button
+        onClick={() => setSearch("")}
+        className="ml-2 text-gray-400 hover:text-gray-200 transition-colors"
+      >
+        <X className="w-4 h-4" />
+      </button>
+    )}
+  </div>
+  <div className="relative flex-1 min-w-[100px]">
+    <select
+      value={filterCategory}
+      onChange={(e) => {
+        setFilterCategory(e.target.value);
+        setFilterValue("");
+      }}
+      className="w-full bg-gray-800 border border-gray-700 rounded-lg p-2.5 text-sm appearance-none pr-8 focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all cursor-pointer hover:border-gray-600"
+    >
+      <option value="">Select Filter Category</option>
+      <option value="branch">Branch</option>
+      <option value="os">Operating System</option>
+      <option value="status">Status</option>
+      <option value="location">Location</option>
+    </select>
+    <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+  </div>
+  
 
-          {(filterCategory || search) && (
-            <button
-              onClick={clearFilters}
-              className="flex items-center gap-2 px-4 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-600/40 text-red-400 rounded-lg transition-all text-sm font-medium hover:scale-105 active:scale-95 animate-fadeIn"
-            >
-              <X className="w-4 h-4" />
-              Clear Filters
-            </button>
-          )}
-        </div>
+  {filterCategory && (
+    <div className="relative flex-1 min-w-[200px] animate-fadeIn">
+      <select
+        value={filterValue}
+        onChange={(e) => setFilterValue(e.target.value)}
+        className="w-full bg-gradient-to-r from-blue-900/30 to-blue-800/30 border border-blue-700/50 rounded-lg p-2.5 text-sm appearance-none pr-8 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all cursor-pointer hover:border-blue-600/70 text-gray-100"
+        style={{ colorScheme: "dark" }}
+      >
+        <option value="" className="bg-gray-800 text-gray-100">
+          All {filterCategory.charAt(0).toUpperCase() + filterCategory.slice(1)}s
+        </option>
+        {getFilterOptions().map((option) => (
+          <option key={option} value={option} className="bg-gray-800 text-gray-100 py-2">
+            {option}
+          </option>
+        ))}
+      </select>
+      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 pointer-events-none" />
+    </div>
+  )}
 
-        {/* Search */}
-        <div className="flex items-center bg-gray-800 border border-gray-700 rounded-lg mb-4 px-2 focus-within:ring-2 focus-within:ring-blue-600 focus-within:border-transparent transition-all">
-          <Search className="w-4 h-4 text-gray-400 mr-2" />
-          <input
-            type="text"
-            placeholder="Search devices by name, IP, or location..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent w-full py-2 text-sm focus:outline-none"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="ml-2 text-gray-400 hover:text-gray-200 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
+ {filterCategory && ( <button
+    onClick={clearFilters}
+    className="flex items-center gap-2 px-4 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-600/40 text-red-400 rounded-lg transition-all text-sm font-medium hover:scale-105 active:scale-95 whitespace-nowrap"
+  >
+    <X className="w-4 h-4" />
+    Clear Filters
+  </button>)}
+
+ 
+</div>
 
         {/* Active Filter Badge */}
         {filterCategory && filterValue && (
@@ -962,8 +970,14 @@ export default function CreateGroup() {
           <table className="w-full text-sm">
             <thead className="bg-gray-800 text-gray-300">
               <tr>
-                <th className="p-2 w-8"></th>
-                <th className="p-2 text-left">Device Name</th>
+<th className="p-2 w-8 text-center">
+  <input
+    type="checkbox"
+    checked={filteredDevices.length > 0 && selectedDevices.length === filteredDevices.length}
+    onChange={toggleSelectAll}
+    className="accent-blue-600 w-4 h-4 cursor-pointer"
+  />
+</th>                   <th className="p-2 text-left">Device Name</th>
                 <th className="p-2 text-left">IP Address</th>
                 <th className="p-2 text-left">Location</th>
                 <th className="p-2 text-left">Branch</th>
@@ -982,7 +996,7 @@ export default function CreateGroup() {
                     const groupDeviceOriginalId = gd.originalDeviceId 
                       ? String(gd.originalDeviceId)
                       : groupDeviceIdStr.split('-')[1] || groupDeviceIdStr;
-                    
+                             
                     return groupDeviceOriginalId === currentDeviceId;
                   });
 

@@ -7,47 +7,149 @@ import {
   ChevronLeft,
   ChevronRight,
   FileBarChart,
-  Banknote,
-  UserRound,
+  Database,
   Settings,
   ChevronDown,
   ChevronUp,
   CircleSmall,
   Users,
   LayoutDashboard,
-  MapPin,
-  Database,
   Wrench,
-  AlertTriangle,
-  TrendingUp,
+  Shield,
+  Usb,
+  Globe,
+  AppWindow,
+  Ban,
 } from "lucide-react";
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 
 export default function DashboardLayout({ setIsAuthenticated }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+
   const [openAccordions, setOpenAccordions] = useState({
-    masters: false,
-    atm: true,
-    reports: false,
+    dashboards: true,
+    controls: false,
     Application: false,
     usb: false,
+    website: false,
+    blacklisting: false,
     policy: false,
     group: false,
   });
 
   const location = useLocation();
 
+  useEffect(() => {
+    // Auto-open parent accordions based on current route
+    const path = location.pathname;
+
+    // Application Control routes
+    const appControlRoutes = [
+      "/dashboard/setMode",
+      "/dashboard/viewMode",
+      "/dashboard/addApplication",
+      "/dashboard/viewApplication",
+      "/dashboard/manageBlacklisted",
+      "/dashboard/preventedApplicationReport",
+      "/dashboard/whitelistedApplication",
+    ];
+
+    // USB Protection routes
+    const usbRoutes = [
+      "/dashboard/externalUsb",
+      "/dashboard/externalUsbReport",
+    ];
+
+    // Website Protection routes
+    const websiteRoutes = [
+      "/dashboard/CaptureWebsiteHistory",
+      "/dashboard/WebsiteBlacklistHistory",
+      "/dashboard/WebsiteBlacklist",
+      "/dashboard/WebsiteHistoryReport",
+      "/dashboard/DownloadBrowserHistory",
+    ];
+
+    // Blacklisting routes
+    const blacklistRoutes = [
+      "/dashboard/addBlacklistedapplication",
+      "/dashboard/ViewBlacklistedapplication",
+      "/dashboard/managewhitelisted",
+      "/dashboard/viewreport",
+    ];
+
+    if (appControlRoutes.some((route) => path.startsWith(route))) {
+      setOpenAccordions({ controls: true, Application: true });
+    } else if (usbRoutes.some((route) => path.startsWith(route))) {
+      setOpenAccordions({ controls: true, usb: true });
+    } else if (websiteRoutes.some((route) => path.startsWith(route))) {
+      setOpenAccordions({ controls: true, website: true });
+    } else if (blacklistRoutes.some((route) => path.startsWith(route))) {
+      setOpenAccordions({ controls: true, blacklisting: true });
+    }
+  }, [location.pathname]);
+
   const toggleAccordion = (key) => {
     setOpenAccordions((prev) => ({ ...prev, [key]: !prev[key] }));
   };
+  // This function closes siblings at the SAME level only
+  const toggleParentAccordion = (key) => {
+    setOpenAccordions((prev) => {
+      const newState = { ...prev };
 
+      // Define parent-level accordions (top level only)
+      const parentKeys = ["dashboards", "controls", "policy", "group"];
+
+      // If it's a parent accordion, close other parents
+      if (parentKeys.includes(key)) {
+        parentKeys.forEach((parentKey) => {
+          if (parentKey !== key) {
+            newState[parentKey] = false;
+          }
+        });
+      }
+
+      // Toggle the clicked accordion
+      newState[key] = !prev[key];
+
+      return newState;
+    });
+  };
+
+  // const isActiveLink = (path) => {
+  //   return (
+  //     location.pathname === path || location.pathname.startsWith(path + "/")
+  //   );
+  // };
   const isActiveLink = (path) => {
+    // Special handling for main dashboard to avoid always being active
+    if (path === "/dashboard") {
+      return (
+        location.pathname === "/dashboard" ||
+        location.pathname === "/dashboard/"
+      );
+    }
+    // For all others, allow nested matching
     return (
       location.pathname === path || location.pathname.startsWith(path + "/")
     );
   };
 
+  // Check if any child route is active for parent highlighting
+  const isParentActive = (parentPaths) => {
+    // Special case: don't highlight dashboard accordion unless exactly on those routes
+    const isDashboardAccordion = parentPaths.includes("/dashboard");
+
+    if (isDashboardAccordion) {
+      return parentPaths.some((path) => location.pathname === path);
+    }
+
+    return parentPaths.some(
+      (path) =>
+        location.pathname === path || location.pathname.startsWith(path + "/")
+    );
+  };
   const AccordionItem = ({
     title,
     icon: Icon,
@@ -55,35 +157,42 @@ export default function DashboardLayout({ setIsAuthenticated }) {
     onToggle,
     children,
     iconSize = 14,
-  }) => (
-    <div className="mb-0">
-      <button
-        onClick={onToggle}
-        className="w-full flex items-center justify-between p-1 text-gray-300 hover:bg-gray-700 hover:text-cyan-400 rounded-md transition-colors duration-200"
-      >
-        <div className="flex items-center gap-1.5">
-          <Icon size={iconSize} />
+    childPaths = [],
+  }) => {
+    const isActive = isParentActive(childPaths);
 
-          {!collapsed && <span className="font-medium text-sm">{title}</span>}
-        </div>
-        {!collapsed && (
-          <div className="transition-transform duration-200">
-            {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-          </div>
-        )}
-      </button>
-      {!collapsed && (
-        <div
-          className={`overflow-hidden transition-all duration-300 ${
-            isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+    return (
+      <div className="mb-0">
+        <button
+          onClick={onToggle}
+          className={`w-full flex ${collapsed && " justify-center"} items-center justify-between p-1 rounded-md transition-colors duration-200   ${
+            isActive
+              ? "bg-cyan-900/50 text-cyan-300 font-medium "
+              : "text-gray-300 hover:bg-gray-700 hover:text-cyan-400"
           }`}
         >
-          <div className="pl-3 py-0 space-y-0">{children}</div>
-        </div>
-      )}
-    </div>
-  );
-
+          <div className="flex items-center gap-1.5">
+            <Icon size={iconSize} className={isActive ? "text-cyan-400" : ""} />
+            {!collapsed && <span className="font-medium text-sm">{title}</span>}
+          </div>
+          {!collapsed && (
+            <div className="transition-transform duration-200">
+              {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+            </div>
+          )}
+        </button>
+        {!collapsed && (
+          <div
+            className={`overflow-hidden transition-all duration-300 ${
+              isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0 "
+            }`}
+          >
+            <div className="pl-3 py-0 space-y-0">{children}</div>
+          </div>
+        )}
+      </div>
+    );
+  };
   const NavLink = ({ to, icon: Icon, children, badge }) => (
     <Link
       to={to}
@@ -108,313 +217,275 @@ export default function DashboardLayout({ setIsAuthenticated }) {
   return (
     <div className="flex h-screen bg-gray-900">
       <aside
-        className={`fixed md:static z-20 top-0 left-0 h-full bg-gray-800 shadow-2xl flex flex-col transform transition-all duration-300 border-r border-gray-700 items-center
-       ${sidebarOpen ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 
-       ${collapsed ? "w-15" : "w-60"}`}
+        className={`fixed md:static z-20 top-0 left-0 h-full bg-gray-800 shadow-2xl flex flex-col transform transition-all duration-300 border-r border-gray-700
+          ${
+            sidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:translate-x-0 
+          ${collapsed ? "w-15" : "w-60"}`}
       >
-        <div className="flex items-center justify-between p-1.5 border-b border-gray-700">
-          {!collapsed && (
-            <div className="flex items-center gap-1.5 mt-0.5">
-              <div className="w-6 h-6 rounded-lg bg-gray-700 flex items-center justify-center shadow-lg border border-gray-600">
-                <div className="w-4 h-4 bg-cyan-500 rounded-md flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">S</span>
-                </div>
-              </div>
-              <div>
-                <h2 className="text-xs font-bold text-gray-100">ScanPlus</h2>
-                {/* <p className="text-xs text-cyan-400">ATM Security</p> */}
-              </div>
+   
+        {/* Sidebar Header */}
+        <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700 bg-gray-800">
+          {/* Logo + Title */}
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center shadow-md">
+              <span className="text-white text-sm font-bold">S+</span>
             </div>
-          )}
+            {!collapsed && (
+              <div className="flex flex-col leading-tight">
+                <h2 className="text-sm font-bold text-gray-100">ScanPlus</h2>
+                <p className="text-[10px] text-gray-400">Security Console</p>
+              </div>
+            )}
+          </div>
 
+          {/* Collapse Toggle */}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden md:flex p-0.5 rounded-md hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-200"
+            className="p-1 rounded-md hover:bg-gray-700 text-gray-400 hover:text-white transition-all"
+            title={collapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
             {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-          </button>
-
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="md:hidden p-0.5 rounded-md hover:bg-gray-700 text-gray-400 hover:text-gray-200"
-          >
-            ✕
           </button>
         </div>
 
         <nav className="flex-1 p-1.5 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-600 scrollbar-track-gray-800">
-          <Link
-            to="/dashboard"
-            className={`flex items-center gap-1.5 p-1.5 mb-1 rounded-md transition-colors duration-200 ${
-              location.pathname === "/dashboard"
-                ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/25"
-                : "text-gray-300 hover:bg-gray-700 hover:text-cyan-400"
-            }`}
-            title={collapsed ? "Dashboard" : ""}
-          >
-            <Home size={20} />
-            {!collapsed && (
-              <span className="font-medium text-sm">Main Dashboard </span>
-            )}
-          </Link>
-
+          {/* Dashboards */}
+          {/* Dashboards */}
           <AccordionItem
             title="Dashboards"
-            icon={Database}
-            iconSize={18}
-            isOpen={openAccordions.masters}
-            onToggle={() => toggleAccordion("masters")}
+            icon={LayoutDashboard}
+            iconSize={25}
+            isOpen={openAccordions.dashboards}
+            onToggle={() => toggleParentAccordion("dashboards")} // Changed here
+            childPaths={["/dashboard", "/dashboard/summaryDashboard"]}
           >
-            {/* <NavLink to="/dashboard/dynamicGraph" icon={LayoutDashboard }>
-              Dynamic Dashboard
-            </NavLink> */}
-
+            <NavLink to="/dashboard" icon={Home}>
+              Main Dashboard
+            </NavLink>
             <NavLink to="/dashboard/summaryDashboard" icon={Database}>
               Summary Dashboard
             </NavLink>
-
-            
-            <NavLink to="/dashboard/dashboard" icon={Database}>
-             Dashboard
-            </NavLink>
           </AccordionItem>
 
-          {/* <AccordionItem
-            title="Dynamic Form Data"
-            icon={Database}
-            iconSize={18}
-            isOpen={openAccordions.masters}
-            onToggle={() => toggleAccordion("masters")}
-          >
-            <NavLink to="/dashboard/dynamicGraph" icon={LayoutDashboard }>
-              Dynamic Dashboard
-            </NavLink>
-
-            <NavLink to="/dashboard/addAntiVirusForm" icon={Settings}>
-              Add Antivirus
-            </NavLink>
-          </AccordionItem> */}
-
-          {/* <AccordionItem
-            title="Listing On date"
-            icon={Banknote}
-              iconSize={18}
-            isOpen={openAccordions.atm}
-            onToggle={() => toggleAccordion("atm")}
-          >
-            <NavLink to="/dashboard/reportPanel" icon={AlertTriangle}>
-              Report Panel
-            </NavLink>
-
-          
-            <NavLink to="/dashboard/add-application-user" icon={UserRound}>
-              Add Application User
-            </NavLink>
-          </AccordionItem> */}
-
-          {/* <AccordionItem
-            title="Dynamic Listings"
-            icon={FileBarChart}
-              iconSize={18}
-            isOpen={openAccordions.reports}
-            onToggle={() => toggleAccordion("reports")}
-          >
-            <NavLink to="/dashboard/reports" icon={FileBarChart}>
-              Reports
-            </NavLink>
-            <NavLink to="/dashboard/virusListing" icon={FileBarChart}>
-              Virus Listing
-            </NavLink>
-          </AccordionItem> */}
-
+          {/* Controls */}
           <AccordionItem
-            title="Application Control"
-            icon={Banknote}
-            iconSize={18}
-            isOpen={openAccordions.Application}
-            onToggle={() => toggleAccordion("Application")}
+            title="Controls"
+            icon={Wrench}
+            iconSize={25}
+            isOpen={openAccordions.controls}
+            onToggle={() => toggleParentAccordion("controls")}
+            childPaths={[
+              "/dashboard/setMode",
+              "/dashboard/viewMode",
+              "/dashboard/addApplication",
+              "/dashboard/viewApplication",
+              "/dashboard/manageBlacklisted",
+              "/dashboard/preventedApplicationReport",
+              "/dashboard/whitelistedApplication",
+              "/dashboard/externalUsb",
+              "/dashboard/externalUsbReport",
+              "/dashboard/CaptureWebsiteHistory",
+              "/dashboard/WebsiteBlacklistHistory",
+              "/dashboard/WebsiteBlacklist",
+              "/dashboard/WebsiteHistoryReport",
+              "/dashboard/DownloadBrowserHistory",
+              "/dashboard/addBlacklistedapplication",
+              "/dashboard/ViewBlacklistedapplication",
+              "/dashboard/managewhitelisted",
+              "/dashboard/viewreport",
+            ]}
           >
-            <NavLink to="/dashboard/setMode" icon={CircleSmall}>
-              Set Mode
-            </NavLink>
-
-            <NavLink to="/dashboard/viewMode" icon={CircleSmall}>
-              View Mode
-            </NavLink>
-
-            <NavLink to="/dashboard/addApplication" icon={CircleSmall}>
-              Add Application
-            </NavLink>
-
-            <NavLink to="/dashboard/viewApplication" icon={CircleSmall}>
-              View Application
-            </NavLink>
-
-            <NavLink to="/dashboard/manageBlacklisted" icon={CircleSmall}>
-              Manage Blacklisted
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/preventedApplicationReport"
-              icon={CircleSmall}
+            {/* Application Control */}
+            <AccordionItem
+              title="Application Control"
+              icon={AppWindow}
+              isOpen={openAccordions.Application}
+              onToggle={() => toggleAccordion("Application")}
+              childPaths={[
+                "/dashboard/setMode",
+                "/dashboard/viewMode",
+                "/dashboard/addApplication",
+                "/dashboard/viewApplication",
+                "/dashboard/manageBlacklisted",
+                "/dashboard/preventedApplicationReport",
+                "/dashboard/whitelistedApplication",
+              ]}
             >
-              Prevented Application Report
-            </NavLink>
+              <NavLink to="/dashboard/setMode" icon={CircleSmall}>
+                Set Mode
+              </NavLink>
+              <NavLink to="/dashboard/viewMode" icon={CircleSmall}>
+                View Mode
+              </NavLink>
+              <NavLink to="/dashboard/addApplication" icon={CircleSmall}>
+                Add Application
+              </NavLink>
+              <NavLink to="/dashboard/viewApplication" icon={CircleSmall}>
+                View Application
+              </NavLink>
+              <NavLink to="/dashboard/manageBlacklisted" icon={CircleSmall}>
+                Manage Blacklisted
+              </NavLink>
+              <NavLink
+                to="/dashboard/preventedApplicationReport"
+                icon={CircleSmall}
+              >
+                Prevented Report
+              </NavLink>
+              <NavLink
+                to="/dashboard/whitelistedApplication"
+                icon={CircleSmall}
+              >
+                Whitelisted
+              </NavLink>
+            </AccordionItem>
 
-            <NavLink to="/dashboard/whitelistedApplication" icon={CircleSmall}>
-              Whitelisted Application
-            </NavLink>
+            {/* USB Protection */}
+            <AccordionItem
+              title="USB Protection"
+              icon={Usb}
+              isOpen={openAccordions.usb}
+              onToggle={() => toggleAccordion("usb")}
+              childPaths={[
+                "/dashboard/externalUsb",
+                "/dashboard/externalUsbReport",
+              ]}
+            >
+              <NavLink to="/dashboard/externalUsb" icon={CircleSmall}>
+                External USB
+              </NavLink>
+              <NavLink to="/dashboard/externalUsbReport" icon={CircleSmall}>
+                USB Report
+              </NavLink>
+            </AccordionItem>
+
+            {/* Website Protection */}
+            <AccordionItem
+              title="Website Protection"
+              icon={Globe}
+              isOpen={openAccordions.website}
+              onToggle={() => toggleAccordion("website")}
+              childPaths={[
+                "/dashboard/CaptureWebsiteHistory",
+                "/dashboard/WebsiteBlacklistHistory",
+                "/dashboard/WebsiteBlacklist",
+                "/dashboard/WebsiteHistoryReport",
+                "/dashboard/DownloadBrowserHistory",
+              ]}
+            >
+              <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
+                Capture History
+              </NavLink>
+              <NavLink
+                to="/dashboard/WebsiteBlacklistHistory"
+                icon={CircleSmall}
+              >
+                Blacklist History
+              </NavLink>
+              <NavLink to="/dashboard/WebsiteBlacklist" icon={CircleSmall}>
+                Website Blacklist
+              </NavLink>
+              <NavLink to="/dashboard/WebsiteHistoryReport" icon={CircleSmall}>
+                History Report
+              </NavLink>
+              <NavLink
+                to="/dashboard/DownloadBrowserHistory"
+                icon={CircleSmall}
+              >
+                Download Browser History
+              </NavLink>
+            </AccordionItem>
+
+            {/* Application Blacklisting */}
+            <AccordionItem
+              title="Application Blacklisting"
+              icon={Ban}
+              isOpen={openAccordions.blacklisting}
+              onToggle={() => toggleAccordion("blacklisting")}
+              childPaths={[
+                "/dashboard/addBlacklistedapplication",
+                "/dashboard/ViewBlacklistedapplication",
+                "/dashboard/managewhitelisted",
+                "/dashboard/viewreport",
+              ]}
+            >
+              <NavLink
+                to="/dashboard/addBlacklistedapplication"
+                icon={CircleSmall}
+              >
+                Add Application
+              </NavLink>
+              <NavLink
+                to="/dashboard/ViewBlacklistedapplication"
+                icon={CircleSmall}
+              >
+                View Application
+              </NavLink>
+              <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
+                Manage Whitelisted
+              </NavLink>
+              <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
+                View Report
+              </NavLink>
+            </AccordionItem>
           </AccordionItem>
 
-          <AccordionItem
-            title="USB Protection"
-            icon={Banknote}
-            iconSize={18}
-            isOpen={openAccordions.usb}
-            onToggle={() => toggleAccordion("usb")}
-          >
-            <NavLink to="/dashboard/externalUsb" icon={CircleSmall}>
-              External USB
-            </NavLink>
-            <NavLink to="/dashboard/externalUsbReport" icon={CircleSmall}>
-              External USB Report
-            </NavLink>
-          </AccordionItem>
-
-             <AccordionItem
-            title="Website Protection"
-            icon={Banknote}
-            isOpen={openAccordions.website}
-            onToggle={() => toggleAccordion("website")}
-          >
-          
-{/*            
-            <NavLink to="/dashboard/WebsiteDashboard" icon={CircleSmall}>
-            Website Dashboard
-            </NavLink> */}
-
-            <NavLink to="/dashboard/CaptureWebsiteHistory" icon={CircleSmall}>
-            Capture Website History
-            </NavLink>
-
-            <NavLink to="/dashboard/WebsiteBlacklistHistory" icon={CircleSmall}>
-            Website Blacklist History
-            </NavLink>
-
-            <NavLink to="/dashboard/WebsiteBlacklist" icon={CircleSmall}>
-           Website Blacklist
-            </NavLink>
-
-            <NavLink to="/dashboard/WebsiteHistoryReport" icon={CircleSmall}>
-            Website History Report
-            </NavLink>
-
-            <NavLink to="/dashboard/DownloadBrowserHistory" icon={CircleSmall}>
-            Download Browser History
-            </NavLink>
-         
-         
-  
-           
-            
-            
-          </AccordionItem> 
-
-
-          {/* <AccordionItem
-            title="AntiVirus "
-            icon={Banknote}
-            isOpen={openAccordions.antivirus}
-            onToggle={() => toggleAccordion("antivirus")}>
-
-               <NavLink to="/dashboard/antivirusEdr" icon={CircleSmall}>
-            Antivirus EDR
-            </NavLink>
-
-            </AccordionItem> */}
-
-          <AccordionItem
-            title="Application Blacklisting "
-            icon={Banknote}
-            isOpen={openAccordions.blacklisting}
-            onToggle={() => toggleAccordion("blacklisting")}
-          >
-            <NavLink
-              to="/dashboard/addBlacklistedapplication"
-              icon={CircleSmall}
-            >
-              Add Application
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/ViewBlacklistedapplication"
-              icon={CircleSmall}
-            >
-              View Application
-            </NavLink>
-            
-
-            <NavLink to="/dashboard/managewhitelisted" icon={CircleSmall}>
-              Manage Whitelisted
-            </NavLink>
-
-            <NavLink to="/dashboard/viewreport" icon={CircleSmall}>
-              View Report
-            </NavLink>
-          </AccordionItem>
+          {/* Policy */}
           <AccordionItem
             title="Policy"
-            icon={Banknote}
+            icon={Shield}
+            iconSize={25}
             isOpen={openAccordions.policy}
-            onToggle={() => toggleAccordion("policy")}
+            onToggle={() => toggleParentAccordion("policy")}
+            childPaths={["/dashboard/PolicySetupFirewall"]}
           >
-       
-{/* 
-            <NavLink to="/policy3" icon={CircleSmall}>
-              Latest policy View
-            </NavLink>
-            <NavLink to="/dashboard/PolicySetupAll" icon={CircleSmall}>
-              Latest policy v1 
-            </NavLink> */}
             <NavLink to="/dashboard/PolicySetupFirewall" icon={CircleSmall}>
-             Latest policy Integrated
+              Latest Policy Integrated
             </NavLink>
           </AccordionItem>
+
+          {/* Group */}
           <AccordionItem
             title="Group"
-            icon={Banknote}
+            icon={Users}
+            iconSize={25}
             isOpen={openAccordions.group}
-            onToggle={() => toggleAccordion("group")}
+            onToggle={() => toggleParentAccordion("group")}
+            childPaths={["/dashboard/CreateGroup", "/dashboard/GroupList"]}
           >
-       
-    {/* <NavLink to="/dashboard/CreateGroup" icon={CircleSmall}>
-           Create Group
-            </NavLink> */}
+        
             <NavLink to="/dashboard/GroupList" icon={CircleSmall}>
-            View Groups
+              View Groups
             </NavLink>
-        
-        
           </AccordionItem>
         </nav>
 
-        <div className="p-1.5 border-t border-gray-700">
+        {/* Sidebar Footer */}
+        <div className="mt-auto border-t border-gray-700 bg-gray-800 p-2 flex flex-col">
           <button
             onClick={() => {
               localStorage.removeItem("isAuthenticated");
               setIsAuthenticated(false);
             }}
-            className="w-full flex items-center gap-1.5 p-1.5 text-red-400 hover:bg-red-900/20 hover:text-red-300 rounded-md transition-colors duration-200"
-            title={collapsed ? "Logout" : ""}
+            className="flex items-center gap-2 text-red-400 hover:text-red-300 hover:bg-red-900/20 py-1.5 px-2 rounded-md transition-colors duration-200 self-start"
+            title="Logout"
           >
-            <LogOut size={12} />
-            {!collapsed && <span className="font-medium text-sm">Logout</span>}
+            <LogOut size={14} />
+            {!collapsed && <span className="text-sm font-medium">Logout</span>}
           </button>
+
+          {!collapsed && (
+            <div className="text-[10px] text-gray-500 mt-2 border-t border-gray-700 pt-1 pl-2">
+              © {new Date().getFullYear()}{" "}
+              <span className="text-cyan-400 font-semibold">ScanPlus</span>
+            </div>
+          )}
         </div>
       </aside>
 
       <div className="flex-1 flex flex-col min-w-0 ">
-        <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-3 py-1 flex items-center justify-between border-b border-gray-700">
+        <header className="bg-gray-800/95 backdrop-blur-md shadow-lg px-4 py-2 flex items-center justify-between border-b border-gray-700 sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}

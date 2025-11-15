@@ -1,20 +1,20 @@
 import axios from "axios";
-const api = axios.create({
-// baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
-baseURL:"http://182.48.194.218:9191/api/v1",
-// 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
-});
+// const api = axios.create({
+// // baseURL: "http://192.168.0.203:8181/SecureIT-EDR-ATM/",
+// baseURL:"http://182.48.194.218:9191/api/v1",
+// // 192.168.0.156:9191/api/v1/dashboard/getDeviceStatus
+// });
 
 
 // vercel CONFIGURATION 
 
-// const api = axios.create({
-//   baseURL: "/api", // will be rewritten by Vercel
-//   timeout: 10000,
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-// });
+const api = axios.create({
+  baseURL: "/api", // will be rewritten by Vercel
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
 
 
 async function fetchResource({ resource, parentValue }) {
