@@ -21,10 +21,9 @@ import {
   AppWindow,
   Ban,
 } from "lucide-react";
-
 import { useEffect, useState } from "react";
 import TopbarCard from "../components/Cards/TopbarCard";
-
+import logo from '../../src/assets/velox_logo.png'
 export default function DashboardLayout({ setIsAuthenticated }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
@@ -248,13 +247,15 @@ const toggleAccordion = (key) => {
         <div className="flex items-center justify-between px-3 py-2 border-b border-gray-700 bg-gray-800">
           {/* Logo + Title */}
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-cyan-600 flex items-center justify-center shadow-md">
-              <span className="text-white text-sm font-bold">S+</span>
+           <div className="w-8 h-8 rounded-lg  flex items-center justify-center shadow-md">
+              <span className="text-white text-sm font-bold">
+                <img src={logo} />
+              </span>
             </div>
             {!collapsed && (
               <div className="flex flex-col leading-tight">
-                <h2 className="text-sm font-bold text-gray-100">ScanPlus</h2>
-                <p className="text-[10px] text-gray-400">Security Console</p>
+                <h2 className="text-sm font-bold text-gray-100">UESM</h2>
+                {/* <p className="text-[10px] text-gray-400">Security Console</p> */}
               </div>
             )}
           </div>

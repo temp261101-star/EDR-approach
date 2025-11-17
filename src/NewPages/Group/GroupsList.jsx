@@ -1253,9 +1253,9 @@ export default function GroupsList() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row bg-gray-950 text-gray-100 min-h-screen">
+<div className="flex flex-col lg:flex-row bg-gray-950 text-gray-100 h-[85vh] overflow-hidden">
       {/* Left - Tree Panel */}
-      <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-800 p-4 lg:p-6 overflow-y-auto max-h-[50vh] lg:max-h-screen">
+      <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-800 p-4 lg:p-6 overflow-y-auto max-h-[35vh] lg:max-h-screen">
         <div className="flex items-center justify-between mb-4 sticky top-0 bg-gray-950 pb-3 border-b border-gray-800/50 z-10">
           <h2 className="text-lg lg:text-xl font-semibold">Group Hierarchy</h2>
           <div className="flex items-center gap-2">
@@ -1291,9 +1291,9 @@ export default function GroupsList() {
       </div>
 
       {/* Right - Details Panel */}
-      <div className="flex-1 p-4 lg:p-6 overflow-y-auto">
+     <div className="flex-1 p-4 lg:p-6 overflow-y-auto h-screen">
         {selectedNode ? (
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-6xl mx-auto ">
             <div className="bg-gray-900 rounded-xl p-4 lg:p-6 mb-6 border border-gray-800">
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 lg:gap-0">
                 <div className="flex-1">
@@ -1343,15 +1343,15 @@ export default function GroupsList() {
             </div>
 
             {selectedNode.parentId && (
-              <div className="bg-gray-900 rounded-xl p-4 lg:p-6 border border-gray-800">
-                <h2 className="text-lg lg:text-xl font-semibold flex items-center gap-2 mb-4">
+              <div className="bg-gray-900 rounded-xl p-1 lg:p-6 border border-gray-800 mb-32 ">
+                <h2 className="text-lg lg:text-xl font-semibold flex items-center gap-2 mb-2">
                   <Users size={20} />
                   Devices in Group ({groupDevices.length})
                 </h2>
 
                 {groupDevices.length > 0 ? (
                   <div className="overflow-x-auto -mx-4 lg:mx-0">
-                    <div className="min-w-full">
+                    <div className="min-w-full ">
                       <Table showCheckboxes={false} data={groupDevices} />
                     </div>
                   </div>

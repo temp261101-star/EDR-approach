@@ -8,8 +8,8 @@ import api from "../lib/api.js";
 
 export default function Table({
   data = [],
-  endpoint, // NEW: API endpoint
-  dataPath, // NEW: path to extract data from response (e.g., "data.recentFileData")
+  endpoint, 
+  dataPath, 
   onBulkAction,
   showCheckboxes = true,
   bulkActionLabel = "Bulk Action",
@@ -294,7 +294,7 @@ export default function Table({
   };
 
   return (
-    <div className="w-full  mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden">
+    <div className="w-full  mx-auto bg-gray-900 rounded-md mt-5 shadow-2xl border border-gray-600 overflow-hidden ">
       {/* Header */}
       <div className="relative bg-gradient-to-r  px-6 py-4 border-b border-gray-600">
         <div className="absolute inset-0 bg-gray-800/20 backdrop-blur-sm"></div>
@@ -341,8 +341,8 @@ export default function Table({
       </div>
 
       {/* Table */}
-      <div className="overflow-x-auto bg-gray-900 w-full p-2 sm:p-4 flex-1 min-h-0">
-        <table className="w-full border-collapse table-auto min-w-full">
+      <div className="overflow-x-auto bg-gray-900 w-full p-2 sm:p-4 flex-1 min-h-0 ">
+        <table className="w-full border-collapse table-auto min-w-full ">
           <thead>
             <tr className="bg-gradient-to-r from-gray-800 to-gray-700 border-b border-gray-600">
               {showCheckboxes && (

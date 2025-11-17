@@ -592,21 +592,39 @@ const PolicySetupFirewall = ({ config }) => {
     );
   };
   const activeScreen = config.screens?.[activeTab];
-  const handleSubmit = () => {
-    const mergedData = Object.values(formState || {}).reduce(
-      (acc, tabData) => ({ ...acc, ...tabData }),
-      {}
-    );
+ 
+const handleSubmit = () => {
+  const modulesData = Object.entries(formState).map(([policyId, policyData]) => {
+    
+    const modules = config.tabs.map(tab => {
+      const screenConfig = config.screens[tab.id];
+      const moduleData = policyData[tab.id] || {};
+      
+      return {
+        moduleId: screenConfig?.moduleId || 0,
+        name: screenConfig?.moduleName || tab.id,
+        defaultAction: screenConfig?.defaultAction || "allow",
+        config: moduleData 
+      };
+    }).filter(module => module.config && Object.keys(module.config).length > 0); 
+    
+    return {
+      policyId: policyId,
+      modules: modules
+    };
+  });
 
-
-    console.log("Submit:", mergedData);
+  const finalPayload = {
+    modules: modulesData.flatMap(policy => policy.modules)
   };
+  
+  console.log("Final Payload:", finalPayload);
+  return finalPayload;
+};
   return (
   <div className="h-full bg-gray-950 text-gray-100 p-6 ">
     {" "}
-    {/* <div className="max-w-6xl mx-auto "> */}
     <div className="w-full max-w-full mx-auto px-4">
-      {/* <div className="lg:flex  h-[70vh]   overflow-hidden"> */}
    <div className="lg:flex h-[85vh] overflow-hidden w-full">
         <div className="lg:w-64 w-full bg-gray-900 border-r border-gray-800 p-4 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-100 mb-4">
@@ -630,9 +648,7 @@ const PolicySetupFirewall = ({ config }) => {
           </div>
         </div>
 
-        {/* <div className="bg-gray-900 w-full flex flex-col shadow-2xl "> */}
         <div className="bg-gray-900 flex-1 flex flex-col shadow-2xl min-w-0">
-          {/* Tabs */}
           {config.tabs && config.tabs.length > 0 && (
             <div className="border-b border-gray-800 bg-gray-900/50"></div>
           )}
@@ -2081,6 +2097,8 @@ useEffect(() => {
     </GenericPopupModal>
   );
 };
+
+
 const dataForUi = {
   tabs: [
     { id: "antivirus", label: "Anti Virus" },
@@ -2228,6 +2246,8 @@ const dataForUi = {
 
   screens: {
     ApplicationControl: {
+          moduleName: "application-control",
+    moduleId: 1,
       type: "custom",
       title: "Application Control Section",
       sections: [
@@ -2261,6 +2281,8 @@ const dataForUi = {
     },
     USB: {
       title: "USB Control Settings",
+       moduleName: "usb-control", 
+    moduleId: 2,
       sections: [
         {
           id: "advanced-device-control",
@@ -2279,6 +2301,8 @@ const dataForUi = {
 
     Website: {
       title: "Website Protection Settings",
+       moduleName: "website-filtering",
+    moduleId: 3,
       sections: [
         {
           id: "website-security",
@@ -2340,6 +2364,8 @@ const dataForUi = {
     },
     Firewall: {
       title: "Firewall Protection Settings",
+    moduleName: "firewall",
+    moduleId: 4,
       sections: [
         {
           id: "firewall-security",
@@ -2476,124 +2502,124 @@ const dataForUi = {
     },
   },
 
-firewallRulesConfig: {
-  screens: {
-    FirewallRuleForm: {
-      type: "multi-step",
-      steps: [
-        {
-          title: "Exceptions",
-          fields: [
+  firewallRulesConfig: {
+    screens: {
+      FirewallRuleForm: {
+        type: "multi-step",
+        steps: [
+          {
+            title: "Exceptions",
+            fields: [
+              {
+                name: "exceptionName",
+                label: "Exception Name",
+                type: "text",
+                placeholder: "Enter rule name",
+                required: true
+              },
+              {
+                name: "protocol",
+                label: "Select Protocol",
+                type: "radio",
+                options: [
+                  { label: "TCP", value: "TCP" },
+                  { label: "UDP", value: "UDP" },
+                  { label: "ICMP", value: "ICMP" }
+                ],
+                defaultValue: "TCP"
+              },
             {
-              name: "exceptionName",
-              label: "Exception Name",
-              type: "text",
-              placeholder: "Enter rule name",
-              required: true
-            },
-            {
-              name: "protocol",
-              label: "Select Protocol",
-              type: "radio",
-              options: [
-                { label: "TCP", value: "TCP" },
-                { label: "UDP", value: "UDP" },
-                { label: "ICMP", value: "ICMP" }
-              ],
-              defaultValue: "TCP"
-            },
-           {
-      name: "applicationType",
-      label: "Application Allow",
-      type: "radio",
-      options: [
-        { label: "All Applications", value: "all" },
-        { label: "Specific Application Path", value: "specific" },
-      ],
-      defaultValue: "all"
-    },
-    //  this is conditional field for multistep form
-    {
-      name: "applicationPath",
-      label: "Application Path",
-      type: "text",
-      placeholder: "e.g., C:\\Program Files\\App\\app.exe",
-      required: false,
-    }
-          ]
-        },
-        {
-  title: "Local TCP/UDP Ports",
-  fields: [
-    {
-      name: "portType",
-      label: "Local TCP/UDP Ports",
-      type: "radio",
-      options: [
-        { label: "All Ports", value: "all" },
-        { label: "Specific Port(s)", value: "specific" },
-        { label: "Port Range", value: "range" }
-      ],
-      defaultValue: "all"
-    },
-    {
-      name: "specificPorts",
-      label: "Specific Port(s):",
-      type: "text",
-      placeholder: "e.g., 80, 443, 8080",
-      description: "Use commas between to enter multiple ports.",
-      required: false,
-    },
-    {
-      name: "startPort",
-      label: "Start Port:",
-      type: "text",
-      placeholder: "e.g., 1000",
-      required: false,
-    },
-    {
-      name: "endPort",
-      label: "End Port:",
-      type: "text",
-      placeholder: "e.g., 2000",       
-      required: false,
-    }
-  ]
-},
-        {
-          title: "Directions",
+        name: "applicationType",
+        label: "Application Allow",
+        type: "radio",
+        options: [
+          { label: "All Applications", value: "all" },
+          { label: "Specific Application Path", value: "specific" },
+        ],
+        defaultValue: "all"
+      },
+      //  this is conditional field for multistep form
+      {
+        name: "applicationPath",
+        label: "Application Path",
+        type: "text",
+        placeholder: "e.g., C:\\Program Files\\App\\app.exe",
+        required: false,
+      }
+            ]
+          },
+          {
+    title: "Local TCP/UDP Ports",
+    fields: [
+      {
+        name: "portType",
+        label: "Local TCP/UDP Ports",
+        type: "radio",
+        options: [
+          { label: "All Ports", value: "all" },
+          { label: "Specific Port(s)", value: "specific" },
+          { label: "Port Range", value: "range" }
+        ],
+        defaultValue: "all"
+      },
+      {
+        name: "specificPorts",
+        label: "Specific Port(s):",
+        type: "text",
+        placeholder: "e.g., 80, 443, 8080",
+        description: "Use commas between to enter multiple ports.",
+        required: false,
+      },
+      {
+        name: "startPort",
+        label: "Start Port:",
+        type: "text",
+        placeholder: "e.g., 1000",
+        required: false,
+      },
+      {
+        name: "endPort",
+        label: "End Port:",
+        type: "text",
+        placeholder: "e.g., 2000",       
+        required: false,
+      }
+    ]
+  },
+          {
+            title: "Directions",
+            fields: [
+              {name: "direction",
+                label: "Select Direction",
+                type: "radio",
+                options: [
+                  { label: "Inbound Connections", value: "inbound" },
+                  { label: "Outbound Connections", value: "outbound" },
+                  { label: "Inbound-Outbound", value: "both" }
+                ],
+              }
+            
+            ]
+          },
+          {
+        title:"Actions",
           fields: [
-             {name: "direction",
-              label: "Select Direction",
-              type: "radio",
-              options: [
-                { label: "Inbound Connections", value: "inbound" },
-                { label: "Outbound Connections", value: "outbound" },
-                { label: "Inbound-Outbound", value: "both" }
-              ],
-            }
-          
-          ]
-        },
-        {
-      title:"Actions",
-        fields: [
-             {name: "Actions",
-              label: "Select Direction",
-              type: "radio",
-              options: [
-                { label: "Allow", value: "Allow" },
-                { label: "Deny", value: "Deny" },
-              ],
-            },
-          
-          ]
-        },
-      
-      ]
+              {name: "Actions",
+                label: "Select Direction",
+                type: "radio",
+                options: [
+                  { label: "Allow", value: "Allow" },
+                  { label: "Deny", value: "Deny" },
+                ],
+              },
+            
+            ]
+          },
+        
+        ]
+      }
     }
-  }
-},
+  },
 
   webCategories: [
     { id: "education", label: "Education" },

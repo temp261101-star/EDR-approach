@@ -216,5 +216,42 @@
     "parentId": "1763212079624",
     "type": "groupDevice",
     "createdAt": "2025-11-15T13:09:40.413Z"
+  },
+  {
+    "id": 1763363386172,
+    "name": "VSPL",
+    "description": "",
+    "parentId": null,
+    "createdAt": "2025-11-17T07:09:46.172Z",
+    "type": "group"
+  },
+  {
+    "id": 1763363398518,
+    "name": "Mumbai-VIP",
+    "description": "",
+    "parentId": "1763363386172",
+    "createdAt": "2025-11-17T07:09:58.518Z",
+    "type": "group"
+  },
+  {
+    "id": "1763363398518-9",
+    "originalDeviceId": 9,
+    "parentId": "1763363398518",
+    "type": "groupDevice",
+    "createdAt": "2025-11-17T07:10:16.305Z"
+  },
+  {
+    "id": "1763363398518-10",
+    "originalDeviceId": 10,
+    "parentId": "1763363398518",
+    "type": "groupDevice",
+    "createdAt": "2025-11-17T07:10:16.362Z"
+  },
+  {
+    "id": "1763363398518-11",
+    "originalDeviceId": 11,
+    "parentId": "1763363398518",
+    "type": "groupDevice",
+    "createdAt": "2025-11-17T07:10:16.409Z"
   }
 ]

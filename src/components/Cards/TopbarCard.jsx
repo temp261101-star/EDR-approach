@@ -131,7 +131,7 @@ const TopbarCard = () => {
 
           {/* Trapezoid Container - Reduced slope */}
           <div
-            className="relative h-full px-10 flex items-center bg-gradient-to-br from-cyan-900/40 via-gray-800/60 to-cyan-900/40 backdrop-blur-md border-t border-b border-cyan-700/30 shadow-2xl"
+            className="relative h-full px-10 flex items-center bg-gray-900 backdrop-blur-md border-t border-b border-cyan-700/30 shadow-2xl"
             style={{
               clipPath: "polygon(0% 0%, 5% 100%, 95% 100%, 100% 0%)", // Reduced slope from 8%/92% to 5%/95%
               boxShadow:
